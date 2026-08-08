@@ -246,7 +246,7 @@ body.project-mode .axisLegend{display:block}
   <div class="sec ecoSec">
     <p class="muted">
       ノードをクリック＝詳細／ドラッグ＝移動。3Dは右ドラッグでパン、ホイールでズーム。<br>
-      編集内容はこのブラウザに保存されます。共有するには「⋯ → JSONをエクスポート」で書き出し、リポジトリの <code>data.json</code> を置き換えてください。
+      編集者の変更はGitHubの <code>data.json</code> へ自動保存され、閲覧者にも定期的に同期されます。編集には右上「⋯」でアクセストークンを設定してください。
     </p>
   </div>
 </aside>
@@ -438,6 +438,7 @@ let dataVersion = 0;
 
 const LS_DATA = 'fn-ecomap-data-v2';
 const LS_SYNC = 'fn-ecomap-gh-v1';
+const LS_PENDING = 'fn-ecomap-pending-v1';
 
 const uid = () => Math.random().toString(36).slice(2,10) + Date.now().toString(36).slice(-4);
 const $ = s => document.querySelector(s);
@@ -482,7 +483,7 @@ function b64dec(b64){
    公開中の data.json は読み取り専用。編集はブラウザに保存し、JSONとして
    書き出してGitHub側のファイルを更新する。
    ========================================================================= */
-const GH_DEFAULT = {owner:'', repo:'', branch:'main', path:'data.json'};
+const GH_DEFAULT = {owner:'', repo:'', branch:'main', path:'data.json', token:''};
 let GH = Object.assign({}, GH_DEFAULT, JSON.parse(localStorage.getItem(LS_SYNC)||'null')||{});
 
 /* github.io で公開されている場合は owner/repo を自動推定 */
@@ -496,13 +497,19 @@ let GH = Object.assign({}, GH_DEFAULT, JSON.parse(localStorage.getItem(LS_SYNC)|
 })();
 
 const ghOn   = () => !!(GH.owner && GH.repo);
-const canEdit= () => accessMode === 'edit';
+const canEdit= () => accessMode === 'edit' && !!GH.token;
 let ghSha = null;            // 最後に取得した data.json の blob SHA
-let pending = new Map();     // 未コミットの変更 key -> {kind, obj, deleted}
+let pending = new Map();     // 未コミットの変更 key -> {kind, obj, deleted, rev}
+try{
+  const savedPending=JSON.parse(localStorage.getItem(LS_PENDING)||'[]');
+  if(Array.isArray(savedPending)) pending=new Map(savedPending);
+}catch(e){}
 let flushTimer = null, flushing = false;
+const savePending=()=>localStorage.setItem(LS_PENDING,JSON.stringify([...pending.entries()]));
 
 async function ghApi(url, opts={}){
-  const h = {'Accept':'application/vnd.github+json', ...(opts.headers||{})};
+  const h = {'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2026-03-10',
+             ...(GH.token?{'Authorization':'Bearer '+GH.token}:{}),...(opts.headers||{})};
   const r = await fetch(url, {...opts, headers:h, cache:'no-store'});
   if(!r.ok){
     let msg = r.status + ' ' + r.statusText;
@@ -512,12 +519,21 @@ async function ghApi(url, opts={}){
   return r.json();
 }
 const contentsUrl = () =>
-  `https://api.github.com/repos/${GH.owner}/${GH.repo}/contents/${encodeURIComponent(GH.path)}?ref=${encodeURIComponent(GH.branch)}`;
+  `https://api.github.com/repos/${encodeURIComponent(GH.owner)}/${encodeURIComponent(GH.repo)}/contents/${GH.path.split('/').map(encodeURIComponent).join('/')}?ref=${encodeURIComponent(GH.branch)}`;
 const rawUrl = () =>
   `https://raw.githubusercontent.com/${GH.owner}/${GH.repo}/${GH.branch}/${GH.path}?t=${Date.now()}`;
 
+async function ghReadForWrite(){
+  const j=await ghApi(contentsUrl());
+  if(!j || !j.content || !j.sha) throw new Error('data.json の内容を取得できませんでした');
+  return {db:normDB(JSON.parse(b64dec(j.content))),sha:j.sha};
+}
+
 /* リポジトリから最新を取得（sha も取れれば保持） */
 async function ghPull(){
+  if(GH.token){
+    const current=await ghReadForWrite();ghSha=current.sha;return current.db;
+  }
   const r = await fetch(rawUrl(), {cache:'no-store'});
   if(!r.ok) throw new Error('raw ' + r.status);
   ghSha = null;
@@ -528,29 +544,73 @@ async function ghPull(){
 function queue(kind, obj, deleted){
   dataVersion++;
   saveLocal();
-  setStatus('このブラウザに保存しました。共有する場合はJSONをエクスポートしてください。');
+  const key=kind+':'+obj.id;
+  pending.set(key,{kind,obj:JSON.parse(JSON.stringify(obj)),deleted:!!deleted,rev:uid()});
+  savePending();
+  setStatus(`GitHubへ保存中…（未同期 ${pending.size}件）`);
+  clearTimeout(flushTimer);flushTimer=setTimeout(flush,1200);
 }
 const persist = (kind, obj, deleted) => { queue(kind, obj, deleted); };
 
+function queueReplace(){
+  dataVersion++;saveLocal();pending.clear();
+  pending.set('database',{kind:'database',db:normDB(JSON.parse(JSON.stringify(DB))),rev:uid()});
+  savePending();setStatus('GitHubへ全データを保存中…');
+  clearTimeout(flushTimer);flushTimer=setTimeout(flush,300);
+}
+
 /* リポジトリ側の最新に自分の変更だけを重ねてコミット（他人の編集を消さない） */
-function applyPending(base){
-  const db = {companies:base.companies.slice(), relations:base.relations.slice()};
-  for(const {kind, obj, deleted} of pending.values()){
-    const arr = kind === 'company' ? 'companies' : 'relations';
+function applyPending(base, entries=pending.values()){
+  let db = normDB(JSON.parse(JSON.stringify(base)));
+  for(const rec of entries){
+    const {kind,obj,deleted}=rec;
+    if(kind==='database'){db=normDB(JSON.parse(JSON.stringify(rec.db)));continue;}
+    const arr = kind === 'company' ? 'companies' : kind === 'relation' ? 'relations' : 'projects';
     db[arr] = db[arr].filter(x => x.id !== obj.id);
-    if(!deleted) db[arr].push(kind === 'company' ? normCompany(obj) : normRelation(obj));
+    if(!deleted) db[arr].push(kind === 'company' ? normCompany(obj) : kind === 'relation' ? normRelation(obj) : normProject(obj));
   }
   // 消えた企業にぶら下がる関係を掃除
   const ids = new Set(db.companies.map(c=>c.id));
   db.relations = db.relations.filter(r => ids.has(r.source) && ids.has(r.target));
+  db.projects = db.projects.filter(p => ids.has(p.companyId));
   return db;
 }
 
-async function flush(){ /* GitHub Pagesからの直接書き込みは行わない */ }
+async function flush(){
+  if(flushing || !pending.size) return;
+  if(!ghOn() || !GH.token){setStatus(`未同期 ${pending.size}件：GitHub設定とアクセストークンを確認してください`);return;}
+  flushing=true;clearTimeout(flushTimer);
+  const batch=new Map(pending);
+  try{
+    let committed=null;
+    for(let attempt=0;attempt<3;attempt++){
+      const current=await ghReadForWrite();
+      const merged=applyPending(current.db,batch.values());
+      try{
+        await ghApi(contentsUrl().replace(/\?ref=.*$/,''),{
+          method:'PUT',headers:{'Content-Type':'application/json'},
+          body:JSON.stringify({message:`Update ecosystem data (${batch.size} changes)`,
+            content:b64enc(JSON.stringify(merged,null,1)+'\n'),sha:current.sha,branch:GH.branch})
+        });
+        committed=merged;break;
+      }catch(e){if(e.status!==409 || attempt===2) throw e;}
+    }
+    for(const [key,rec] of batch){if(pending.get(key)?.rev===rec.rev)pending.delete(key);}
+    savePending();
+    DB=applyPending(committed,pending.values());saveLocal();
+    await ensureImages();refreshGraph();
+    setStatus(`GitHubへ保存しました ${new Date().toLocaleTimeString('ja-JP')}（未同期 ${pending.size}件）`);
+    if(pending.size){clearTimeout(flushTimer);flushTimer=setTimeout(flush,500);}
+  }catch(e){
+    savePending();
+    setStatus(`GitHub保存失敗：${String(e.message).slice(0,100)}（未同期 ${pending.size}件）`);
+  }finally{flushing=false;}
+}
 
 async function loadAll(){
+  DB=null;
   const local=localStorage.getItem(LS_DATA);
-  if(local){
+  if(pending.size && local){
     try{DB=normDB(JSON.parse(local));setStatus('このブラウザに保存した編集内容を表示中');}
     catch(e){localStorage.removeItem(LS_DATA);DB=null;}
   }
@@ -1650,13 +1710,14 @@ async function deleteRelation(id){
 /* ---- メニュー（保存先・入出力） ---- */
 function openMenu(){
   const where = !ghOn() ? 'このブラウザのみ（リポジトリ未設定）'
-                         : `${GH.owner}/${GH.repo}@${GH.branch} の ${GH.path}`;
+                         : GH.token ? `${GH.owner}/${GH.repo}@${GH.branch} の ${GH.path}（自動同期）`
+                                    : `${GH.owner}/${GH.repo}@${GH.branch} の ${GH.path}（閲覧のみ）`;
   modal(`
     <header>保存先とデータ管理</header>
     <div class="body">
       <p class="muted" style="margin-top:0">現在の保存先：<b style="color:var(--fg)">${esc(where)}</b></p>
 
-      <h4 style="margin:16px 0 8px;font-size:12px;color:var(--fg-dim);letter-spacing:.08em">GITHUB 公開データ</h4>
+      <h4 style="margin:16px 0 8px;font-size:12px;color:var(--fg-dim);letter-spacing:.08em">GITHUB 同期設定</h4>
       <div style="display:flex;gap:8px">
         <label class="f" style="flex:1"><span>オーナー</span><input class="inp" id="gO" value="${esc(GH.owner)}" placeholder="hanadamushin"></label>
         <label class="f" style="flex:1"><span>リポジトリ</span><input class="inp" id="gR" value="${esc(GH.repo)}" placeholder="ecosystem-map"></label>
@@ -1665,8 +1726,12 @@ function openMenu(){
         <label class="f" style="flex:1"><span>ブランチ</span><input class="inp" id="gB" value="${esc(GH.branch)}" placeholder="main"></label>
         <label class="f" style="flex:1"><span>ファイルパス</span><input class="inp" id="gP" value="${esc(GH.path)}" placeholder="data.json"></label>
       </div>
+      <label class="f"><span>アクセストークン（編集者のみ）</span>
+        <input class="inp" id="gT" type="password" value="${esc(GH.token)}" placeholder="github_pat_..."></label>
       <p class="muted">
-        編集内容はこのブラウザに保存されます。共有するときは「JSONをエクスポート」で書き出し、GitHub上の <b>data.json</b> を置き換えてください。アクセストークンは使いません。
+        Fine-grained personal access tokenを、対象リポジトリ限定・<b>Contents: Read and write</b>で発行してください。
+        トークンはこのブラウザだけに保存され、HTMLやdata.jsonには入りません。共有PCには入力しないでください。
+        ${pending.size?`<br><b style="color:var(--accent)">未同期の変更：${pending.size}件</b>`:''}
       </p>
 
       <h4 style="margin:18px 0 8px;font-size:12px;color:var(--fg-dim);letter-spacing:.08em">その他</h4>
@@ -1686,6 +1751,7 @@ function openMenu(){
       ov.querySelector('[data-x]').onclick=()=>ov.remove();
       ov.querySelector('#xPull').onclick=async ()=>{
         if(!ghOn()){ alert('リポジトリが未設定です。'); return; }
+        if(pending.size){alert('未同期の変更があります。GitHubへの保存完了後に最新を取得してください。');return;}
         try{ DB = await ghPull(); await ensureImages(); dataVersion++; saveLocal(); refreshGraph();
              setStatus('最新を取得しました ' + new Date().toLocaleTimeString('ja-JP')); ov.remove(); }
         catch(e){ alert('取得失敗: ' + e.message); }
@@ -1698,30 +1764,34 @@ function openMenu(){
       ov.querySelector('#xImport').onclick=()=>ov.querySelector('#xFile').click();
       ov.querySelector('#xFile').onchange=async e=>{
         const f=e.target.files[0]; if(!f) return;
+        if(!canEdit()){alert('GitHubへ同期するには、アクセストークンを設定して編集モードに切り替えてください。');return;}
         try{
           const j=JSON.parse(await f.text());
           if(!Array.isArray(j.companies)) throw new Error('形式が不正です');
           DB = normDB(j);
           Object.keys(imgCache).forEach(k=>delete imgCache[k]);
-          await ensureImages(); dataVersion++; saveLocal();
+          await ensureImages(); queueReplace();
           ov.remove(); refreshGraph();
         }catch(err){ alert('読み込み失敗: '+err.message); }
       };
       ov.querySelector('#xSeed').onclick=async ()=>{
+        if(!canEdit()){alert('GitHubへ同期するには、アクセストークンを設定して編集モードに切り替えてください。');return;}
         if(!confirm('現在の表示を、同梱の初期データ（Miro CSV由来）に戻します。よろしいですか？')) return;
         if(!(await trySeedFile())) DB = normDB(JSON.parse(JSON.stringify(SEED)));
         Object.keys(imgCache).forEach(k=>delete imgCache[k]);
-        await ensureImages(); dataVersion++; saveLocal(); ov.remove(); refreshGraph();
+        await ensureImages(); queueReplace(); ov.remove(); refreshGraph();
       };
       ov.querySelector('#xReset').onclick=()=>{
-        if(!confirm('このブラウザのキャッシュを消去します（リポジトリのデータは消えません）。')) return;
-        localStorage.removeItem(LS_DATA); location.reload();
+        if(!confirm('このブラウザのキャッシュと未同期変更を消去します（GitHub上のデータは消えません）。')) return;
+        localStorage.removeItem(LS_DATA);localStorage.removeItem(LS_PENDING);location.reload();
       };
       ov.querySelector('#gSave').onclick=()=>{
         GH = {owner:ov.querySelector('#gO').value.trim(), repo:ov.querySelector('#gR').value.trim(),
               branch:ov.querySelector('#gB').value.trim()||'main',
-              path:ov.querySelector('#gP').value.trim()||'data.json'};
+              path:ov.querySelector('#gP').value.trim()||'data.json',
+              token:ov.querySelector('#gT').value.trim()};
         localStorage.setItem(LS_SYNC, JSON.stringify(GH));
+        if(!GH.token){accessMode='view';localStorage.setItem('fn-ecomap-access-v1','view');}
         location.reload();
       };
     });
@@ -1795,11 +1865,16 @@ $('#b3d').onclick = ()=>setMode('3D');
 $('#b2d').onclick = ()=>setMode('2D');
 $('#bProjects').onclick = ()=>setMode('PROJECT');
 function syncAccessUI(){
-  document.body.classList.toggle('readonly',accessMode!=='edit');
-  $('#modeView').classList.toggle('on',accessMode==='view');
-  $('#modeEdit').classList.toggle('on',accessMode==='edit');
+  const editing=canEdit();
+  document.body.classList.toggle('readonly',!editing);
+  $('#modeView').classList.toggle('on',!editing);
+  $('#modeEdit').classList.toggle('on',editing);
 }
 function setAccessMode(next){
+  if(next==='edit' && !GH.token){
+    alert('編集にはGitHubアクセストークンの設定が必要です。右上の設定画面で入力してください。');
+    openMenu();return;
+  }
   accessMode=next;
   localStorage.setItem('fn-ecomap-access-v1',accessMode);
   syncAccessUI();
@@ -1855,6 +1930,19 @@ window.addEventListener('keydown', e=>{
   await loadAll();
   makeGraph(); syncAffUI();
   if(mode==='2D' && view.layout==='band') setTimeout(()=>Graph.zoomToFit(600,40), 400);
+  if(pending.size && GH.token) setTimeout(flush,500);
+  if(ghOn()){
+    setInterval(async()=>{
+      if(document.querySelector('.overlay')||pending.size||flushing)return;
+      try{
+        const fresh=await ghPull();
+        if(JSON.stringify(fresh)!==JSON.stringify(DB)){
+          DB=fresh;await ensureImages();dataVersion++;saveLocal();refreshGraph();
+          setStatus('GitHubの最新変更を取り込みました '+new Date().toLocaleTimeString('ja-JP'));
+        }
+      }catch(e){}
+    },CFG.pollMs);
+  }
 })();
 </script>
 </body>
