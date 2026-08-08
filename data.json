@@ -1,0 +1,3192 @@
+{
+ "companies": [
+  {
+   "id": "fastneura",
+   "name": "株式会社FastNeura",
+   "categories": [
+    "1b",
+    "2",
+    "4d"
+   ],
+   "logo": null,
+   "url": "https://fastneura.com",
+   "note": "生体信号 × AI。エコシステムの中心。",
+   "hub": true,
+   "status": "self"
+  },
+  {
+   "id": "c_2120a4ce26",
+   "name": "味の素",
+   "categories": [
+    "1a"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "柔軟・貼付フィルム電極",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_45a4de7636",
+   "name": "帝国通信工業",
+   "categories": [
+    "1a"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "伸縮性電極＋コード",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_9da9d122fd",
+   "name": "NOK",
+   "categories": [
+    "1a"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "ゴム電極",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_12b02567f6",
+   "name": "住友電気工業",
+   "categories": [
+    "1a"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "極細ワイヤセンサー",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_c66bae3a6e",
+   "name": "ミツフジ",
+   "categories": [
+    "1a"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "導電性繊維",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_a08d29f811",
+   "name": "日本触媒",
+   "categories": [
+    "1a"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "機能性素材・通信素材",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_7b8f613a6c",
+   "name": "積水化学工業",
+   "categories": [
+    "1a"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "機能性ゲル材料・ベッド下センサ",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_dd388f7deb",
+   "name": "産業技術総合研究所",
+   "categories": [
+    "1a"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "フレキシブルバッテリー",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_ad47d7e548",
+   "name": "東大 染谷/横田研・松久研",
+   "categories": [
+    "1a"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "ナノメッシュ電極",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_21191b1ee9",
+   "name": "住友ベークライト",
+   "categories": [
+    "1a"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "生体電極材料",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_79eea493ed",
+   "name": "島津製作所",
+   "categories": [
+    "1b"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "マルチモーダル計測 HuMe",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_a689b578db",
+   "name": "Analog Devices",
+   "categories": [
+    "1b"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "半導体・インピーダンス計測IC",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_c720992d69",
+   "name": "三共社",
+   "categories": [
+    "1b"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "ADI 代理店",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_daa552c313",
+   "name": "Meldworks",
+   "categories": [
+    "1b"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "イヤフォン型脳波＋接続ハブ",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_08d2ef0bd1",
+   "name": "村田製作所",
+   "categories": [
+    "1b"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "ミリ波・MEMS・超音波・赤外線",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_be8263f82f",
+   "name": "住友理工（MONILIFE）",
+   "categories": [
+    "1b"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "非接触睡眠センシング",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_afdda3f4ee",
+   "name": "パラマウントベッド",
+   "categories": [
+    "1b"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "ベッド睡眠センサー",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_9b0c123329",
+   "name": "NeU",
+   "categories": [
+    "1b"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "ウェアラブル fNIRS",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_432297c6a7",
+   "name": "三菱電機（テラヘルツ）",
+   "categories": [
+    "1b"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "非接触バイタル（rPPG/THz）",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_043b75ae52",
+   "name": "三菱電機（磁気ナノ粒子）",
+   "categories": [
+    "1b"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "磁気バイオセンシング",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_9e1d4ea7f5",
+   "name": "株式会社マリ（MaRI）",
+   "categories": [
+    "1b"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "ミリ波レーダ生体センシング",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_30b927460e",
+   "name": "Bemap",
+   "categories": [
+    "1b"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "Wi-Fiセンシング（CSI）",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_1156757120",
+   "name": "issin",
+   "categories": [
+    "1b"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "スマートバスマット等",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_f440ef8a13",
+   "name": "SOXAI",
+   "categories": [
+    "1b"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "スマートリング",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_2cd2b22b11",
+   "name": "Biodata Bank",
+   "categories": [
+    "1b"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "深部体温ウェアラブル",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_4c883b3e23",
+   "name": "ワコム",
+   "categories": [
+    "1b"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "デジタルペン・筆圧センシング",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_8b1e65fa9c",
+   "name": "ゼブラ",
+   "categories": [
+    "1b"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "筆圧センシング",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_02f9b77ae7",
+   "name": "エム・ビー・エス（MBS）",
+   "categories": [
+    "1b"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "筆圧・筆跡バイオマーカー",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_a47bb02c1d",
+   "name": "JiMED",
+   "categories": [
+    "1b"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "侵襲脳波(ECoG)・FES/ICMS",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_9f7cf006df",
+   "name": "南西医療器",
+   "categories": [
+    "1b"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "PSG（アリス6）レンタル・解析",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_7443f9e658",
+   "name": "フィリップス・ジャパン",
+   "categories": [
+    "1b"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "睡眠検査装置 Sonata",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_7256aa49b0",
+   "name": "京セラ（FDL）",
+   "categories": [
+    "1b"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "EDA・イヤフォン型ヒアラブル",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_d65a4c525e",
+   "name": "東京農工大 SCLコンソーシアム",
+   "categories": [
+    "1b"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "スマートコンタクトレンズ",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_fd1e446d8d",
+   "name": "カシオ計算機",
+   "categories": [
+    "1b"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "耐久ウェアラブル・Moflin",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_004fa7c113",
+   "name": "CITIZEN",
+   "categories": [
+    "1b"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "ウェアラブル",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_9b1a6758d5",
+   "name": "セイコーエプソン",
+   "categories": [
+    "1b"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "PPG（SDK公開）",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_27869deaee",
+   "name": "ヌヴォトンテクノロジージャパン",
+   "categories": [
+    "1b"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "センサ設計・エッジ推論",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_343b84cae4",
+   "name": "PGV",
+   "categories": [
+    "1b"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "額装着型EEG",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_efcab6e1a0",
+   "name": "CyberneX",
+   "categories": [
+    "1b"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "イヤフォン型脳波（競合）",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_81d3ed585c",
+   "name": "三菱電機（Serendie / 応用開発）",
+   "categories": [
+    "2"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "データ基盤・生体データ連携",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_d1a2cf6475",
+   "name": "三菱電機（超省電力AI）",
+   "categories": [
+    "2"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "エッジNPU推論",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_9032fc08e7",
+   "name": "NTTドコモ",
+   "categories": [
+    "2"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "HealthTech基盤／人間拡張基盤®",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_961919b013",
+   "name": "NTTデータ経営研究所（CAN）",
+   "categories": [
+    "2"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "人間情報データベース",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_8b6381a64f",
+   "name": "KDDI グループ",
+   "categories": [
+    "2"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "通信・データ基盤／睡眠PoC",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_c7efeae12f",
+   "name": "ソフトバンク / SynapSpark",
+   "categories": [
+    "2"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "AI基盤・スマートビル",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_67d9075bfe",
+   "name": "富士通",
+   "categories": [
+    "2"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "空間知能",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_7e70c05039",
+   "name": "NEC",
+   "categories": [
+    "2"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "AI基盤・防衛",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_9de03bf5db",
+   "name": "マクニカ",
+   "categories": [
+    "2"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "商社・データ基盤/GTM",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_e08d15299a",
+   "name": "キヤノン / キヤノンMJ",
+   "categories": [
+    "2"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "AI・エージェント基盤",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_91c325d404",
+   "name": "日立製作所",
+   "categories": [
+    "2"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "鉄道AI・fNIRS共同開発",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_6feb54b1e6",
+   "name": "ExNerve",
+   "categories": [
+    "2"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "データ基盤共同開発",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_ea171ba76b",
+   "name": "パナソニック EW",
+   "categories": [
+    "3"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "照明・気流・電設・IoT",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_33ee7f066c",
+   "name": "ダイキン工業",
+   "categories": [
+    "3"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "空調",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_fe91feda65",
+   "name": "ゼネラル（空調）",
+   "categories": [
+    "3"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "ルームエアコン・冷却ブース",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_39c3867bc9",
+   "name": "TOA",
+   "categories": [
+    "3"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "音響（スピーカー／マイク）",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_e1ed697243",
+   "name": "川崎重工業",
+   "categories": [
+    "3"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "社会ロボット LEO",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_65cf7f1aad",
+   "name": "三菱電機（会話ロボット/DMS）",
+   "categories": [
+    "3"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "会話ロボット・DMS",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_23ee2c0de6",
+   "name": "オムロン / オムロンHC",
+   "categories": [
+    "3"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "制御機器・ヘルスケア機器",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_2ab9fff714",
+   "name": "SwitchBot",
+   "categories": [
+    "3"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "スマートホームIoT",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_04c1d7cd20",
+   "name": "TOTO",
+   "categories": [
+    "3"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "トイレ・風呂IoT",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_124d9809da",
+   "name": "トヨタ紡織",
+   "categories": [
+    "3"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "車室内 シート・天井・音/熱/光",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_1f68c930db",
+   "name": "HUAWEI（Bemap 経由）",
+   "categories": [
+    "3"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "ウェアラブル＋Wi-Fiセンシング",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_87ae3b0d42",
+   "name": "遠藤照明 / オーデリック",
+   "categories": [
+    "3"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "サーカディアン照明",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_e11d78fa77",
+   "name": "東宝",
+   "categories": [
+    "3"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "空間演出・心臓デバイス",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_889b18d36d",
+   "name": "日鉄興和不動産",
+   "categories": [
+    "4a"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "オフィス・ニューロダイバーシティ空間",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_38ea754791",
+   "name": "三井不動産",
+   "categories": [
+    "4a"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "柏の葉スマートシティ",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_62a15eeee5",
+   "name": "RELIC",
+   "categories": [
+    "4a"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "事業開発支援",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_9cd4f18f0b",
+   "name": "STYZ",
+   "categories": [
+    "4a"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "事業共創",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_51c45e9a4c",
+   "name": "UDCKタウンマネジメント",
+   "categories": [
+    "4a"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "柏の葉まちづくり主体",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_cf6e1f1fa0",
+   "name": "三菱地所",
+   "categories": [
+    "4a"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "スマートホーム・オフィスIoT",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_b742104c3a",
+   "name": "積水ハウス",
+   "categories": [
+    "4a"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "プラットフォームハウス・住空間",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_741de9e1eb",
+   "name": "大和ハウス工業",
+   "categories": [
+    "4a"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "生体連動型スマートホーム",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_bd480b0d19",
+   "name": "東急不動産",
+   "categories": [
+    "4a"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "健康経営C・渋谷SOIL",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_30d82910e3",
+   "name": "住友不動産",
+   "categories": [
+    "4a"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "不動産",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_5ade216837",
+   "name": "三菱HCキャピタル",
+   "categories": [
+    "4a"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "エクイティ出資型共創（CLAP）",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_fbccc595ba",
+   "name": "京王電鉄",
+   "categories": [
+    "4a"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "沿線まちづくり",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_6ec09dbf94",
+   "name": "本田技研 / ホンダイノベーションズ",
+   "categories": [
+    "4b"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "自動運転車内の環境知能",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_9441bc0654",
+   "name": "トヨタ自動車 未来創生センター",
+   "categories": [
+    "4b"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "ロボット・感性チーム",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_60f7e15fc1",
+   "name": "日産自動車",
+   "categories": [
+    "4b"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "NVH・車室内感性設計",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_0bb9b2429c",
+   "name": "いすゞ中央研究所",
+   "categories": [
+    "4b"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "商用車・ドライバー",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_1abef9b0f3",
+   "name": "JR東日本 / LiSH",
+   "categories": [
+    "4b"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "乗務員の眠気対策・高輪GW実証",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_0dcc02c105",
+   "name": "日本総研 / JR東日本商事",
+   "categories": [
+    "4b"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "WCC事務局・調達",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_a79e6ada2d",
+   "name": "日本郵船",
+   "categories": [
+    "4b"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "船員の安全・疲労管理",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_e7b34f0185",
+   "name": "ヤマハ発動機",
+   "categories": [
+    "4b"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "二輪モニタリング",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_3d6ec17836",
+   "name": "防衛装備庁 / 防衛イノベ研",
+   "categories": [
+    "4c"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "公募・SBIR",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_a77d5f74e3",
+   "name": "陸上自衛隊 / 陸上幕僚監部",
+   "categories": [
+    "4c"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "隊員の認知・疲労・睡眠最適化",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_7d038d1645",
+   "name": "デジタルレシピ",
+   "categories": [
+    "4c"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "認知戦・ナラティブ分析",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_147130dc92",
+   "name": "スペースデータ",
+   "categories": [
+    "4c"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "衛星デジタルツイン PROVIDENCE",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_a90cf25e4b",
+   "name": "JISDA",
+   "categories": [
+    "4c"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "防衛産業支援",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_98c3abf705",
+   "name": "防衛技術協会 / 防衛基盤整備協会",
+   "categories": [
+    "4c"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "業界団体",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_822fd7e4af",
+   "name": "ijsolutions",
+   "categories": [
+    "4c"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "防衛アドバイザリ",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_e671838d52",
+   "name": "サントリー（研究所/SIC）",
+   "categories": [
+    "4d"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "睡眠介入・機能性",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_5b692041fc",
+   "name": "ライオン",
+   "categories": [
+    "4d"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "習慣化技術",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_e56c52ff8f",
+   "name": "中外製薬",
+   "categories": [
+    "4d"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "市販後の副作用重篤化予防",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_c387b5c704",
+   "name": "KDDIヘルスケア",
+   "categories": [
+    "4d"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "睡眠PoC（auウェルネス）",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_4cf79d19da",
+   "name": "Meiji Seika ファルマ / 明治",
+   "categories": [
+    "4d"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "うつ・睡眠・環境介入",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_14942382ec",
+   "name": "日本ハム中央研究所",
+   "categories": [
+    "4d"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "食後の満足感・ストレス低減",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_70d52c6740",
+   "name": "ミツカン",
+   "categories": [
+    "4d"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "感性分析",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_557b22aefc",
+   "name": "森永 感性科学研究所",
+   "categories": [
+    "4d"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "感性科学",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_4ca3214a00",
+   "name": "ファンケル",
+   "categories": [
+    "4d"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "香り×脳波",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_8011297fbd",
+   "name": "D-lab",
+   "categories": [
+    "4d"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "香りによる集中度向上",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_7bde5cb4a6",
+   "name": "第一三共ヘルスケア",
+   "categories": [
+    "4d"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "OTC・ヘルスケア",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_37baf9413d",
+   "name": "大正製薬",
+   "categories": [
+    "4d"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "OTC",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_5d0be5f7b7",
+   "name": "小野薬品工業",
+   "categories": [
+    "4d"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "がん患者支援",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_63981caf3c",
+   "name": "リジェネソーム",
+   "categories": [
+    "4d"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "再生医療・低酸素フィルター",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_bf12630e06",
+   "name": "ロンジェビティクリニック",
+   "categories": [
+    "4d"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "予防・長寿クリニック",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_b33a4888dc",
+   "name": "MS&AD",
+   "categories": [
+    "4d"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "保険・健康経営",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_689857a6cf",
+   "name": "SOMPOケア",
+   "categories": [
+    "4d"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "保険・介護",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_a64b49eeee",
+   "name": "大翔会 / INTEP",
+   "categories": [
+    "4d"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "介護・リハビリ現場",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_5c1e3ef14f",
+   "name": "竹山さん紹介事業者",
+   "categories": [
+    "4d"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "介護",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_b544273f6f",
+   "name": "博報堂DY",
+   "categories": [
+    "4e"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "王さん Wearable AI",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_4162e24f05",
+   "name": "大広",
+   "categories": [
+    "4e"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "バーンアウト・睡眠",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_cd819aa8fd",
+   "name": "ソニー",
+   "categories": [
+    "4e"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "イメージングセンサー・VR×脳波",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_ce180fea47",
+   "name": "サイバーエージェント",
+   "categories": [
+    "4e"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "UI/UX・紹介ハブ",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_f50ef97959",
+   "name": "Singulab / I'chiba'n 他",
+   "categories": [
+    "4e"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "音楽・心拍同期の情動介入",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_e278d5242d",
+   "name": "データアナリティクスラボ",
+   "categories": [
+    "4e"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "データ解析",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_bc9517f2b4",
+   "name": "KDDI ∞Labo (MUGENLABO)",
+   "categories": [
+    "5"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "アクセラレータ／紹介ハブ",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_94c57f8615",
+   "name": "みずほ銀行 / みずほキャピタル",
+   "categories": [
+    "5"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "金融／紹介ハブ",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_ac039813e6",
+   "name": "デロイト トーマツ VS",
+   "categories": [
+    "5"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "アクセラレータ／紹介ハブ",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_492b5bb857",
+   "name": "STORIUM",
+   "categories": [
+    "5"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "紹介ハブ",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_417314aceb",
+   "name": "ON&BOARD",
+   "categories": [
+    "5"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "防衛・経済安保VC",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_0ff79f2b2c",
+   "name": "人間拡張コンソーシアム",
+   "categories": [
+    "5"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "事務局＝三菱総研",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_695e5dc349",
+   "name": "WaaS共創コンソーシアム",
+   "categories": [
+    "5"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "JR東日本主導／日本総研事務局",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_412b17f8e2",
+   "name": "応用脳科学コンソーシアム",
+   "categories": [
+    "5"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "コンソーシアム",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_09e5569c1c",
+   "name": "XGMF（次世代通信×素材）",
+   "categories": [
+    "5"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "事務局＝日本触媒",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_2652eec977",
+   "name": "Sandbox",
+   "categories": [
+    "5"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "IRB付き研究プラットフォーム",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_540653ef67",
+   "name": "NEDO",
+   "categories": [
+    "5"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "公的助成",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_7f5c89754f",
+   "name": "あいちデジタルヘルスC",
+   "categories": [
+    "5"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "地域コンソーシアム",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_cf52a2808c",
+   "name": "アカデミア（湯田研 他）",
+   "categories": [
+    "5"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "共同研究",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_3a5f5a79c3",
+   "name": "柳澤 琢史 研究室（阪大 医学系）",
+   "categories": [
+    "6"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "侵襲BMI・ECoG・臨床脳波",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_cb6bb31392",
+   "name": "松久 直司 研究室（東大 生産技術研究所）",
+   "categories": [
+    "6"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "伸縮導電性ナノ材料",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_6fabb0cf07",
+   "name": "生理学研究所（佐藤・山本・福永・原田 各先生）",
+   "categories": [
+    "6"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "fMRI・熟慮指標",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_02550eaf76",
+   "name": "鈴木 隆文 研究室（NICT／阪大 招へい教授）",
+   "categories": [
+    "6"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "侵襲BMI・柔軟電極",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_76bd4e15f8",
+   "name": "平田 雅之 研究室（阪大 脳機能診断再建学）",
+   "categories": [
+    "6"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "侵襲BMI・ECoG",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_bac212747c",
+   "name": "毛内 拡 研究室（お茶の水女子大）",
+   "categories": [
+    "6"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "アストロサイト・感覚刺激",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_777ce15eae",
+   "name": "湯田研究室（三重大 半導体センター）",
+   "categories": [
+    "6"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "エッジコンピューティング・生体センシング",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_7f23bea11b",
+   "name": "大黒 達也 研究室（東大 次世代知能科学研究センター）",
+   "categories": [
+    "6"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "音楽の統計学習・心拍介入",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_8e6ecccd83",
+   "name": "松尾・岩澤研究室（東大）",
+   "categories": [
+    "6"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "LLM・世界モデル・Physical AI",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_5a98d7374f",
+   "name": "鈴村 豊太郎 研究室（東大 電子情報学）",
+   "categories": [
+    "6"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "深層グラフ学習・GNN・HPC",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_32d15a8bcb",
+   "name": "割澤 伸一 研究室／伴 祐樹（東大 新領域）",
+   "categories": [
+    "6"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "Pseudo-haptics・情動誘導",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_0898d1e699",
+   "name": "稲見 昌彦 研究室（東大 先端研 身体情報学）",
+   "categories": [
+    "6"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "人間拡張・自在化身体",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_7fcb3465a7",
+   "name": "小林 伸彰 研究室（日本大学 理工 精密機械）",
+   "categories": [
+    "6"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "軽量小型BMI・低電力LSI・ドローン",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_a9fc188354",
+   "name": "尾形 哲也 研究室（早稲田／AIROA代表）",
+   "categories": [
+    "6"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "ロボティクス・環境知能・ムーンショット",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_d6c4184924",
+   "name": "高橋 宏知 研究室（東大 工学部）",
+   "categories": [
+    "6"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "脳ダイナミクス・VNS・非平衡熱力学",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_93464150a5",
+   "name": "兼本 大輔 先生（東京理科大）",
+   "categories": [
+    "6"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "脳波の圧縮センシング・無線伝送",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_e24b2557fc",
+   "name": "高木 康博 研究室（東京農工大）",
+   "categories": [
+    "6"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "スマートコンタクトレンズ・光学",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_4b52e9f955",
+   "name": "原田 悦子 名誉教授（筑波大／イデアラボ）",
+   "categories": [
+    "6"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "認知心理・高齢者・倫理審査",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_944b6ad0d3",
+   "name": "唐山 英明 研究室（富山県立大）",
+   "categories": [
+    "6"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "生体信号処理・カオス理論・HRV",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_a88f336e20",
+   "name": "田中 久弥 研究室／近藤 蒼大（工学院大）",
+   "categories": [
+    "6"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "Ear-EEG・SSVEP-BCI",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_70d56ece65",
+   "name": "中村 優吾 研究室（立命館 ユビキタス知能）",
+   "categories": [
+    "6"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "遍在知能・ユビキタス",
+   "hub": false,
+   "status": ""
+  },
+  {
+   "id": "c_075ba8934b",
+   "name": "西野 精治 教授（スタンフォード大）",
+   "categories": [
+    "6"
+   ],
+   "logo": null,
+   "url": "",
+   "note": "睡眠科学",
+   "hub": false,
+   "status": ""
+  }
+ ],
+ "relations": [
+  {
+   "id": "r_c_2120a4ce26",
+   "source": "fastneura",
+   "target": "c_2120a4ce26",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_45a4de7636",
+   "source": "fastneura",
+   "target": "c_45a4de7636",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_9da9d122fd",
+   "source": "fastneura",
+   "target": "c_9da9d122fd",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_12b02567f6",
+   "source": "fastneura",
+   "target": "c_12b02567f6",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_c66bae3a6e",
+   "source": "fastneura",
+   "target": "c_c66bae3a6e",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_a08d29f811",
+   "source": "fastneura",
+   "target": "c_a08d29f811",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_7b8f613a6c",
+   "source": "fastneura",
+   "target": "c_7b8f613a6c",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_dd388f7deb",
+   "source": "fastneura",
+   "target": "c_dd388f7deb",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_ad47d7e548",
+   "source": "fastneura",
+   "target": "c_ad47d7e548",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_21191b1ee9",
+   "source": "fastneura",
+   "target": "c_21191b1ee9",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_79eea493ed",
+   "source": "fastneura",
+   "target": "c_79eea493ed",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_a689b578db",
+   "source": "fastneura",
+   "target": "c_a689b578db",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_c720992d69",
+   "source": "fastneura",
+   "target": "c_c720992d69",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_daa552c313",
+   "source": "fastneura",
+   "target": "c_daa552c313",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_08d2ef0bd1",
+   "source": "fastneura",
+   "target": "c_08d2ef0bd1",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_be8263f82f",
+   "source": "fastneura",
+   "target": "c_be8263f82f",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_afdda3f4ee",
+   "source": "fastneura",
+   "target": "c_afdda3f4ee",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_9b0c123329",
+   "source": "fastneura",
+   "target": "c_9b0c123329",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_432297c6a7",
+   "source": "fastneura",
+   "target": "c_432297c6a7",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_043b75ae52",
+   "source": "fastneura",
+   "target": "c_043b75ae52",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_9e1d4ea7f5",
+   "source": "fastneura",
+   "target": "c_9e1d4ea7f5",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_30b927460e",
+   "source": "fastneura",
+   "target": "c_30b927460e",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_1156757120",
+   "source": "fastneura",
+   "target": "c_1156757120",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_f440ef8a13",
+   "source": "fastneura",
+   "target": "c_f440ef8a13",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_2cd2b22b11",
+   "source": "fastneura",
+   "target": "c_2cd2b22b11",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_4c883b3e23",
+   "source": "fastneura",
+   "target": "c_4c883b3e23",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_8b1e65fa9c",
+   "source": "fastneura",
+   "target": "c_8b1e65fa9c",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_02f9b77ae7",
+   "source": "fastneura",
+   "target": "c_02f9b77ae7",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_a47bb02c1d",
+   "source": "fastneura",
+   "target": "c_a47bb02c1d",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_9f7cf006df",
+   "source": "fastneura",
+   "target": "c_9f7cf006df",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_7443f9e658",
+   "source": "fastneura",
+   "target": "c_7443f9e658",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_7256aa49b0",
+   "source": "fastneura",
+   "target": "c_7256aa49b0",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_d65a4c525e",
+   "source": "fastneura",
+   "target": "c_d65a4c525e",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_fd1e446d8d",
+   "source": "fastneura",
+   "target": "c_fd1e446d8d",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_004fa7c113",
+   "source": "fastneura",
+   "target": "c_004fa7c113",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_9b1a6758d5",
+   "source": "fastneura",
+   "target": "c_9b1a6758d5",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_27869deaee",
+   "source": "fastneura",
+   "target": "c_27869deaee",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_343b84cae4",
+   "source": "fastneura",
+   "target": "c_343b84cae4",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_efcab6e1a0",
+   "source": "fastneura",
+   "target": "c_efcab6e1a0",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_81d3ed585c",
+   "source": "fastneura",
+   "target": "c_81d3ed585c",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_d1a2cf6475",
+   "source": "fastneura",
+   "target": "c_d1a2cf6475",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_9032fc08e7",
+   "source": "fastneura",
+   "target": "c_9032fc08e7",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_961919b013",
+   "source": "fastneura",
+   "target": "c_961919b013",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_8b6381a64f",
+   "source": "fastneura",
+   "target": "c_8b6381a64f",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_c7efeae12f",
+   "source": "fastneura",
+   "target": "c_c7efeae12f",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_67d9075bfe",
+   "source": "fastneura",
+   "target": "c_67d9075bfe",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_7e70c05039",
+   "source": "fastneura",
+   "target": "c_7e70c05039",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_9de03bf5db",
+   "source": "fastneura",
+   "target": "c_9de03bf5db",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_e08d15299a",
+   "source": "fastneura",
+   "target": "c_e08d15299a",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_91c325d404",
+   "source": "fastneura",
+   "target": "c_91c325d404",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_6feb54b1e6",
+   "source": "fastneura",
+   "target": "c_6feb54b1e6",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_ea171ba76b",
+   "source": "fastneura",
+   "target": "c_ea171ba76b",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_33ee7f066c",
+   "source": "fastneura",
+   "target": "c_33ee7f066c",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_fe91feda65",
+   "source": "fastneura",
+   "target": "c_fe91feda65",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_39c3867bc9",
+   "source": "fastneura",
+   "target": "c_39c3867bc9",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_e1ed697243",
+   "source": "fastneura",
+   "target": "c_e1ed697243",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_65cf7f1aad",
+   "source": "fastneura",
+   "target": "c_65cf7f1aad",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_23ee2c0de6",
+   "source": "fastneura",
+   "target": "c_23ee2c0de6",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_2ab9fff714",
+   "source": "fastneura",
+   "target": "c_2ab9fff714",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_04c1d7cd20",
+   "source": "fastneura",
+   "target": "c_04c1d7cd20",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_124d9809da",
+   "source": "fastneura",
+   "target": "c_124d9809da",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_1f68c930db",
+   "source": "fastneura",
+   "target": "c_1f68c930db",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_87ae3b0d42",
+   "source": "fastneura",
+   "target": "c_87ae3b0d42",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_e11d78fa77",
+   "source": "fastneura",
+   "target": "c_e11d78fa77",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_889b18d36d",
+   "source": "fastneura",
+   "target": "c_889b18d36d",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_38ea754791",
+   "source": "fastneura",
+   "target": "c_38ea754791",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_62a15eeee5",
+   "source": "fastneura",
+   "target": "c_62a15eeee5",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_9cd4f18f0b",
+   "source": "fastneura",
+   "target": "c_9cd4f18f0b",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_51c45e9a4c",
+   "source": "fastneura",
+   "target": "c_51c45e9a4c",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_cf6e1f1fa0",
+   "source": "fastneura",
+   "target": "c_cf6e1f1fa0",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_b742104c3a",
+   "source": "fastneura",
+   "target": "c_b742104c3a",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_741de9e1eb",
+   "source": "fastneura",
+   "target": "c_741de9e1eb",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_bd480b0d19",
+   "source": "fastneura",
+   "target": "c_bd480b0d19",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_30d82910e3",
+   "source": "fastneura",
+   "target": "c_30d82910e3",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_5ade216837",
+   "source": "fastneura",
+   "target": "c_5ade216837",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_fbccc595ba",
+   "source": "fastneura",
+   "target": "c_fbccc595ba",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_6ec09dbf94",
+   "source": "fastneura",
+   "target": "c_6ec09dbf94",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_9441bc0654",
+   "source": "fastneura",
+   "target": "c_9441bc0654",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_60f7e15fc1",
+   "source": "fastneura",
+   "target": "c_60f7e15fc1",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_0bb9b2429c",
+   "source": "fastneura",
+   "target": "c_0bb9b2429c",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_1abef9b0f3",
+   "source": "fastneura",
+   "target": "c_1abef9b0f3",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_0dcc02c105",
+   "source": "fastneura",
+   "target": "c_0dcc02c105",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_a79e6ada2d",
+   "source": "fastneura",
+   "target": "c_a79e6ada2d",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_e7b34f0185",
+   "source": "fastneura",
+   "target": "c_e7b34f0185",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_3d6ec17836",
+   "source": "fastneura",
+   "target": "c_3d6ec17836",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_a77d5f74e3",
+   "source": "fastneura",
+   "target": "c_a77d5f74e3",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_7d038d1645",
+   "source": "fastneura",
+   "target": "c_7d038d1645",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_147130dc92",
+   "source": "fastneura",
+   "target": "c_147130dc92",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_a90cf25e4b",
+   "source": "fastneura",
+   "target": "c_a90cf25e4b",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_98c3abf705",
+   "source": "fastneura",
+   "target": "c_98c3abf705",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_822fd7e4af",
+   "source": "fastneura",
+   "target": "c_822fd7e4af",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_e671838d52",
+   "source": "fastneura",
+   "target": "c_e671838d52",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_5b692041fc",
+   "source": "fastneura",
+   "target": "c_5b692041fc",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_e56c52ff8f",
+   "source": "fastneura",
+   "target": "c_e56c52ff8f",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_c387b5c704",
+   "source": "fastneura",
+   "target": "c_c387b5c704",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_4cf79d19da",
+   "source": "fastneura",
+   "target": "c_4cf79d19da",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_14942382ec",
+   "source": "fastneura",
+   "target": "c_14942382ec",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_70d52c6740",
+   "source": "fastneura",
+   "target": "c_70d52c6740",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_557b22aefc",
+   "source": "fastneura",
+   "target": "c_557b22aefc",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_4ca3214a00",
+   "source": "fastneura",
+   "target": "c_4ca3214a00",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_8011297fbd",
+   "source": "fastneura",
+   "target": "c_8011297fbd",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_7bde5cb4a6",
+   "source": "fastneura",
+   "target": "c_7bde5cb4a6",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_37baf9413d",
+   "source": "fastneura",
+   "target": "c_37baf9413d",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_5d0be5f7b7",
+   "source": "fastneura",
+   "target": "c_5d0be5f7b7",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_63981caf3c",
+   "source": "fastneura",
+   "target": "c_63981caf3c",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_bf12630e06",
+   "source": "fastneura",
+   "target": "c_bf12630e06",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_b33a4888dc",
+   "source": "fastneura",
+   "target": "c_b33a4888dc",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_689857a6cf",
+   "source": "fastneura",
+   "target": "c_689857a6cf",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_a64b49eeee",
+   "source": "fastneura",
+   "target": "c_a64b49eeee",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_5c1e3ef14f",
+   "source": "fastneura",
+   "target": "c_5c1e3ef14f",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_b544273f6f",
+   "source": "fastneura",
+   "target": "c_b544273f6f",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_4162e24f05",
+   "source": "fastneura",
+   "target": "c_4162e24f05",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_cd819aa8fd",
+   "source": "fastneura",
+   "target": "c_cd819aa8fd",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_ce180fea47",
+   "source": "fastneura",
+   "target": "c_ce180fea47",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_f50ef97959",
+   "source": "fastneura",
+   "target": "c_f50ef97959",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_e278d5242d",
+   "source": "fastneura",
+   "target": "c_e278d5242d",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_bc9517f2b4",
+   "source": "fastneura",
+   "target": "c_bc9517f2b4",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_94c57f8615",
+   "source": "fastneura",
+   "target": "c_94c57f8615",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_ac039813e6",
+   "source": "fastneura",
+   "target": "c_ac039813e6",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_492b5bb857",
+   "source": "fastneura",
+   "target": "c_492b5bb857",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_417314aceb",
+   "source": "fastneura",
+   "target": "c_417314aceb",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_0ff79f2b2c",
+   "source": "fastneura",
+   "target": "c_0ff79f2b2c",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_695e5dc349",
+   "source": "fastneura",
+   "target": "c_695e5dc349",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_412b17f8e2",
+   "source": "fastneura",
+   "target": "c_412b17f8e2",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_09e5569c1c",
+   "source": "fastneura",
+   "target": "c_09e5569c1c",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_2652eec977",
+   "source": "fastneura",
+   "target": "c_2652eec977",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_540653ef67",
+   "source": "fastneura",
+   "target": "c_540653ef67",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_7f5c89754f",
+   "source": "fastneura",
+   "target": "c_7f5c89754f",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_cf52a2808c",
+   "source": "fastneura",
+   "target": "c_cf52a2808c",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_3a5f5a79c3",
+   "source": "fastneura",
+   "target": "c_3a5f5a79c3",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_cb6bb31392",
+   "source": "fastneura",
+   "target": "c_cb6bb31392",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_6fabb0cf07",
+   "source": "fastneura",
+   "target": "c_6fabb0cf07",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_02550eaf76",
+   "source": "fastneura",
+   "target": "c_02550eaf76",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_76bd4e15f8",
+   "source": "fastneura",
+   "target": "c_76bd4e15f8",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_bac212747c",
+   "source": "fastneura",
+   "target": "c_bac212747c",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_777ce15eae",
+   "source": "fastneura",
+   "target": "c_777ce15eae",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_7f23bea11b",
+   "source": "fastneura",
+   "target": "c_7f23bea11b",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_8e6ecccd83",
+   "source": "fastneura",
+   "target": "c_8e6ecccd83",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_5a98d7374f",
+   "source": "fastneura",
+   "target": "c_5a98d7374f",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_32d15a8bcb",
+   "source": "fastneura",
+   "target": "c_32d15a8bcb",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_0898d1e699",
+   "source": "fastneura",
+   "target": "c_0898d1e699",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_7fcb3465a7",
+   "source": "fastneura",
+   "target": "c_7fcb3465a7",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_a9fc188354",
+   "source": "fastneura",
+   "target": "c_a9fc188354",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_d6c4184924",
+   "source": "fastneura",
+   "target": "c_d6c4184924",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_93464150a5",
+   "source": "fastneura",
+   "target": "c_93464150a5",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_e24b2557fc",
+   "source": "fastneura",
+   "target": "c_e24b2557fc",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_4b52e9f955",
+   "source": "fastneura",
+   "target": "c_4b52e9f955",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_944b6ad0d3",
+   "source": "fastneura",
+   "target": "c_944b6ad0d3",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_a88f336e20",
+   "source": "fastneura",
+   "target": "c_a88f336e20",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_70d56ece65",
+   "source": "fastneura",
+   "target": "c_70d56ece65",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  },
+  {
+   "id": "r_c_075ba8934b",
+   "source": "fastneura",
+   "target": "c_075ba8934b",
+   "label": "",
+   "type": "contact",
+   "color": "",
+   "directed": false
+  }
+ ],
+ "projects": []
+}

@@ -1,0 +1,1861 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>FastNeura Ecosystem Map</title>
+<script src="https://unpkg.com/three@0.160.0/build/three.min.js"></script>
+<script src="https://unpkg.com/three-spritetext@1.8.2/dist/three-spritetext.min.js"></script>
+<script src="https://unpkg.com/3d-force-graph@1.73.0/dist/3d-force-graph.min.js"></script>
+<script src="https://unpkg.com/force-graph@1.43.5/dist/force-graph.min.js"></script>
+<style>
+:root{
+  --bg:#0b0f17; --bg2:#111827; --panel:rgba(17,24,39,.92); --line:#1f2937;
+  --fg:#e5edf7; --fg-dim:#93a4bb; --accent:#f5c518; --accent2:#38bdf8;
+  --radius:10px;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:var(--bg);color:var(--fg);
+  font-family:-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Noto Sans JP",Meiryo,sans-serif;
+  overflow:hidden;-webkit-text-size-adjust:100%}
+button,input,select,textarea{font-family:inherit;font-size:13px}
+button{cursor:pointer;touch-action:manipulation}
+
+#graph{position:fixed;inset:0}
+#graph canvas{display:block}
+
+/* ---- top bar ---- */
+#topbar{position:fixed;top:0;left:0;right:0;height:52px;display:flex;align-items:center;gap:8px;
+  padding:0 10px;background:linear-gradient(180deg,rgba(11,15,23,.95),rgba(11,15,23,.55));
+  backdrop-filter:blur(8px);z-index:20;border-bottom:1px solid var(--line)}
+#brand{font-weight:700;letter-spacing:.02em;font-size:15px;white-space:nowrap}
+#brand span{color:var(--accent)}
+.spacer{flex:1}
+.btn{background:#1b2433;border:1px solid #2b3648;color:var(--fg);padding:7px 11px;border-radius:8px;
+  transition:.15s;white-space:nowrap}
+.btn:hover{background:#243044;border-color:#3a4a63}
+.btn.primary{background:var(--accent);color:#1a1400;border-color:var(--accent);font-weight:700}
+.btn.primary:hover{background:#ffd63d}
+.btn.danger{background:#3a1b1b;border-color:#5c2b2b;color:#ffb4b4}
+.btn.sm{padding:4px 8px;font-size:12px;border-radius:6px}
+.toggle{display:flex;border:1px solid #2b3648;border-radius:8px;overflow:hidden}
+.toggle button{background:#151d2a;border:0;color:var(--fg-dim);padding:7px 12px;font-weight:700}
+.toggle button.on{background:var(--accent2);color:#06202e}
+#search{background:#151d2a;border:1px solid #2b3648;color:var(--fg);padding:7px 10px;border-radius:8px;width:150px}
+
+/* ---- side panel ---- */
+#side{position:fixed;top:52px;bottom:0;left:0;width:310px;background:var(--panel);backdrop-filter:blur(10px);
+  border-right:1px solid var(--line);overflow-y:auto;z-index:15;transition:transform .22s ease}
+#side.hidden{transform:translateX(-100%)}
+.sec{padding:12px 14px;border-bottom:1px solid var(--line)}
+.sec h3{margin:0 0 9px;font-size:12px;letter-spacing:.08em;color:var(--fg-dim);text-transform:uppercase}
+.catrow{display:flex;align-items:center;gap:8px;padding:3px 0;font-size:12.5px;cursor:pointer;user-select:none}
+.catrow:hover{color:#fff}
+.dot{width:11px;height:11px;border-radius:50%;flex:0 0 11px}
+.catrow.off{opacity:.32}
+.count{margin-left:auto;color:var(--fg-dim);font-size:11px}
+.listitem{display:flex;align-items:center;gap:8px;padding:6px 7px;border-radius:7px;cursor:pointer;font-size:13px}
+.listitem:hover{background:#1a2432}
+.listitem .nm{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.listitem .acts{margin-left:auto;display:flex;gap:4px;opacity:0;transition:.15s}
+.listitem:hover .acts{opacity:1}
+.thumb{width:22px;height:22px;border-radius:50%;object-fit:cover;background:#222c3c;flex:0 0 22px}
+.rel{font-size:12px;padding:6px 7px;border-radius:7px;display:flex;gap:6px;align-items:center}
+.rel:hover{background:#1a2432}
+.rel .lbl{color:var(--accent);font-size:11px}
+.muted{color:var(--fg-dim);font-size:11.5px;line-height:1.6}
+
+/* ---- modal ---- */
+.overlay{position:fixed;inset:0;background:rgba(5,8,13,.7);z-index:40;display:flex;align-items:center;
+  justify-content:center;padding:16px;backdrop-filter:blur(3px)}
+.modal{background:#121a27;border:1px solid #2b3648;border-radius:14px;width:100%;max-width:460px;
+  max-height:88vh;overflow-y:auto;box-shadow:0 24px 60px rgba(0,0,0,.6)}
+.modal header{padding:14px 16px;border-bottom:1px solid var(--line);font-weight:700;display:flex;align-items:center}
+.modal .body{padding:16px}
+.modal footer{padding:12px 16px;border-top:1px solid var(--line);display:flex;gap:8px;justify-content:flex-end}
+label.f{display:block;margin:0 0 12px}
+label.f>span{display:block;font-size:11.5px;color:var(--fg-dim);margin-bottom:5px;letter-spacing:.04em}
+.inp{width:100%;background:#0d141f;border:1px solid #2b3648;color:var(--fg);padding:9px 10px;border-radius:8px}
+.inp:focus{outline:none;border-color:var(--accent2)}
+textarea.inp{min-height:64px;resize:vertical}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{display:flex;align-items:center;gap:6px;border:1px solid #2b3648;background:#0d141f;color:var(--fg-dim);
+  padding:6px 9px;border-radius:999px;font-size:11.5px;cursor:pointer;user-select:none}
+.chip.on{color:#fff;background:#1d2a3c}
+.logobox{display:flex;align-items:center;gap:12px}
+.logoprev{width:64px;height:64px;border-radius:50%;background:#0d141f;border:1px dashed #2b3648;object-fit:cover}
+
+/* ---- tooltip / detail ---- */
+#rightcol{position:fixed;right:12px;top:64px;bottom:12px;width:290px;z-index:16;display:flex;flex-direction:column;
+  gap:10px;pointer-events:none;overflow:hidden}
+#rightcol>*{pointer-events:auto}
+#detail{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px;
+  backdrop-filter:blur(10px);display:none;flex:0 0 auto;max-height:46%;overflow-y:auto}
+#detail.show{display:block}
+#catpanel{background:var(--panel);border:1px solid var(--line);border-radius:12px;
+  backdrop-filter:blur(10px);display:none;flex:1 1 auto;min-height:0;flex-direction:column;overflow:hidden}
+#catpanel.show{display:flex}
+#catpanel .ph{padding:12px 14px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:8px}
+#catpanel .ph b{font-size:13px;line-height:1.35}
+#catpanel .pb{overflow-y:auto;padding:6px 8px}
+.cprow{display:flex;gap:8px;align-items:flex-start;padding:7px 8px;border-radius:8px;cursor:pointer}
+.cprow:hover{background:#1a2432}
+.cprow.sel{background:#1d3247}
+.cprow .nm{font-size:12.5px;line-height:1.35}
+.cprow .tg{font-size:10.5px;color:var(--fg-dim);line-height:1.3}
+.sdot{width:8px;height:8px;border-radius:50%;flex:0 0 8px;margin-top:5px}
+.eye{background:none;border:0;color:var(--fg-dim);padding:0 2px;font-size:12px;line-height:1;opacity:.55}
+.eye:hover{opacity:1}
+.catrow.focus{background:#1d3247;box-shadow:inset 2px 0 0 var(--accent2)}
+.fbadge{margin-left:auto;font-size:9.5px;padding:2px 6px;border-radius:999px;background:var(--accent2);color:#06202e;font-weight:700}
+.catrow.focus .count{margin-left:6px}
+#detail h2{margin:0 0 4px;font-size:16px;display:flex;align-items:center;gap:9px}
+#detail .tags{display:flex;flex-wrap:wrap;gap:5px;margin:9px 0}
+.tag{font-size:10.5px;padding:3px 7px;border-radius:999px;background:#1d2a3c;color:#cfe0f5}
+body.readonly #btnAdd, body.readonly #btnRel, body.readonly .acts,
+body.readonly #dEdit, body.readonly #dRel, body.readonly #dDel,
+body.readonly #btnAddProject, body.readonly #pEdit, body.readonly #pDel{display:none !important}
+#robadge{display:none;font-size:11px;padding:3px 8px;border-radius:999px;background:#243044;color:var(--fg-dim);white-space:nowrap}
+body.readonly #robadge{display:inline-block}
+body.project-mode #side .ecoSec{display:none}
+#projectSec{display:none}
+body.project-mode #projectSec{display:block}
+body.project-mode #focusChip, body.project-mode #btnAdd, body.project-mode #btnRel{display:none !important}
+body.project-mode #search{display:none}
+body:not(.project-mode) #btnAddProject{display:none}
+.axisGrid{display:grid;grid-template-columns:1fr;gap:8px}
+.projectSummary{margin:9px 0 0;padding:8px 10px;border-radius:8px;background:#101a28;color:var(--fg-dim);font-size:11.5px;line-height:1.55}
+.metricGrid{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin:10px 0}
+.metric{padding:8px;border-radius:8px;background:#101a28;border:1px solid var(--line)}
+.metric b{display:block;margin-top:3px;color:var(--fg);font-size:13px}
+.axisLegend{position:fixed;left:330px;bottom:14px;z-index:14;padding:8px 10px;background:rgba(11,15,23,.78);border:1px solid var(--line);border-radius:9px;color:var(--fg-dim);font-size:11px;pointer-events:none;display:none}
+body.project-mode .axisLegend{display:block}
+#hint{position:fixed;left:50%;transform:translateX(-50%);bottom:12px;z-index:14;color:var(--fg-dim);
+  font-size:11.5px;background:rgba(11,15,23,.72);padding:6px 12px;border-radius:999px;pointer-events:none}
+#status{position:fixed;left:12px;bottom:12px;z-index:14;font-size:11px;color:var(--fg-dim)}
+
+@media (max-width:760px){
+  #side{width:82%;max-width:320px}
+  #rightcol{right:8px;left:8px;width:auto;top:auto;bottom:8px;height:52%}
+  #search{width:104px}
+  #brand{font-size:13px}
+  #brand span{display:none}
+  #topbar{gap:5px}
+  .toggle button{padding:7px 8px}
+  .axisLegend{left:10px;bottom:10px}
+  #hint{display:none}
+}
+</style>
+</head>
+<body>
+
+<div id="graph"></div>
+
+<div id="topbar">
+  <button class="btn sm" id="btnSide">☰</button>
+  <div id="brand">FastNeura <span>Ecosystem Map</span></div>
+  <span id="robadge">閲覧のみ</span>
+  <button class="btn sm" id="focusChip" style="display:none"></button>
+  <div class="spacer"></div>
+  <input id="search" class="" placeholder="企業を検索…">
+  <div class="toggle">
+    <button id="b2d" class="on">2D</button>
+    <button id="b3d">3D</button>
+    <button id="bProjects">案件評価</button>
+  </div>
+  <div class="toggle" title="誤操作防止の表示切り替えです">
+    <button id="modeView" class="on">閲覧</button>
+    <button id="modeEdit">編集</button>
+  </div>
+  <button class="btn primary" id="btnAdd">＋ 企業</button>
+  <button class="btn" id="btnRel">＋ 関係</button>
+  <button class="btn primary" id="btnAddProject">＋ 案件</button>
+  <button class="btn sm" id="btnMenu">⋯</button>
+</div>
+
+<aside id="side">
+  <div class="sec" id="projectSec">
+    <h3>案件ポジショニング</h3>
+    <div class="toggle" style="margin-bottom:10px">
+      <button id="p2d" class="on">2D</button><button id="p3d">3D</button>
+    </div>
+    <div class="axisGrid">
+      <label class="f"><span>X軸</span><select class="inp" id="axisX"></select></label>
+      <label class="f"><span>Y軸</span><select class="inp" id="axisY"></select></label>
+      <label class="f" id="axisZWrap" style="display:none"><span>Z軸</span><select class="inp" id="axisZ"></select></label>
+    </div>
+    <div class="projectSummary" id="projectSummary"></div>
+    <h3 style="margin-top:16px">案件一覧 <span id="pCount" class="count"></span></h3>
+    <div id="projectList"></div>
+    <p class="muted">選択した軸が未入力の案件はマップから除外されます。企業名・ロゴ・カテゴリ色はエコシステムの企業情報を使用します。</p>
+  </div>
+  <div class="sec ecoSec">
+    <h3>表示設定</h3>
+    <label class="f" style="margin-bottom:10px">
+      <span>アイコン／カードの大きさ <b id="vScaleV" style="color:var(--fg)"></b></span>
+      <input type="range" id="vScale" min="0.6" max="3" step="0.1" style="width:100%">
+    </label>
+    <div style="display:flex;gap:6px;flex-wrap:wrap">
+      <button class="btn sm" id="vLayout">2Dレイアウト：カテゴリ整列</button>
+      <button class="btn sm" id="vTheme">配色：ライト</button>
+      <button class="btn sm" id="vFit">全体表示</button>
+    </div>
+  </div>
+  <div class="sec ecoSec">
+    <h3>相性（キーワード近接）</h3>
+    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px">
+      <button class="btn sm" id="afOn">引力：OFF</button>
+      <button class="btn sm" id="afCross">異業種のみ：ON</button>
+    </div>
+    <label class="f" style="margin-bottom:8px">
+      <span>類似度のしきい値 <b id="afThrV" style="color:var(--fg)"></b></span>
+      <input type="range" id="afThr" min="0.1" max="0.6" step="0.02" style="width:100%">
+    </label>
+    <label class="f" style="margin-bottom:6px">
+      <span>引き寄せの強さ <b id="afForceV" style="color:var(--fg)"></b></span>
+      <input type="range" id="afForce" min="0.2" max="2.5" step="0.1" style="width:100%">
+    </label>
+    <p class="muted" id="afInfo"></p>
+  </div>
+  <div class="sec ecoSec">
+    <h3>カテゴリ（クリックで表示切替）</h3>
+    <div id="catlist"></div>
+    <div style="display:flex;gap:6px;margin-top:8px">
+      <button class="btn sm" id="catAll">全表示</button>
+      <button class="btn sm" id="catNone">全非表示</button>
+      <button class="btn sm" id="catUnfocus">フォーカス解除</button>
+    </div>
+    <p class="muted" style="margin:8px 0 0">行をクリックでそのカテゴリにフォーカス（拡大＋集約）。👁 で表示/非表示。</p>
+  </div>
+  <div class="sec ecoSec">
+    <h3>ステータス（外枠の色）</h3>
+    <div id="stalist"></div>
+  </div>
+  <div class="sec ecoSec">
+    <h3>関係線の種類</h3>
+    <div id="typelist"></div>
+  </div>
+  <div class="sec ecoSec">
+    <h3>企業一覧 <span id="cCount" class="count"></span></h3>
+    <div id="complist"></div>
+  </div>
+  <div class="sec ecoSec">
+    <h3>関係一覧 <span id="rCount" class="count"></span></h3>
+    <div id="rellist"></div>
+  </div>
+  <div class="sec ecoSec">
+    <p class="muted">
+      ノードをクリック＝詳細／ドラッグ＝移動。3Dは右ドラッグでパン、ホイールでズーム。<br>
+      編集内容はこのブラウザに保存されます。共有するには「⋯ → JSONをエクスポート」で書き出し、リポジトリの <code>data.json</code> を置き換えてください。
+    </p>
+  </div>
+</aside>
+
+<div id="rightcol">
+  <div id="detail"></div>
+  <div id="catpanel"><div class="ph"></div><div class="pb"></div></div>
+</div>
+<div id="hint">カードをクリックで詳細・ドラッグで移動／ホイールでズーム</div>
+<div id="status"></div>
+<div class="axisLegend" id="axisLegend"></div>
+
+<script>
+/* =========================================================================
+   FastNeura Ecosystem Map  —  single-file 3D/2D relationship graph
+   -------------------------------------------------------------------------
+   TUNABLES
+   ========================================================================= */
+const CFG = {
+  chargeStrength: -170,   // ノード同士の反発（強くする＝より広がる）
+  linkDistance:   70,     // リンクの自然長
+  nodeSize:       12,     // 3Dノードの基本サイズ
+  cardW:          150,    // 2Dカードの基準幅
+  cardH:          46,     // 2Dカードの基準高さ
+  bandCols:       9,      // カテゴリ整列時の1行あたりの最大列数
+  hubScale:       1.7,    // ハブ企業（FastNeura）の拡大率
+  logoPx:         192,    // 保存するロゴ画像の解像度(px)
+  pollMs:         20000   // リポジトリの変更を取り込む間隔(ms)
+};
+
+/* ---------- カテゴリ定義 ---------- */
+const CATS = [
+  {id:'1a', name:'センシング｜素材・電極',        color:'#ff5252'},
+  {id:'1b', name:'センシング｜デバイス・センサ',  color:'#ff9800'},
+  {id:'2',  name:'データ基盤・OS/モデル',         color:'#ffd54f'},
+  {id:'3',  name:'アクチュエータ・IoT・環境制御', color:'#7cb342'},
+  {id:'4a', name:'アプリ｜不動産・空間・都市',    color:'#26a69a'},
+  {id:'4b', name:'アプリ｜モビリティ',            color:'#29b6f6'},
+  {id:'4c', name:'アプリ｜防衛・安全保障',        color:'#5c6bc0'},
+  {id:'4d', name:'アプリ｜ヘルスケア・睡眠・食品',color:'#ab47bc'},
+  {id:'4e', name:'アプリ｜広告・教育・空間演出',  color:'#ec407a'},
+  {id:'5',  name:'GTM・紹介ハブ・コンソーシアム', color:'#8d6e63'},
+  {id:'6',  name:'アカデミア｜大学研究室・研究機関',color:'#78909c'}
+];
+const CAT = Object.fromEntries(CATS.map(c=>[c.id,c]));
+
+/* ---------- ステータス（ノードの外枠色。Miro版の凡例に対応） ---------- */
+const STATUSES = [
+  {id:'won',  name:'受注・契約・共同研究決定',        color:'#22c55e'},
+  {id:'nda',  name:'NDA・共同研究の書面手続き中',      color:'#38bdf8'},
+  {id:'poc',  name:'PoC設計・共同申請／定例あり',      color:'#a78bfa'},
+  {id:'prop', name:'提案・商談中／共同提案・継続協議',  color:'#f5c518'},
+  {id:'init', name:'初期接触・打診・候補',            color:'#94a3b8'},
+  {id:'lost', name:'失注・停止・返信途絶',            color:'#ef4444'},
+  {id:'',     name:'未設定',                        color:'#3d4757'}
+];
+const STA = Object.fromEntries(STATUSES.map(s=>[s.id,s]));
+const staColor = id => (STA[id]||STA['']).color;
+
+/* ---------- 関係線の種類（Miro版の凡例に対応） ---------- */
+const RTYPES = [
+  {id:'actual',    name:'実在する座組・取引',     color:'#cbd5e1', lcolor:'#5f8a6a', dash:null,  directed:false},
+  {id:'hub',       name:'紹介ハブ経由（矢印）',   color:'#f5c518', lcolor:'#7c5cbf', dash:null,  directed:true},
+  {id:'usecase',   name:'ユースケース軸',        color:'#38bdf8', lcolor:'#5b6ec4', dash:[2,2], directed:false},
+  {id:'potential', name:'潜在的な繋がり（仮説）', color:'#f59e0b', lcolor:'#e08a3c', dash:[1,3], directed:false},
+  {id:'contact',   name:'接点あり（未分類）',     color:'#39465a', lcolor:'#d0d5dd', dash:[1,4], directed:false},
+  {id:'affinity',  name:'相性（キーワード自動）',  color:'#34d399', lcolor:'#10b981', dash:[2,3], directed:false, auto:true}
+];
+const RT = Object.fromEntries(RTYPES.map(r=>[r.id,r]));
+const rtOf = t => RT[t] || RT['contact'];
+function linkColor(l){
+  const base = l.color || (theme==='light' ? rtOf(l.type).lcolor : rtOf(l.type).color);
+  if(!focusCat) return base;
+  const s0 = typeof l.source==='object' ? l.source : null;
+  const t0 = typeof l.target==='object' ? l.target : null;
+  const hot = (s0 && inFocus(s0)) || (t0 && inFocus(t0));
+  return hex2rgba(base, hot ? 0.95 : 0.10);
+}
+
+/* =========================================================================
+   キーワード辞書（相性判定に使う）
+   note / 社名 / 手入力キーワード に対して正規表現でマッチさせる。
+   ここに追記すれば判定軸を増やせる。
+   ========================================================================= */
+const KEYWORDS = [
+  {k:'脳波',        re:/脳波|EEG|BMI|BCI|ブレイン|neuro|ニューロ/i},
+  {k:'心拍・自律神経',re:/心拍|脈波|PPG|HRV|自律神経|血流|血圧/i},
+  {k:'睡眠',        re:/睡眠|入眠|眠り|PSG|不眠|Sleep/i},
+  {k:'体温・代謝',   re:/体温|代謝|血糖|発汗|温熱/i},
+  {k:'呼吸',        re:/呼吸|肺|換気/i},
+  {k:'姿勢・動作',   re:/姿勢|動作|歩行|モーション|筋|EMG|体幹/i},
+  {k:'視線・眼',     re:/視線|眼|アイ|コンタクトレンズ|網膜|瞳/i},
+  {k:'電極・素材',   re:/電極|素材|繊維|フィルム|ゴム|導電|ナノメッシュ|ベークライト|貼付/i},
+  {k:'半導体・回路', re:/半導体|IC|回路|チップ|インピーダンス|集積/i},
+  {k:'ウェアラブル', re:/ウェアラブル|装着|リング|ウォッチ|イヤ|ヒアラブル|指輪/i},
+  {k:'非接触センシング',re:/非接触|レーダー|ミリ波|テラヘルツ|Wi-Fi|CSI|カメラ|画像計測/i},
+  {k:'音・音響',     re:/音|音響|聴覚|スピーカ|マイク|楽|サウンド|振動音/i},
+  {k:'光・照明',     re:/光|照明|ライティング|LED|演出|プロジェク/i},
+  {k:'空調・気流',   re:/空調|気流|換気|温度|湿度|エアコン|環境制御/i},
+  {k:'香り・嗅覚',   re:/香り|嗅覚|芳香|アロマ|匂/i},
+  {k:'触覚・振動',   re:/触覚|振動|ハプティ|圧覚/i},
+  {k:'ロボティクス', re:/ロボ|アクチュエータ|マニピュ|VLA|自律移動/i},
+  {k:'モビリティ',   re:/車|モビリティ|運転|DMS|車室|鉄道|船|航空|シート/i},
+  {k:'住宅・不動産', re:/不動産|住宅|マンション|ハウス|建物|ビル|都市|まちづくり|空間/i},
+  {k:'オフィス・働き方',re:/オフィス|ワーク|働|健康経営|従業員/i},
+  {k:'介護・高齢者', re:/介護|高齢|リハビリ|ケア|看護/i},
+  {k:'医療・臨床',   re:/医療|臨床|病院|診断|治療|製薬|創薬|薬|IRB|倫理審査/i},
+  {k:'認知・脳機能', re:/認知|記憶|注意|集中|熟慮|意思決定|学習効果/i},
+  {k:'ストレス・疲労',re:/ストレス|疲労|リラ|回復|メンタル|情動|感情|快適/i},
+  {k:'食品・機能性', re:/食|飲料|機能性|栄養|サプリ|乳酸菌|発酵|調味/i},
+  {k:'化粧品・美容', re:/化粧|美容|スキン|肌|香粧/i},
+  {k:'保険・金融',   re:/保険|金融|銀行|キャピタル|出資|投資|リース/i},
+  {k:'防衛・安全保障',re:/防衛|安全保障|自衛|ATLA|装備|SBIR|警備/i},
+  {k:'通信・ネットワーク',re:/通信|5G|6G|ネットワーク|キャリア|IoT基盤/i},
+  {k:'データ基盤・AI',re:/データ|AI|基盤|解析|プラットフォーム|クラウド|モデル|LLM|エッジ/i},
+  {k:'広告・マーケ', re:/広告|マーケ|ブランド|プロモ|エージェンシー/i},
+  {k:'教育・人材',   re:/教育|学習支援|人材|研修|トレーニング/i},
+  {k:'エンタメ・空間演出',re:/エンタメ|演出|ライブ|音楽|映像|テーマパーク|劇場/i},
+  {k:'コンソーシアム・ハブ',re:/コンソーシアム|ハブ|紹介|アクセラ|事務局|協会|公的|補助|助成/i},
+  {k:'アカデミア',   re:/研究室|教授|先生|大学|研究機関|名誉/i},
+  {k:'計測機器',     re:/計測|測定|分析装置|マルチモーダル|PSG|レンタル/i},
+  {k:'磁気・電磁',   re:/磁気|磁性|電磁|ナノ粒子/i},
+  {k:'筆記・入力',   re:/ペン|筆圧|スタイラス|タブレット|入力デバイス|文具/i},
+  {k:'体組成・体重', re:/体重|体組成|バスマット|スケール|肥満/i},
+  {k:'商社・代理店', re:/代理店|商社|販売|流通|卸/i},
+  {k:'XR・空間情報', re:/XR|VR|AR|デジタルツイン|3D|空間情報|衛星|地図/i},
+  {k:'寝具・ベッド', re:/ベッド|寝具|マットレス|枕|布団/i}
+];
+
+/* ---------- 相性（キーワード近接）設定 ---------- */
+const aff = Object.assign({on:false, crossOnly:true, thr:0.28, topK:4, force:1.0},
+                          JSON.parse(localStorage.getItem('fn-ecomap-aff-v1')||'null')||{});
+const saveAff = () => localStorage.setItem('fn-ecomap-aff-v1', JSON.stringify(aff));
+
+/* ---------- 表示設定 ---------- */
+const LS_VIEW = 'fn-ecomap-view-v1';
+const view = Object.assign({scale:1.4, layout:'band', theme:'light'},
+                           JSON.parse(localStorage.getItem(LS_VIEW)||'null')||{});
+let theme = view.theme;
+const saveView = () => localStorage.setItem(LS_VIEW, JSON.stringify({scale:view.scale, layout:view.layout, theme:view.theme, mode:(typeof mode!=='undefined'?mode:'2D')}));
+const THEMES = {
+  dark : {bg:'#0b0f17', band:'#131b28', bandAlt:'#0e1521', text:'#e5edf7', dim:'#8ea3bd', card:'#16202e', fillA:'44', label:'#7b8ba1'},
+  light: {bg:'#ffffff', band:'#f2f3f5', bandAlt:'#ffffff', text:'#1f2937', dim:'#6b7280', card:'#ffffff', fillA:'22', label:'#9aa3af'}
+};
+const TH = () => THEMES[theme];
+const primaryCat = c => (c.categories||[])[0] || '5';
+const inFocus = n => !focusCat || (n.categories||[]).includes(focusCat) || n.hub;
+/* フォーカス時の拡大／縮小率 */
+const focusK = n => focusCat ? (inFocus(n) ? 1.55 : 0.55) : 1;
+const catK   = cid => focusCat ? (cid===focusCat || cid==='__hub' ? 1.55 : 0.55) : 1;
+function hex2rgba(hex, a){
+  const h = String(hex).replace('#','');
+  const v = h.length===3 ? h.split('').map(x=>x+x).join('') : h;
+  const n = parseInt(v,16);
+  return `rgba(${(n>>16)&255},${(n>>8)&255},${n&255},${a})`;
+}
+const linkDash  = l => rtOf(l.type).dash;
+const catColor = id => (CAT[id]||{}).color || '#64748b';
+
+/* ---------- 初期データ ---------- */
+const SEED = {"companies":[{"id":"fastneura","name":"株式会社FastNeura","categories":["1b","2","4d"],"logo":null,"url":"https://fastneura.com","note":"生体信号 × AI。エコシステムの中心。","hub":true,"status":"self"},{"id":"c_2120a4ce26","name":"味の素","categories":["1a"],"logo":null,"url":"","note":"柔軟・貼付フィルム電極","hub":false,"status":""},{"id":"c_45a4de7636","name":"帝国通信工業","categories":["1a"],"logo":null,"url":"","note":"伸縮性電極＋コード","hub":false,"status":""},{"id":"c_9da9d122fd","name":"NOK","categories":["1a"],"logo":null,"url":"","note":"ゴム電極","hub":false,"status":""},{"id":"c_12b02567f6","name":"住友電気工業","categories":["1a"],"logo":null,"url":"","note":"極細ワイヤセンサー","hub":false,"status":""},{"id":"c_c66bae3a6e","name":"ミツフジ","categories":["1a"],"logo":null,"url":"","note":"導電性繊維","hub":false,"status":""},{"id":"c_a08d29f811","name":"日本触媒","categories":["1a"],"logo":null,"url":"","note":"機能性素材・通信素材","hub":false,"status":""},{"id":"c_7b8f613a6c","name":"積水化学工業","categories":["1a"],"logo":null,"url":"","note":"機能性ゲル材料・ベッド下センサ","hub":false,"status":""},{"id":"c_dd388f7deb","name":"産業技術総合研究所","categories":["1a"],"logo":null,"url":"","note":"フレキシブルバッテリー","hub":false,"status":""},{"id":"c_ad47d7e548","name":"東大 染谷/横田研・松久研","categories":["1a"],"logo":null,"url":"","note":"ナノメッシュ電極","hub":false,"status":""},{"id":"c_21191b1ee9","name":"住友ベークライト","categories":["1a"],"logo":null,"url":"","note":"生体電極材料","hub":false,"status":""},{"id":"c_79eea493ed","name":"島津製作所","categories":["1b"],"logo":null,"url":"","note":"マルチモーダル計測 HuMe","hub":false,"status":""},{"id":"c_a689b578db","name":"Analog Devices","categories":["1b"],"logo":null,"url":"","note":"半導体・インピーダンス計測IC","hub":false,"status":""},{"id":"c_c720992d69","name":"三共社","categories":["1b"],"logo":null,"url":"","note":"ADI 代理店","hub":false,"status":""},{"id":"c_daa552c313","name":"Meldworks","categories":["1b"],"logo":null,"url":"","note":"イヤフォン型脳波＋接続ハブ","hub":false,"status":""},{"id":"c_08d2ef0bd1","name":"村田製作所","categories":["1b"],"logo":null,"url":"","note":"ミリ波・MEMS・超音波・赤外線","hub":false,"status":""},{"id":"c_be8263f82f","name":"住友理工（MONILIFE）","categories":["1b"],"logo":null,"url":"","note":"非接触睡眠センシング","hub":false,"status":""},{"id":"c_afdda3f4ee","name":"パラマウントベッド","categories":["1b"],"logo":null,"url":"","note":"ベッド睡眠センサー","hub":false,"status":""},{"id":"c_9b0c123329","name":"NeU","categories":["1b"],"logo":null,"url":"","note":"ウェアラブル fNIRS","hub":false,"status":""},{"id":"c_432297c6a7","name":"三菱電機（テラヘルツ）","categories":["1b"],"logo":null,"url":"","note":"非接触バイタル（rPPG/THz）","hub":false,"status":""},{"id":"c_043b75ae52","name":"三菱電機（磁気ナノ粒子）","categories":["1b"],"logo":null,"url":"","note":"磁気バイオセンシング","hub":false,"status":""},{"id":"c_9e1d4ea7f5","name":"株式会社マリ（MaRI）","categories":["1b"],"logo":null,"url":"","note":"ミリ波レーダ生体センシング","hub":false,"status":""},{"id":"c_30b927460e","name":"Bemap","categories":["1b"],"logo":null,"url":"","note":"Wi-Fiセンシング（CSI）","hub":false,"status":""},{"id":"c_1156757120","name":"issin","categories":["1b"],"logo":null,"url":"","note":"スマートバスマット等","hub":false,"status":""},{"id":"c_f440ef8a13","name":"SOXAI","categories":["1b"],"logo":null,"url":"","note":"スマートリング","hub":false,"status":""},{"id":"c_2cd2b22b11","name":"Biodata Bank","categories":["1b"],"logo":null,"url":"","note":"深部体温ウェアラブル","hub":false,"status":""},{"id":"c_4c883b3e23","name":"ワコム","categories":["1b"],"logo":null,"url":"","note":"デジタルペン・筆圧センシング","hub":false,"status":""},{"id":"c_8b1e65fa9c","name":"ゼブラ","categories":["1b"],"logo":null,"url":"","note":"筆圧センシング","hub":false,"status":""},{"id":"c_02f9b77ae7","name":"エム・ビー・エス（MBS）","categories":["1b"],"logo":null,"url":"","note":"筆圧・筆跡バイオマーカー","hub":false,"status":""},{"id":"c_a47bb02c1d","name":"JiMED","categories":["1b"],"logo":null,"url":"","note":"侵襲脳波(ECoG)・FES/ICMS","hub":false,"status":""},{"id":"c_9f7cf006df","name":"南西医療器","categories":["1b"],"logo":null,"url":"","note":"PSG（アリス6）レンタル・解析","hub":false,"status":""},{"id":"c_7443f9e658","name":"フィリップス・ジャパン","categories":["1b"],"logo":null,"url":"","note":"睡眠検査装置 Sonata","hub":false,"status":""},{"id":"c_7256aa49b0","name":"京セラ（FDL）","categories":["1b"],"logo":null,"url":"","note":"EDA・イヤフォン型ヒアラブル","hub":false,"status":""},{"id":"c_d65a4c525e","name":"東京農工大 SCLコンソーシアム","categories":["1b"],"logo":null,"url":"","note":"スマートコンタクトレンズ","hub":false,"status":""},{"id":"c_fd1e446d8d","name":"カシオ計算機","categories":["1b"],"logo":null,"url":"","note":"耐久ウェアラブル・Moflin","hub":false,"status":""},{"id":"c_004fa7c113","name":"CITIZEN","categories":["1b"],"logo":null,"url":"","note":"ウェアラブル","hub":false,"status":""},{"id":"c_9b1a6758d5","name":"セイコーエプソン","categories":["1b"],"logo":null,"url":"","note":"PPG（SDK公開）","hub":false,"status":""},{"id":"c_27869deaee","name":"ヌヴォトンテクノロジージャパン","categories":["1b"],"logo":null,"url":"","note":"センサ設計・エッジ推論","hub":false,"status":""},{"id":"c_343b84cae4","name":"PGV","categories":["1b"],"logo":null,"url":"","note":"額装着型EEG","hub":false,"status":""},{"id":"c_efcab6e1a0","name":"CyberneX","categories":["1b"],"logo":null,"url":"","note":"イヤフォン型脳波（競合）","hub":false,"status":""},{"id":"c_81d3ed585c","name":"三菱電機（Serendie / 応用開発）","categories":["2"],"logo":null,"url":"","note":"データ基盤・生体データ連携","hub":false,"status":""},{"id":"c_d1a2cf6475","name":"三菱電機（超省電力AI）","categories":["2"],"logo":null,"url":"","note":"エッジNPU推論","hub":false,"status":""},{"id":"c_9032fc08e7","name":"NTTドコモ","categories":["2"],"logo":null,"url":"","note":"HealthTech基盤／人間拡張基盤®","hub":false,"status":""},{"id":"c_961919b013","name":"NTTデータ経営研究所（CAN）","categories":["2"],"logo":null,"url":"","note":"人間情報データベース","hub":false,"status":""},{"id":"c_8b6381a64f","name":"KDDI グループ","categories":["2"],"logo":null,"url":"","note":"通信・データ基盤／睡眠PoC","hub":false,"status":""},{"id":"c_c7efeae12f","name":"ソフトバンク / SynapSpark","categories":["2"],"logo":null,"url":"","note":"AI基盤・スマートビル","hub":false,"status":""},{"id":"c_67d9075bfe","name":"富士通","categories":["2"],"logo":null,"url":"","note":"空間知能","hub":false,"status":""},{"id":"c_7e70c05039","name":"NEC","categories":["2"],"logo":null,"url":"","note":"AI基盤・防衛","hub":false,"status":""},{"id":"c_9de03bf5db","name":"マクニカ","categories":["2"],"logo":null,"url":"","note":"商社・データ基盤/GTM","hub":false,"status":""},{"id":"c_e08d15299a","name":"キヤノン / キヤノンMJ","categories":["2"],"logo":null,"url":"","note":"AI・エージェント基盤","hub":false,"status":""},{"id":"c_91c325d404","name":"日立製作所","categories":["2"],"logo":null,"url":"","note":"鉄道AI・fNIRS共同開発","hub":false,"status":""},{"id":"c_6feb54b1e6","name":"ExNerve","categories":["2"],"logo":null,"url":"","note":"データ基盤共同開発","hub":false,"status":""},{"id":"c_ea171ba76b","name":"パナソニック EW","categories":["3"],"logo":null,"url":"","note":"照明・気流・電設・IoT","hub":false,"status":""},{"id":"c_33ee7f066c","name":"ダイキン工業","categories":["3"],"logo":null,"url":"","note":"空調","hub":false,"status":""},{"id":"c_fe91feda65","name":"ゼネラル（空調）","categories":["3"],"logo":null,"url":"","note":"ルームエアコン・冷却ブース","hub":false,"status":""},{"id":"c_39c3867bc9","name":"TOA","categories":["3"],"logo":null,"url":"","note":"音響（スピーカー／マイク）","hub":false,"status":""},{"id":"c_e1ed697243","name":"川崎重工業","categories":["3"],"logo":null,"url":"","note":"社会ロボット LEO","hub":false,"status":""},{"id":"c_65cf7f1aad","name":"三菱電機（会話ロボット/DMS）","categories":["3"],"logo":null,"url":"","note":"会話ロボット・DMS","hub":false,"status":""},{"id":"c_23ee2c0de6","name":"オムロン / オムロンHC","categories":["3"],"logo":null,"url":"","note":"制御機器・ヘルスケア機器","hub":false,"status":""},{"id":"c_2ab9fff714","name":"SwitchBot","categories":["3"],"logo":null,"url":"","note":"スマートホームIoT","hub":false,"status":""},{"id":"c_04c1d7cd20","name":"TOTO","categories":["3"],"logo":null,"url":"","note":"トイレ・風呂IoT","hub":false,"status":""},{"id":"c_124d9809da","name":"トヨタ紡織","categories":["3"],"logo":null,"url":"","note":"車室内 シート・天井・音/熱/光","hub":false,"status":""},{"id":"c_1f68c930db","name":"HUAWEI（Bemap 経由）","categories":["3"],"logo":null,"url":"","note":"ウェアラブル＋Wi-Fiセンシング","hub":false,"status":""},{"id":"c_87ae3b0d42","name":"遠藤照明 / オーデリック","categories":["3"],"logo":null,"url":"","note":"サーカディアン照明","hub":false,"status":""},{"id":"c_e11d78fa77","name":"東宝","categories":["3"],"logo":null,"url":"","note":"空間演出・心臓デバイス","hub":false,"status":""},{"id":"c_889b18d36d","name":"日鉄興和不動産","categories":["4a"],"logo":null,"url":"","note":"オフィス・ニューロダイバーシティ空間","hub":false,"status":""},{"id":"c_38ea754791","name":"三井不動産","categories":["4a"],"logo":null,"url":"","note":"柏の葉スマートシティ","hub":false,"status":""},{"id":"c_62a15eeee5","name":"RELIC","categories":["4a"],"logo":null,"url":"","note":"事業開発支援","hub":false,"status":""},{"id":"c_9cd4f18f0b","name":"STYZ","categories":["4a"],"logo":null,"url":"","note":"事業共創","hub":false,"status":""},{"id":"c_51c45e9a4c","name":"UDCKタウンマネジメント","categories":["4a"],"logo":null,"url":"","note":"柏の葉まちづくり主体","hub":false,"status":""},{"id":"c_cf6e1f1fa0","name":"三菱地所","categories":["4a"],"logo":null,"url":"","note":"スマートホーム・オフィスIoT","hub":false,"status":""},{"id":"c_b742104c3a","name":"積水ハウス","categories":["4a"],"logo":null,"url":"","note":"プラットフォームハウス・住空間","hub":false,"status":""},{"id":"c_741de9e1eb","name":"大和ハウス工業","categories":["4a"],"logo":null,"url":"","note":"生体連動型スマートホーム","hub":false,"status":""},{"id":"c_bd480b0d19","name":"東急不動産","categories":["4a"],"logo":null,"url":"","note":"健康経営C・渋谷SOIL","hub":false,"status":""},{"id":"c_30d82910e3","name":"住友不動産","categories":["4a"],"logo":null,"url":"","note":"不動産","hub":false,"status":""},{"id":"c_5ade216837","name":"三菱HCキャピタル","categories":["4a"],"logo":null,"url":"","note":"エクイティ出資型共創（CLAP）","hub":false,"status":""},{"id":"c_fbccc595ba","name":"京王電鉄","categories":["4a"],"logo":null,"url":"","note":"沿線まちづくり","hub":false,"status":""},{"id":"c_6ec09dbf94","name":"本田技研 / ホンダイノベーションズ","categories":["4b"],"logo":null,"url":"","note":"自動運転車内の環境知能","hub":false,"status":""},{"id":"c_9441bc0654","name":"トヨタ自動車 未来創生センター","categories":["4b"],"logo":null,"url":"","note":"ロボット・感性チーム","hub":false,"status":""},{"id":"c_60f7e15fc1","name":"日産自動車","categories":["4b"],"logo":null,"url":"","note":"NVH・車室内感性設計","hub":false,"status":""},{"id":"c_0bb9b2429c","name":"いすゞ中央研究所","categories":["4b"],"logo":null,"url":"","note":"商用車・ドライバー","hub":false,"status":""},{"id":"c_1abef9b0f3","name":"JR東日本 / LiSH","categories":["4b"],"logo":null,"url":"","note":"乗務員の眠気対策・高輪GW実証","hub":false,"status":""},{"id":"c_0dcc02c105","name":"日本総研 / JR東日本商事","categories":["4b"],"logo":null,"url":"","note":"WCC事務局・調達","hub":false,"status":""},{"id":"c_a79e6ada2d","name":"日本郵船","categories":["4b"],"logo":null,"url":"","note":"船員の安全・疲労管理","hub":false,"status":""},{"id":"c_e7b34f0185","name":"ヤマハ発動機","categories":["4b"],"logo":null,"url":"","note":"二輪モニタリング","hub":false,"status":""},{"id":"c_3d6ec17836","name":"防衛装備庁 / 防衛イノベ研","categories":["4c"],"logo":null,"url":"","note":"公募・SBIR","hub":false,"status":""},{"id":"c_a77d5f74e3","name":"陸上自衛隊 / 陸上幕僚監部","categories":["4c"],"logo":null,"url":"","note":"隊員の認知・疲労・睡眠最適化","hub":false,"status":""},{"id":"c_7d038d1645","name":"デジタルレシピ","categories":["4c"],"logo":null,"url":"","note":"認知戦・ナラティブ分析","hub":false,"status":""},{"id":"c_147130dc92","name":"スペースデータ","categories":["4c"],"logo":null,"url":"","note":"衛星デジタルツイン PROVIDENCE","hub":false,"status":""},{"id":"c_a90cf25e4b","name":"JISDA","categories":["4c"],"logo":null,"url":"","note":"防衛産業支援","hub":false,"status":""},{"id":"c_98c3abf705","name":"防衛技術協会 / 防衛基盤整備協会","categories":["4c"],"logo":null,"url":"","note":"業界団体","hub":false,"status":""},{"id":"c_822fd7e4af","name":"ijsolutions","categories":["4c"],"logo":null,"url":"","note":"防衛アドバイザリ","hub":false,"status":""},{"id":"c_e671838d52","name":"サントリー（研究所/SIC）","categories":["4d"],"logo":null,"url":"","note":"睡眠介入・機能性","hub":false,"status":""},{"id":"c_5b692041fc","name":"ライオン","categories":["4d"],"logo":null,"url":"","note":"習慣化技術","hub":false,"status":""},{"id":"c_e56c52ff8f","name":"中外製薬","categories":["4d"],"logo":null,"url":"","note":"市販後の副作用重篤化予防","hub":false,"status":""},{"id":"c_c387b5c704","name":"KDDIヘルスケア","categories":["4d"],"logo":null,"url":"","note":"睡眠PoC（auウェルネス）","hub":false,"status":""},{"id":"c_4cf79d19da","name":"Meiji Seika ファルマ / 明治","categories":["4d"],"logo":null,"url":"","note":"うつ・睡眠・環境介入","hub":false,"status":""},{"id":"c_14942382ec","name":"日本ハム中央研究所","categories":["4d"],"logo":null,"url":"","note":"食後の満足感・ストレス低減","hub":false,"status":""},{"id":"c_70d52c6740","name":"ミツカン","categories":["4d"],"logo":null,"url":"","note":"感性分析","hub":false,"status":""},{"id":"c_557b22aefc","name":"森永 感性科学研究所","categories":["4d"],"logo":null,"url":"","note":"感性科学","hub":false,"status":""},{"id":"c_4ca3214a00","name":"ファンケル","categories":["4d"],"logo":null,"url":"","note":"香り×脳波","hub":false,"status":""},{"id":"c_8011297fbd","name":"D-lab","categories":["4d"],"logo":null,"url":"","note":"香りによる集中度向上","hub":false,"status":""},{"id":"c_7bde5cb4a6","name":"第一三共ヘルスケア","categories":["4d"],"logo":null,"url":"","note":"OTC・ヘルスケア","hub":false,"status":""},{"id":"c_37baf9413d","name":"大正製薬","categories":["4d"],"logo":null,"url":"","note":"OTC","hub":false,"status":""},{"id":"c_5d0be5f7b7","name":"小野薬品工業","categories":["4d"],"logo":null,"url":"","note":"がん患者支援","hub":false,"status":""},{"id":"c_63981caf3c","name":"リジェネソーム","categories":["4d"],"logo":null,"url":"","note":"再生医療・低酸素フィルター","hub":false,"status":""},{"id":"c_bf12630e06","name":"ロンジェビティクリニック","categories":["4d"],"logo":null,"url":"","note":"予防・長寿クリニック","hub":false,"status":""},{"id":"c_b33a4888dc","name":"MS&AD","categories":["4d"],"logo":null,"url":"","note":"保険・健康経営","hub":false,"status":""},{"id":"c_689857a6cf","name":"SOMPOケア","categories":["4d"],"logo":null,"url":"","note":"保険・介護","hub":false,"status":""},{"id":"c_a64b49eeee","name":"大翔会 / INTEP","categories":["4d"],"logo":null,"url":"","note":"介護・リハビリ現場","hub":false,"status":""},{"id":"c_5c1e3ef14f","name":"竹山さん紹介事業者","categories":["4d"],"logo":null,"url":"","note":"介護","hub":false,"status":""},{"id":"c_b544273f6f","name":"博報堂DY","categories":["4e"],"logo":null,"url":"","note":"王さん Wearable AI","hub":false,"status":""},{"id":"c_4162e24f05","name":"大広","categories":["4e"],"logo":null,"url":"","note":"バーンアウト・睡眠","hub":false,"status":""},{"id":"c_cd819aa8fd","name":"ソニー","categories":["4e"],"logo":null,"url":"","note":"イメージングセンサー・VR×脳波","hub":false,"status":""},{"id":"c_ce180fea47","name":"サイバーエージェント","categories":["4e"],"logo":null,"url":"","note":"UI/UX・紹介ハブ","hub":false,"status":""},{"id":"c_f50ef97959","name":"Singulab / I'chiba'n 他","categories":["4e"],"logo":null,"url":"","note":"音楽・心拍同期の情動介入","hub":false,"status":""},{"id":"c_e278d5242d","name":"データアナリティクスラボ","categories":["4e"],"logo":null,"url":"","note":"データ解析","hub":false,"status":""},{"id":"c_bc9517f2b4","name":"KDDI ∞Labo (MUGENLABO)","categories":["5"],"logo":null,"url":"","note":"アクセラレータ／紹介ハブ","hub":false,"status":""},{"id":"c_94c57f8615","name":"みずほ銀行 / みずほキャピタル","categories":["5"],"logo":null,"url":"","note":"金融／紹介ハブ","hub":false,"status":""},{"id":"c_ac039813e6","name":"デロイト トーマツ VS","categories":["5"],"logo":null,"url":"","note":"アクセラレータ／紹介ハブ","hub":false,"status":""},{"id":"c_492b5bb857","name":"STORIUM","categories":["5"],"logo":null,"url":"","note":"紹介ハブ","hub":false,"status":""},{"id":"c_417314aceb","name":"ON&BOARD","categories":["5"],"logo":null,"url":"","note":"防衛・経済安保VC","hub":false,"status":""},{"id":"c_0ff79f2b2c","name":"人間拡張コンソーシアム","categories":["5"],"logo":null,"url":"","note":"事務局＝三菱総研","hub":false,"status":""},{"id":"c_695e5dc349","name":"WaaS共創コンソーシアム","categories":["5"],"logo":null,"url":"","note":"JR東日本主導／日本総研事務局","hub":false,"status":""},{"id":"c_412b17f8e2","name":"応用脳科学コンソーシアム","categories":["5"],"logo":null,"url":"","note":"コンソーシアム","hub":false,"status":""},{"id":"c_09e5569c1c","name":"XGMF（次世代通信×素材）","categories":["5"],"logo":null,"url":"","note":"事務局＝日本触媒","hub":false,"status":""},{"id":"c_2652eec977","name":"Sandbox","categories":["5"],"logo":null,"url":"","note":"IRB付き研究プラットフォーム","hub":false,"status":""},{"id":"c_540653ef67","name":"NEDO","categories":["5"],"logo":null,"url":"","note":"公的助成","hub":false,"status":""},{"id":"c_7f5c89754f","name":"あいちデジタルヘルスC","categories":["5"],"logo":null,"url":"","note":"地域コンソーシアム","hub":false,"status":""},{"id":"c_cf52a2808c","name":"アカデミア（湯田研 他）","categories":["5"],"logo":null,"url":"","note":"共同研究","hub":false,"status":""},{"id":"c_3a5f5a79c3","name":"柳澤 琢史 研究室（阪大 医学系）","categories":["6"],"logo":null,"url":"","note":"侵襲BMI・ECoG・臨床脳波","hub":false,"status":""},{"id":"c_cb6bb31392","name":"松久 直司 研究室（東大 生産技術研究所）","categories":["6"],"logo":null,"url":"","note":"伸縮導電性ナノ材料","hub":false,"status":""},{"id":"c_6fabb0cf07","name":"生理学研究所（佐藤・山本・福永・原田 各先生）","categories":["6"],"logo":null,"url":"","note":"fMRI・熟慮指標","hub":false,"status":""},{"id":"c_02550eaf76","name":"鈴木 隆文 研究室（NICT／阪大 招へい教授）","categories":["6"],"logo":null,"url":"","note":"侵襲BMI・柔軟電極","hub":false,"status":""},{"id":"c_76bd4e15f8","name":"平田 雅之 研究室（阪大 脳機能診断再建学）","categories":["6"],"logo":null,"url":"","note":"侵襲BMI・ECoG","hub":false,"status":""},{"id":"c_bac212747c","name":"毛内 拡 研究室（お茶の水女子大）","categories":["6"],"logo":null,"url":"","note":"アストロサイト・感覚刺激","hub":false,"status":""},{"id":"c_777ce15eae","name":"湯田研究室（三重大 半導体センター）","categories":["6"],"logo":null,"url":"","note":"エッジコンピューティング・生体センシング","hub":false,"status":""},{"id":"c_7f23bea11b","name":"大黒 達也 研究室（東大 次世代知能科学研究センター）","categories":["6"],"logo":null,"url":"","note":"音楽の統計学習・心拍介入","hub":false,"status":""},{"id":"c_8e6ecccd83","name":"松尾・岩澤研究室（東大）","categories":["6"],"logo":null,"url":"","note":"LLM・世界モデル・Physical AI","hub":false,"status":""},{"id":"c_5a98d7374f","name":"鈴村 豊太郎 研究室（東大 電子情報学）","categories":["6"],"logo":null,"url":"","note":"深層グラフ学習・GNN・HPC","hub":false,"status":""},{"id":"c_32d15a8bcb","name":"割澤 伸一 研究室／伴 祐樹（東大 新領域）","categories":["6"],"logo":null,"url":"","note":"Pseudo-haptics・情動誘導","hub":false,"status":""},{"id":"c_0898d1e699","name":"稲見 昌彦 研究室（東大 先端研 身体情報学）","categories":["6"],"logo":null,"url":"","note":"人間拡張・自在化身体","hub":false,"status":""},{"id":"c_7fcb3465a7","name":"小林 伸彰 研究室（日本大学 理工 精密機械）","categories":["6"],"logo":null,"url":"","note":"軽量小型BMI・低電力LSI・ドローン","hub":false,"status":""},{"id":"c_a9fc188354","name":"尾形 哲也 研究室（早稲田／AIROA代表）","categories":["6"],"logo":null,"url":"","note":"ロボティクス・環境知能・ムーンショット","hub":false,"status":""},{"id":"c_d6c4184924","name":"高橋 宏知 研究室（東大 工学部）","categories":["6"],"logo":null,"url":"","note":"脳ダイナミクス・VNS・非平衡熱力学","hub":false,"status":""},{"id":"c_93464150a5","name":"兼本 大輔 先生（東京理科大）","categories":["6"],"logo":null,"url":"","note":"脳波の圧縮センシング・無線伝送","hub":false,"status":""},{"id":"c_e24b2557fc","name":"高木 康博 研究室（東京農工大）","categories":["6"],"logo":null,"url":"","note":"スマートコンタクトレンズ・光学","hub":false,"status":""},{"id":"c_4b52e9f955","name":"原田 悦子 名誉教授（筑波大／イデアラボ）","categories":["6"],"logo":null,"url":"","note":"認知心理・高齢者・倫理審査","hub":false,"status":""},{"id":"c_944b6ad0d3","name":"唐山 英明 研究室（富山県立大）","categories":["6"],"logo":null,"url":"","note":"生体信号処理・カオス理論・HRV","hub":false,"status":""},{"id":"c_a88f336e20","name":"田中 久弥 研究室／近藤 蒼大（工学院大）","categories":["6"],"logo":null,"url":"","note":"Ear-EEG・SSVEP-BCI","hub":false,"status":""},{"id":"c_70d56ece65","name":"中村 優吾 研究室（立命館 ユビキタス知能）","categories":["6"],"logo":null,"url":"","note":"遍在知能・ユビキタス","hub":false,"status":""},{"id":"c_075ba8934b","name":"西野 精治 教授（スタンフォード大）","categories":["6"],"logo":null,"url":"","note":"睡眠科学","hub":false,"status":""}],"relations":[{"id":"r_c_2120a4ce26","source":"fastneura","target":"c_2120a4ce26","label":"","type":"contact","color":"","directed":false},{"id":"r_c_45a4de7636","source":"fastneura","target":"c_45a4de7636","label":"","type":"contact","color":"","directed":false},{"id":"r_c_9da9d122fd","source":"fastneura","target":"c_9da9d122fd","label":"","type":"contact","color":"","directed":false},{"id":"r_c_12b02567f6","source":"fastneura","target":"c_12b02567f6","label":"","type":"contact","color":"","directed":false},{"id":"r_c_c66bae3a6e","source":"fastneura","target":"c_c66bae3a6e","label":"","type":"contact","color":"","directed":false},{"id":"r_c_a08d29f811","source":"fastneura","target":"c_a08d29f811","label":"","type":"contact","color":"","directed":false},{"id":"r_c_7b8f613a6c","source":"fastneura","target":"c_7b8f613a6c","label":"","type":"contact","color":"","directed":false},{"id":"r_c_dd388f7deb","source":"fastneura","target":"c_dd388f7deb","label":"","type":"contact","color":"","directed":false},{"id":"r_c_ad47d7e548","source":"fastneura","target":"c_ad47d7e548","label":"","type":"contact","color":"","directed":false},{"id":"r_c_21191b1ee9","source":"fastneura","target":"c_21191b1ee9","label":"","type":"contact","color":"","directed":false},{"id":"r_c_79eea493ed","source":"fastneura","target":"c_79eea493ed","label":"","type":"contact","color":"","directed":false},{"id":"r_c_a689b578db","source":"fastneura","target":"c_a689b578db","label":"","type":"contact","color":"","directed":false},{"id":"r_c_c720992d69","source":"fastneura","target":"c_c720992d69","label":"","type":"contact","color":"","directed":false},{"id":"r_c_daa552c313","source":"fastneura","target":"c_daa552c313","label":"","type":"contact","color":"","directed":false},{"id":"r_c_08d2ef0bd1","source":"fastneura","target":"c_08d2ef0bd1","label":"","type":"contact","color":"","directed":false},{"id":"r_c_be8263f82f","source":"fastneura","target":"c_be8263f82f","label":"","type":"contact","color":"","directed":false},{"id":"r_c_afdda3f4ee","source":"fastneura","target":"c_afdda3f4ee","label":"","type":"contact","color":"","directed":false},{"id":"r_c_9b0c123329","source":"fastneura","target":"c_9b0c123329","label":"","type":"contact","color":"","directed":false},{"id":"r_c_432297c6a7","source":"fastneura","target":"c_432297c6a7","label":"","type":"contact","color":"","directed":false},{"id":"r_c_043b75ae52","source":"fastneura","target":"c_043b75ae52","label":"","type":"contact","color":"","directed":false},{"id":"r_c_9e1d4ea7f5","source":"fastneura","target":"c_9e1d4ea7f5","label":"","type":"contact","color":"","directed":false},{"id":"r_c_30b927460e","source":"fastneura","target":"c_30b927460e","label":"","type":"contact","color":"","directed":false},{"id":"r_c_1156757120","source":"fastneura","target":"c_1156757120","label":"","type":"contact","color":"","directed":false},{"id":"r_c_f440ef8a13","source":"fastneura","target":"c_f440ef8a13","label":"","type":"contact","color":"","directed":false},{"id":"r_c_2cd2b22b11","source":"fastneura","target":"c_2cd2b22b11","label":"","type":"contact","color":"","directed":false},{"id":"r_c_4c883b3e23","source":"fastneura","target":"c_4c883b3e23","label":"","type":"contact","color":"","directed":false},{"id":"r_c_8b1e65fa9c","source":"fastneura","target":"c_8b1e65fa9c","label":"","type":"contact","color":"","directed":false},{"id":"r_c_02f9b77ae7","source":"fastneura","target":"c_02f9b77ae7","label":"","type":"contact","color":"","directed":false},{"id":"r_c_a47bb02c1d","source":"fastneura","target":"c_a47bb02c1d","label":"","type":"contact","color":"","directed":false},{"id":"r_c_9f7cf006df","source":"fastneura","target":"c_9f7cf006df","label":"","type":"contact","color":"","directed":false},{"id":"r_c_7443f9e658","source":"fastneura","target":"c_7443f9e658","label":"","type":"contact","color":"","directed":false},{"id":"r_c_7256aa49b0","source":"fastneura","target":"c_7256aa49b0","label":"","type":"contact","color":"","directed":false},{"id":"r_c_d65a4c525e","source":"fastneura","target":"c_d65a4c525e","label":"","type":"contact","color":"","directed":false},{"id":"r_c_fd1e446d8d","source":"fastneura","target":"c_fd1e446d8d","label":"","type":"contact","color":"","directed":false},{"id":"r_c_004fa7c113","source":"fastneura","target":"c_004fa7c113","label":"","type":"contact","color":"","directed":false},{"id":"r_c_9b1a6758d5","source":"fastneura","target":"c_9b1a6758d5","label":"","type":"contact","color":"","directed":false},{"id":"r_c_27869deaee","source":"fastneura","target":"c_27869deaee","label":"","type":"contact","color":"","directed":false},{"id":"r_c_343b84cae4","source":"fastneura","target":"c_343b84cae4","label":"","type":"contact","color":"","directed":false},{"id":"r_c_efcab6e1a0","source":"fastneura","target":"c_efcab6e1a0","label":"","type":"contact","color":"","directed":false},{"id":"r_c_81d3ed585c","source":"fastneura","target":"c_81d3ed585c","label":"","type":"contact","color":"","directed":false},{"id":"r_c_d1a2cf6475","source":"fastneura","target":"c_d1a2cf6475","label":"","type":"contact","color":"","directed":false},{"id":"r_c_9032fc08e7","source":"fastneura","target":"c_9032fc08e7","label":"","type":"contact","color":"","directed":false},{"id":"r_c_961919b013","source":"fastneura","target":"c_961919b013","label":"","type":"contact","color":"","directed":false},{"id":"r_c_8b6381a64f","source":"fastneura","target":"c_8b6381a64f","label":"","type":"contact","color":"","directed":false},{"id":"r_c_c7efeae12f","source":"fastneura","target":"c_c7efeae12f","label":"","type":"contact","color":"","directed":false},{"id":"r_c_67d9075bfe","source":"fastneura","target":"c_67d9075bfe","label":"","type":"contact","color":"","directed":false},{"id":"r_c_7e70c05039","source":"fastneura","target":"c_7e70c05039","label":"","type":"contact","color":"","directed":false},{"id":"r_c_9de03bf5db","source":"fastneura","target":"c_9de03bf5db","label":"","type":"contact","color":"","directed":false},{"id":"r_c_e08d15299a","source":"fastneura","target":"c_e08d15299a","label":"","type":"contact","color":"","directed":false},{"id":"r_c_91c325d404","source":"fastneura","target":"c_91c325d404","label":"","type":"contact","color":"","directed":false},{"id":"r_c_6feb54b1e6","source":"fastneura","target":"c_6feb54b1e6","label":"","type":"contact","color":"","directed":false},{"id":"r_c_ea171ba76b","source":"fastneura","target":"c_ea171ba76b","label":"","type":"contact","color":"","directed":false},{"id":"r_c_33ee7f066c","source":"fastneura","target":"c_33ee7f066c","label":"","type":"contact","color":"","directed":false},{"id":"r_c_fe91feda65","source":"fastneura","target":"c_fe91feda65","label":"","type":"contact","color":"","directed":false},{"id":"r_c_39c3867bc9","source":"fastneura","target":"c_39c3867bc9","label":"","type":"contact","color":"","directed":false},{"id":"r_c_e1ed697243","source":"fastneura","target":"c_e1ed697243","label":"","type":"contact","color":"","directed":false},{"id":"r_c_65cf7f1aad","source":"fastneura","target":"c_65cf7f1aad","label":"","type":"contact","color":"","directed":false},{"id":"r_c_23ee2c0de6","source":"fastneura","target":"c_23ee2c0de6","label":"","type":"contact","color":"","directed":false},{"id":"r_c_2ab9fff714","source":"fastneura","target":"c_2ab9fff714","label":"","type":"contact","color":"","directed":false},{"id":"r_c_04c1d7cd20","source":"fastneura","target":"c_04c1d7cd20","label":"","type":"contact","color":"","directed":false},{"id":"r_c_124d9809da","source":"fastneura","target":"c_124d9809da","label":"","type":"contact","color":"","directed":false},{"id":"r_c_1f68c930db","source":"fastneura","target":"c_1f68c930db","label":"","type":"contact","color":"","directed":false},{"id":"r_c_87ae3b0d42","source":"fastneura","target":"c_87ae3b0d42","label":"","type":"contact","color":"","directed":false},{"id":"r_c_e11d78fa77","source":"fastneura","target":"c_e11d78fa77","label":"","type":"contact","color":"","directed":false},{"id":"r_c_889b18d36d","source":"fastneura","target":"c_889b18d36d","label":"","type":"contact","color":"","directed":false},{"id":"r_c_38ea754791","source":"fastneura","target":"c_38ea754791","label":"","type":"contact","color":"","directed":false},{"id":"r_c_62a15eeee5","source":"fastneura","target":"c_62a15eeee5","label":"","type":"contact","color":"","directed":false},{"id":"r_c_9cd4f18f0b","source":"fastneura","target":"c_9cd4f18f0b","label":"","type":"contact","color":"","directed":false},{"id":"r_c_51c45e9a4c","source":"fastneura","target":"c_51c45e9a4c","label":"","type":"contact","color":"","directed":false},{"id":"r_c_cf6e1f1fa0","source":"fastneura","target":"c_cf6e1f1fa0","label":"","type":"contact","color":"","directed":false},{"id":"r_c_b742104c3a","source":"fastneura","target":"c_b742104c3a","label":"","type":"contact","color":"","directed":false},{"id":"r_c_741de9e1eb","source":"fastneura","target":"c_741de9e1eb","label":"","type":"contact","color":"","directed":false},{"id":"r_c_bd480b0d19","source":"fastneura","target":"c_bd480b0d19","label":"","type":"contact","color":"","directed":false},{"id":"r_c_30d82910e3","source":"fastneura","target":"c_30d82910e3","label":"","type":"contact","color":"","directed":false},{"id":"r_c_5ade216837","source":"fastneura","target":"c_5ade216837","label":"","type":"contact","color":"","directed":false},{"id":"r_c_fbccc595ba","source":"fastneura","target":"c_fbccc595ba","label":"","type":"contact","color":"","directed":false},{"id":"r_c_6ec09dbf94","source":"fastneura","target":"c_6ec09dbf94","label":"","type":"contact","color":"","directed":false},{"id":"r_c_9441bc0654","source":"fastneura","target":"c_9441bc0654","label":"","type":"contact","color":"","directed":false},{"id":"r_c_60f7e15fc1","source":"fastneura","target":"c_60f7e15fc1","label":"","type":"contact","color":"","directed":false},{"id":"r_c_0bb9b2429c","source":"fastneura","target":"c_0bb9b2429c","label":"","type":"contact","color":"","directed":false},{"id":"r_c_1abef9b0f3","source":"fastneura","target":"c_1abef9b0f3","label":"","type":"contact","color":"","directed":false},{"id":"r_c_0dcc02c105","source":"fastneura","target":"c_0dcc02c105","label":"","type":"contact","color":"","directed":false},{"id":"r_c_a79e6ada2d","source":"fastneura","target":"c_a79e6ada2d","label":"","type":"contact","color":"","directed":false},{"id":"r_c_e7b34f0185","source":"fastneura","target":"c_e7b34f0185","label":"","type":"contact","color":"","directed":false},{"id":"r_c_3d6ec17836","source":"fastneura","target":"c_3d6ec17836","label":"","type":"contact","color":"","directed":false},{"id":"r_c_a77d5f74e3","source":"fastneura","target":"c_a77d5f74e3","label":"","type":"contact","color":"","directed":false},{"id":"r_c_7d038d1645","source":"fastneura","target":"c_7d038d1645","label":"","type":"contact","color":"","directed":false},{"id":"r_c_147130dc92","source":"fastneura","target":"c_147130dc92","label":"","type":"contact","color":"","directed":false},{"id":"r_c_a90cf25e4b","source":"fastneura","target":"c_a90cf25e4b","label":"","type":"contact","color":"","directed":false},{"id":"r_c_98c3abf705","source":"fastneura","target":"c_98c3abf705","label":"","type":"contact","color":"","directed":false},{"id":"r_c_822fd7e4af","source":"fastneura","target":"c_822fd7e4af","label":"","type":"contact","color":"","directed":false},{"id":"r_c_e671838d52","source":"fastneura","target":"c_e671838d52","label":"","type":"contact","color":"","directed":false},{"id":"r_c_5b692041fc","source":"fastneura","target":"c_5b692041fc","label":"","type":"contact","color":"","directed":false},{"id":"r_c_e56c52ff8f","source":"fastneura","target":"c_e56c52ff8f","label":"","type":"contact","color":"","directed":false},{"id":"r_c_c387b5c704","source":"fastneura","target":"c_c387b5c704","label":"","type":"contact","color":"","directed":false},{"id":"r_c_4cf79d19da","source":"fastneura","target":"c_4cf79d19da","label":"","type":"contact","color":"","directed":false},{"id":"r_c_14942382ec","source":"fastneura","target":"c_14942382ec","label":"","type":"contact","color":"","directed":false},{"id":"r_c_70d52c6740","source":"fastneura","target":"c_70d52c6740","label":"","type":"contact","color":"","directed":false},{"id":"r_c_557b22aefc","source":"fastneura","target":"c_557b22aefc","label":"","type":"contact","color":"","directed":false},{"id":"r_c_4ca3214a00","source":"fastneura","target":"c_4ca3214a00","label":"","type":"contact","color":"","directed":false},{"id":"r_c_8011297fbd","source":"fastneura","target":"c_8011297fbd","label":"","type":"contact","color":"","directed":false},{"id":"r_c_7bde5cb4a6","source":"fastneura","target":"c_7bde5cb4a6","label":"","type":"contact","color":"","directed":false},{"id":"r_c_37baf9413d","source":"fastneura","target":"c_37baf9413d","label":"","type":"contact","color":"","directed":false},{"id":"r_c_5d0be5f7b7","source":"fastneura","target":"c_5d0be5f7b7","label":"","type":"contact","color":"","directed":false},{"id":"r_c_63981caf3c","source":"fastneura","target":"c_63981caf3c","label":"","type":"contact","color":"","directed":false},{"id":"r_c_bf12630e06","source":"fastneura","target":"c_bf12630e06","label":"","type":"contact","color":"","directed":false},{"id":"r_c_b33a4888dc","source":"fastneura","target":"c_b33a4888dc","label":"","type":"contact","color":"","directed":false},{"id":"r_c_689857a6cf","source":"fastneura","target":"c_689857a6cf","label":"","type":"contact","color":"","directed":false},{"id":"r_c_a64b49eeee","source":"fastneura","target":"c_a64b49eeee","label":"","type":"contact","color":"","directed":false},{"id":"r_c_5c1e3ef14f","source":"fastneura","target":"c_5c1e3ef14f","label":"","type":"contact","color":"","directed":false},{"id":"r_c_b544273f6f","source":"fastneura","target":"c_b544273f6f","label":"","type":"contact","color":"","directed":false},{"id":"r_c_4162e24f05","source":"fastneura","target":"c_4162e24f05","label":"","type":"contact","color":"","directed":false},{"id":"r_c_cd819aa8fd","source":"fastneura","target":"c_cd819aa8fd","label":"","type":"contact","color":"","directed":false},{"id":"r_c_ce180fea47","source":"fastneura","target":"c_ce180fea47","label":"","type":"contact","color":"","directed":false},{"id":"r_c_f50ef97959","source":"fastneura","target":"c_f50ef97959","label":"","type":"contact","color":"","directed":false},{"id":"r_c_e278d5242d","source":"fastneura","target":"c_e278d5242d","label":"","type":"contact","color":"","directed":false},{"id":"r_c_bc9517f2b4","source":"fastneura","target":"c_bc9517f2b4","label":"","type":"contact","color":"","directed":false},{"id":"r_c_94c57f8615","source":"fastneura","target":"c_94c57f8615","label":"","type":"contact","color":"","directed":false},{"id":"r_c_ac039813e6","source":"fastneura","target":"c_ac039813e6","label":"","type":"contact","color":"","directed":false},{"id":"r_c_492b5bb857","source":"fastneura","target":"c_492b5bb857","label":"","type":"contact","color":"","directed":false},{"id":"r_c_417314aceb","source":"fastneura","target":"c_417314aceb","label":"","type":"contact","color":"","directed":false},{"id":"r_c_0ff79f2b2c","source":"fastneura","target":"c_0ff79f2b2c","label":"","type":"contact","color":"","directed":false},{"id":"r_c_695e5dc349","source":"fastneura","target":"c_695e5dc349","label":"","type":"contact","color":"","directed":false},{"id":"r_c_412b17f8e2","source":"fastneura","target":"c_412b17f8e2","label":"","type":"contact","color":"","directed":false},{"id":"r_c_09e5569c1c","source":"fastneura","target":"c_09e5569c1c","label":"","type":"contact","color":"","directed":false},{"id":"r_c_2652eec977","source":"fastneura","target":"c_2652eec977","label":"","type":"contact","color":"","directed":false},{"id":"r_c_540653ef67","source":"fastneura","target":"c_540653ef67","label":"","type":"contact","color":"","directed":false},{"id":"r_c_7f5c89754f","source":"fastneura","target":"c_7f5c89754f","label":"","type":"contact","color":"","directed":false},{"id":"r_c_cf52a2808c","source":"fastneura","target":"c_cf52a2808c","label":"","type":"contact","color":"","directed":false},{"id":"r_c_3a5f5a79c3","source":"fastneura","target":"c_3a5f5a79c3","label":"","type":"contact","color":"","directed":false},{"id":"r_c_cb6bb31392","source":"fastneura","target":"c_cb6bb31392","label":"","type":"contact","color":"","directed":false},{"id":"r_c_6fabb0cf07","source":"fastneura","target":"c_6fabb0cf07","label":"","type":"contact","color":"","directed":false},{"id":"r_c_02550eaf76","source":"fastneura","target":"c_02550eaf76","label":"","type":"contact","color":"","directed":false},{"id":"r_c_76bd4e15f8","source":"fastneura","target":"c_76bd4e15f8","label":"","type":"contact","color":"","directed":false},{"id":"r_c_bac212747c","source":"fastneura","target":"c_bac212747c","label":"","type":"contact","color":"","directed":false},{"id":"r_c_777ce15eae","source":"fastneura","target":"c_777ce15eae","label":"","type":"contact","color":"","directed":false},{"id":"r_c_7f23bea11b","source":"fastneura","target":"c_7f23bea11b","label":"","type":"contact","color":"","directed":false},{"id":"r_c_8e6ecccd83","source":"fastneura","target":"c_8e6ecccd83","label":"","type":"contact","color":"","directed":false},{"id":"r_c_5a98d7374f","source":"fastneura","target":"c_5a98d7374f","label":"","type":"contact","color":"","directed":false},{"id":"r_c_32d15a8bcb","source":"fastneura","target":"c_32d15a8bcb","label":"","type":"contact","color":"","directed":false},{"id":"r_c_0898d1e699","source":"fastneura","target":"c_0898d1e699","label":"","type":"contact","color":"","directed":false},{"id":"r_c_7fcb3465a7","source":"fastneura","target":"c_7fcb3465a7","label":"","type":"contact","color":"","directed":false},{"id":"r_c_a9fc188354","source":"fastneura","target":"c_a9fc188354","label":"","type":"contact","color":"","directed":false},{"id":"r_c_d6c4184924","source":"fastneura","target":"c_d6c4184924","label":"","type":"contact","color":"","directed":false},{"id":"r_c_93464150a5","source":"fastneura","target":"c_93464150a5","label":"","type":"contact","color":"","directed":false},{"id":"r_c_e24b2557fc","source":"fastneura","target":"c_e24b2557fc","label":"","type":"contact","color":"","directed":false},{"id":"r_c_4b52e9f955","source":"fastneura","target":"c_4b52e9f955","label":"","type":"contact","color":"","directed":false},{"id":"r_c_944b6ad0d3","source":"fastneura","target":"c_944b6ad0d3","label":"","type":"contact","color":"","directed":false},{"id":"r_c_a88f336e20","source":"fastneura","target":"c_a88f336e20","label":"","type":"contact","color":"","directed":false},{"id":"r_c_70d56ece65","source":"fastneura","target":"c_70d56ece65","label":"","type":"contact","color":"","directed":false},{"id":"r_c_075ba8934b","source":"fastneura","target":"c_075ba8934b","label":"","type":"contact","color":"","directed":false}]};
+
+/* =========================================================================
+   STATE
+   ========================================================================= */
+let DB = {companies:[], relations:[]};
+let mode = (JSON.parse(localStorage.getItem('fn-ecomap-view-v1')||'null')||{}).mode || '2D';
+if(!['2D','3D','PROJECT'].includes(mode)) mode='2D';
+let accessMode = localStorage.getItem('fn-ecomap-access-v1') === 'edit' ? 'edit' : 'view';
+let projectDim = localStorage.getItem('fn-ecomap-project-dim-v1') === '3D' ? '3D' : '2D';
+const PROJECT_AXES = [
+  {id:'expectedAmount', name:'得られそうな金額', short:'金額', min:0, max:null, unit:'万円'},
+  {id:'winProbability', name:'受注の確度', short:'受注確度', min:0, max:100, unit:'%'},
+  {id:'pocContinuity', name:'PoC後の継続性', short:'継続性', min:1, max:5, unit:'/ 5'},
+  {id:'assetAffinity', name:'社内の技術アセットとの親和性', short:'技術親和性', min:1, max:5, unit:'/ 5'},
+  {id:'reusability', name:'他案件や企業への応用性', short:'応用性', min:1, max:5, unit:'/ 5'},
+  {id:'interest', name:'案件の面白さ', short:'面白さ', min:1, max:5, unit:'/ 5'}
+];
+let projectAxes = Object.assign({x:'expectedAmount',y:'winProbability',z:'assetAffinity'},
+  JSON.parse(localStorage.getItem('fn-ecomap-project-axes-v1')||'null')||{});
+let hidden = new Set();          // 非表示カテゴリ
+let hiddenSta = new Set();       // 非表示ステータス
+let hiddenType = new Set(['contact']); // 非表示の関係種別（既定で「未分類」は隠す）
+let selectedId = null;
+let focusCat = null;                       // フォーカス中のカテゴリID
+let Graph = null;
+const imgCache = {};             // id -> HTMLImageElement
+let dataVersion = 0;
+
+const LS_DATA = 'fn-ecomap-data-v2';
+const LS_SYNC = 'fn-ecomap-gh-v1';
+
+const uid = () => Math.random().toString(36).slice(2,10) + Date.now().toString(36).slice(-4);
+const $ = s => document.querySelector(s);
+const esc = s => String(s??'').replace(/[&<>"']/g, m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+
+/* =========================================================================
+   PERSISTENCE
+   ========================================================================= */
+function saveLocal(){ try{ localStorage.setItem(LS_DATA, JSON.stringify(DB)); }catch(e){} }
+
+const normCompany = c => ({id:c.id,name:c.name,categories:c.categories||[],logo:c.logo||null,
+                           url:c.url||'',note:c.note||'',hub:!!c.hub,status:c.status||'',
+                           keywords:c.keywords||[]});
+const normRelation = r => ({id:r.id,source:r.source,target:r.target,label:r.label||'',
+                           type:r.type||'actual',color:r.color||'',directed:!!r.directed});
+const optionalNumber = v => v === '' || v === null || v === undefined || !Number.isFinite(Number(v)) ? null : Number(v);
+const normProject = p => ({id:p.id||uid(),name:p.name||'',companyId:p.companyId||'',note:p.note||'',
+  expectedAmount:optionalNumber(p.expectedAmount), winProbability:optionalNumber(p.winProbability),
+  pocContinuity:optionalNumber(p.pocContinuity), assetAffinity:optionalNumber(p.assetAffinity),
+  reusability:optionalNumber(p.reusability), interest:optionalNumber(p.interest),
+  createdAt:p.createdAt||new Date().toISOString(), updatedAt:p.updatedAt||p.createdAt||new Date().toISOString()});
+const normDB = j => ({companies:(j.companies||[]).map(normCompany),
+                      relations:(j.relations||[]).map(normRelation),
+                      projects:(j.projects||[]).map(normProject)});
+
+/* ---------- base64 (UTF-8 safe) ---------- */
+function b64enc(str){
+  const bytes = new TextEncoder().encode(str);
+  let bin = '';
+  for(let i=0;i<bytes.length;i+=0x8000) bin += String.fromCharCode.apply(null, bytes.subarray(i,i+0x8000));
+  return btoa(bin);
+}
+function b64dec(b64){
+  const bin = atob(String(b64).replace(/\s/g,''));
+  const bytes = new Uint8Array(bin.length);
+  for(let i=0;i<bin.length;i++) bytes[i] = bin.charCodeAt(i);
+  return new TextDecoder().decode(bytes);
+}
+
+/* =========================================================================
+   GITHUB PAGES DATA SOURCE
+   公開中の data.json は読み取り専用。編集はブラウザに保存し、JSONとして
+   書き出してGitHub側のファイルを更新する。
+   ========================================================================= */
+const GH_DEFAULT = {owner:'', repo:'', branch:'main', path:'data.json'};
+let GH = Object.assign({}, GH_DEFAULT, JSON.parse(localStorage.getItem(LS_SYNC)||'null')||{});
+
+/* github.io で公開されている場合は owner/repo を自動推定 */
+(function autodetect(){
+  if(GH.owner && GH.repo) return;
+  const m = location.hostname.match(/^([^.]+)\.github\.io$/);
+  if(!m) return;
+  GH.owner = m[1];
+  const seg = location.pathname.split('/').filter(Boolean);
+  GH.repo = seg.length ? seg[0] : (m[1] + '.github.io');
+})();
+
+const ghOn   = () => !!(GH.owner && GH.repo);
+const canEdit= () => accessMode === 'edit';
+let ghSha = null;            // 最後に取得した data.json の blob SHA
+let pending = new Map();     // 未コミットの変更 key -> {kind, obj, deleted}
+let flushTimer = null, flushing = false;
+
+async function ghApi(url, opts={}){
+  const h = {'Accept':'application/vnd.github+json', ...(opts.headers||{})};
+  const r = await fetch(url, {...opts, headers:h, cache:'no-store'});
+  if(!r.ok){
+    let msg = r.status + ' ' + r.statusText;
+    try{ const j = await r.json(); if(j.message) msg += ' — ' + j.message; }catch(e){}
+    const err = new Error(msg); err.status = r.status; throw err;
+  }
+  return r.json();
+}
+const contentsUrl = () =>
+  `https://api.github.com/repos/${GH.owner}/${GH.repo}/contents/${encodeURIComponent(GH.path)}?ref=${encodeURIComponent(GH.branch)}`;
+const rawUrl = () =>
+  `https://raw.githubusercontent.com/${GH.owner}/${GH.repo}/${GH.branch}/${GH.path}?t=${Date.now()}`;
+
+/* リポジトリから最新を取得（sha も取れれば保持） */
+async function ghPull(){
+  const r = await fetch(rawUrl(), {cache:'no-store'});
+  if(!r.ok) throw new Error('raw ' + r.status);
+  ghSha = null;
+  return normDB(await r.json());
+}
+
+/* 変更を積んで、少し待ってからまとめて 1 コミットで反映する */
+function queue(kind, obj, deleted){
+  dataVersion++;
+  saveLocal();
+  setStatus('このブラウザに保存しました。共有する場合はJSONをエクスポートしてください。');
+}
+const persist = (kind, obj, deleted) => { queue(kind, obj, deleted); };
+
+/* リポジトリ側の最新に自分の変更だけを重ねてコミット（他人の編集を消さない） */
+function applyPending(base){
+  const db = {companies:base.companies.slice(), relations:base.relations.slice()};
+  for(const {kind, obj, deleted} of pending.values()){
+    const arr = kind === 'company' ? 'companies' : 'relations';
+    db[arr] = db[arr].filter(x => x.id !== obj.id);
+    if(!deleted) db[arr].push(kind === 'company' ? normCompany(obj) : normRelation(obj));
+  }
+  // 消えた企業にぶら下がる関係を掃除
+  const ids = new Set(db.companies.map(c=>c.id));
+  db.relations = db.relations.filter(r => ids.has(r.source) && ids.has(r.target));
+  return db;
+}
+
+async function flush(){ /* GitHub Pagesからの直接書き込みは行わない */ }
+
+async function loadAll(){
+  const local=localStorage.getItem(LS_DATA);
+  if(local){
+    try{DB=normDB(JSON.parse(local));setStatus('このブラウザに保存した編集内容を表示中');}
+    catch(e){localStorage.removeItem(LS_DATA);DB=null;}
+  }
+  if(!DB && ghOn()){
+    try{
+      DB = await ghPull();
+      setStatus(`${GH.owner}/${GH.repo} の公開データを表示中`);
+    }catch(e){
+      setStatus('リポジトリ読み込み失敗: ' + String(e.message).slice(0,70) + '／ローカル表示');
+      loadLocalOrSeed();
+    }
+  } else if(!DB) {
+    loadLocalOrSeed();
+    setStatus('ローカル保存モード（リポジトリ未設定）');
+  }
+  if(!DB || !DB.companies || !DB.companies.length) DB = normDB(JSON.parse(JSON.stringify(SEED)));
+  if(!Array.isArray(DB.projects)) DB.projects=[];
+  await ensureImages();
+}
+function loadLocalOrSeed(){
+  const raw = localStorage.getItem(LS_DATA);
+  if(raw){ try{ DB = normDB(JSON.parse(raw)); return; }catch(e){} }
+  DB = null;
+}
+
+/* 同梱の data.json を読み込む（初期データに戻すとき用） */
+async function trySeedFile(){
+  try{
+    const r = await fetch('./data.json', {cache:'no-store'});
+    if(!r.ok) return false;
+    const j = await r.json();
+    if(j && Array.isArray(j.companies)){ DB = normDB(j); return true; }
+  }catch(e){}
+  return false;
+}
+
+window.addEventListener('beforeunload', e=>{
+  if(pending.size){ e.preventDefault(); e.returnValue = ''; }
+});
+
+/* =========================================================================
+   IMAGES
+   ========================================================================= */
+function loadImg(src){ return new Promise(res=>{ const i=new Image(); i.onload=()=>res(i); i.onerror=()=>res(null); i.src=src; }); }
+async function ensureImages(){
+  for(const c of DB.companies){
+    if(c.logo && !imgCache[c.id + '|' + c.logo.length]){
+      const im = await loadImg(c.logo);
+      if(im) imgCache[c.id] = im;
+    } else if(!c.logo){ delete imgCache[c.id]; }
+  }
+}
+/* アップロード画像を正方形にセンタークロップ→円形に切り抜いてPNG化 */
+async function processLogo(file){
+  const url = URL.createObjectURL(file);
+  const img = await loadImg(url);
+  URL.revokeObjectURL(url);
+  if(!img) return null;
+  const S = CFG.logoPx, cv = document.createElement('canvas');
+  cv.width = cv.height = S;
+  const ctx = cv.getContext('2d');
+  ctx.save();
+  ctx.beginPath(); ctx.arc(S/2,S/2,S/2,0,Math.PI*2); ctx.clip();
+  ctx.fillStyle = '#ffffff'; ctx.fillRect(0,0,S,S);   // 透過ロゴ用の白背景
+  const s = Math.min(img.width,img.height);
+  ctx.drawImage(img,(img.width-s)/2,(img.height-s)/2,s,s,0,0,S,S);
+  ctx.restore();
+  return cv.toDataURL('image/png');
+}
+
+/* =========================================================================
+   NODE TEXTURE（ロゴ＋カテゴリのリング）
+   ========================================================================= */
+const _cvCache = new Map();
+function nodeCanvasCached(c){
+  const key = c.id+'|'+dataVersion+'|'+(selectedId===c.id?1:0);
+  let cv = _cvCache.get(c.id);
+  if(cv && cv.key===key) return cv.canvas;
+  const canvas = nodeCanvas(c);
+  _cvCache.set(c.id,{key,canvas});
+  return canvas;
+}
+function nodeCanvas(c){
+  const S = 256, cv = document.createElement('canvas');
+  cv.width = cv.height = S;
+  const g = cv.getContext('2d');
+  const cx=S/2, cy=S/2, R=96;
+  const cats = (c.categories&&c.categories.length) ? c.categories : ['5'];
+
+  // 内側
+  g.save();
+  g.beginPath(); g.arc(cx,cy,R-10,0,Math.PI*2); g.closePath(); g.clip();
+  const img = imgCache[c.id];
+  if(img){ g.drawImage(img,cx-(R-10),cy-(R-10),(R-10)*2,(R-10)*2); }
+  else{
+    g.fillStyle = '#101826'; g.fillRect(0,0,S,S);
+    g.fillStyle = catColor(cats[0]); g.globalAlpha=.25; g.fillRect(0,0,S,S); g.globalAlpha=1;
+    g.fillStyle = '#eef4ff'; g.font='bold 64px sans-serif';
+    g.textAlign='center'; g.textBaseline='middle';
+    g.fillText(initials(c.name), cx, cy+4);
+  }
+  g.restore();
+
+  // カテゴリリング（複数カテゴリを等分割で描画）
+  const step = (Math.PI*2)/cats.length, gap = cats.length>1 ? 0.09 : 0;
+  g.lineWidth = 20; g.lineCap = 'butt';
+  cats.forEach((id,i)=>{
+    g.strokeStyle = catColor(id);
+    g.beginPath();
+    g.arc(cx,cy,R-1,-Math.PI/2 + i*step + gap/2, -Math.PI/2 + (i+1)*step - gap/2);
+    g.stroke();
+  });
+  // ステータス（外枠）
+  g.strokeStyle = c.hub ? '#f5c518' : staColor(c.status);
+  g.lineWidth = c.hub ? 9 : 7;
+  g.beginPath(); g.arc(cx,cy,R+12,0,Math.PI*2); g.stroke();
+  // 選択ハイライト
+  if(selectedId===c.id){ g.strokeStyle='#38bdf8'; g.lineWidth=5; g.beginPath(); g.arc(cx,cy,R+20,0,Math.PI*2); g.stroke(); }
+  return cv;
+}
+function initials(n){
+  const s = String(n||'?').replace(/^(株式会社|有限会社|一般社団法人|国立大学法人)/,'').trim();
+  return /[ -~]/.test(s[0]) ? s.slice(0,2).toUpperCase() : s.slice(0,2);
+}
+
+/* =========================================================================
+   GRAPH DATA
+   ========================================================================= */
+/* =========================================================================
+   相性エンジン：キーワード抽出 → TF-IDF コサイン類似度 → 近接リンク生成
+   ========================================================================= */
+let KWMAP = new Map();      // id -> Set(keyword)
+let AFF = [];               // 相性リンク
+let affKey = '';            // 再計算判定用
+
+function keywordsOf(c){
+  const text = [c.name, c.note, (c.keywords||[]).join(' ')].join(' ');
+  const set = new Set(c.keywords||[]);
+  for(const d of KEYWORDS) if(d.re.test(text)) set.add(d.k);
+  return set;
+}
+
+function computeAffinity(){
+  const key = [dataVersion, aff.on, aff.crossOnly, aff.thr, aff.topK].join('|');
+  if(key === affKey) return;
+  affKey = key;
+  AFF = [];
+  KWMAP = new Map(DB.companies.map(c=>[c.id, keywordsOf(c)]));
+  if(!aff.on) return;
+
+  const targets = DB.companies.filter(c=>!c.hub && KWMAP.get(c.id).size);
+  const N = targets.length || 1;
+  const df = {};
+  targets.forEach(c=>KWMAP.get(c.id).forEach(k=>df[k]=(df[k]||0)+1));
+  const idf = k => Math.log((N+1)/((df[k]||0)+1)) + 1;
+
+  const vecs = targets.map(c=>{
+    const v = {}; let n2 = 0;
+    KWMAP.get(c.id).forEach(k=>{ const w = idf(k); v[k] = w; n2 += w*w; });
+    return {c, v, norm: Math.sqrt(n2) || 1};
+  });
+
+  const cand = new Map(targets.map(c=>[c.id, []]));
+  for(let i=0;i<vecs.length;i++){
+    for(let j=i+1;j<vecs.length;j++){
+      const A = vecs[i], B = vecs[j];
+      if(aff.crossOnly && primaryCat(A.c) === primaryCat(B.c)) continue;
+      let dot = 0; const shared = [];
+      for(const k in A.v) if(B.v[k]){ dot += A.v[k]*B.v[k]; shared.push(k); }
+      if(!dot) continue;
+      const sim = dot / (A.norm * B.norm) * (shared.length / (shared.length + 1.2));
+      if(sim < aff.thr) continue;
+      cand.get(A.c.id).push({o:B.c.id, sim, shared});
+      cand.get(B.c.id).push({o:A.c.id, sim, shared});
+    }
+  }
+  const seen = new Set();
+  cand.forEach((list, id)=>{
+    list.sort((a,b)=>b.sim-a.sim);
+    list.slice(0, aff.topK).forEach(p=>{
+      const pk = id < p.o ? id+'~'+p.o : p.o+'~'+id;
+      if(seen.has(pk)) return;
+      seen.add(pk);
+      AFF.push({id:'aff_'+pk, source:id, target:p.o, type:'affinity',
+                label:'', color:'', directed:false, sim:p.sim, shared:p.shared});
+    });
+  });
+}
+
+/* ある企業と相性の近い順（詳細パネル用） */
+function similarTo(id, n){
+  computeAffinity();
+  const me = KWMAP.get(id); if(!me || !me.size) return [];
+  const targets = DB.companies.filter(c=>c.id!==id && !c.hub);
+  const out = [];
+  for(const c of targets){
+    const o = KWMAP.get(c.id) || new Set();
+    const shared = [...me].filter(k=>o.has(k));
+    if(!shared.length) continue;
+    const sim = shared.length / Math.sqrt(me.size * o.size) * (shared.length/(shared.length+1.2));
+    out.push({c, sim, shared});
+  }
+  return out.sort((a,b)=>b.sim-a.sim).slice(0, n||5);
+}
+
+const visible = c => c.hub || (
+  ((c.categories||[]).length ? (c.categories||[]).some(x=>!hidden.has(x)) : !hidden.size)
+  && !hiddenSta.has(c.status||''));
+const posCache = new Map();
+function stashPositions(){
+  if(!Graph) return;
+  (Graph.graphData().nodes||[]).forEach(n=>{
+    if(typeof n.x === 'number') posCache.set(n.id, {x:n.x, y:n.y, z:n.z, fx:n.fx, fy:n.fy, fz:n.fz});
+  });
+}
+function graphData(){
+  const nodes = DB.companies.filter(visible).map(c=>{
+    const p = posCache.get(c.id);
+    return p ? Object.assign({}, c, p) : c;
+  });
+  const ids = new Set(nodes.map(n=>n.id));
+  computeAffinity();
+  const all = DB.relations.concat(aff.on ? AFF : []);
+  const links = all
+    .filter(r=>ids.has(r.source)&&ids.has(r.target)&&!hiddenType.has(r.type||'actual'))
+    .map(r=>({...r}));
+  return {nodes, links};
+}
+
+/* =========================================================================
+   案件評価：企業情報に紐づく2D / 3Dポジショニング
+   ========================================================================= */
+const axisMeta = id => PROJECT_AXES.find(a=>a.id===id) || PROJECT_AXES[0];
+const companyOf = id => DB.companies.find(c=>c.id===id) || null;
+const projectAxisIds = () => projectDim==='3D'
+  ? [projectAxes.x, projectAxes.y, projectAxes.z] : [projectAxes.x, projectAxes.y];
+const hasProjectValue = (p,id) => p[id] !== null && p[id] !== '' && p[id] !== undefined && Number.isFinite(Number(p[id]));
+function projectDomain(id){
+  const a=axisMeta(id);
+  if(a.max!==null) return [a.min,a.max];
+  const vals=(DB.projects||[]).filter(p=>hasProjectValue(p,id)).map(p=>Number(p[id]));
+  return [0, Math.max(100, ...vals)*1.08];
+}
+function projectCoord(p,id,span=440,invert=false){
+  const [lo,hi]=projectDomain(id), v=Number(p[id]);
+  const t=Math.max(0,Math.min(1,(v-lo)/((hi-lo)||1)));
+  return (invert?1-t:t)*span-span/2;
+}
+function projectGraphData(){
+  const axes=projectAxisIds();
+  const nodes=(DB.projects||[]).filter(p=>axes.every(a=>hasProjectValue(p,a))).map(p=>{
+    const c=companyOf(p.companyId);
+    const n={...p, company:c, project:true};
+    n.x=n.fx=projectCoord(p,projectAxes.x,500,false);
+    n.y=n.fy=projectCoord(p,projectAxes.y,440,projectDim==='2D');
+    if(projectDim==='3D') n.z=n.fz=projectCoord(p,projectAxes.z,440,false);
+    return n;
+  });
+  return {nodes,links:[]};
+}
+function projectColor(n){ return n.company ? catColor(primaryCat(n.company)) : '#38bdf8'; }
+function drawProjectCard(n,ctx){
+  const k=Math.max(.8,view.scale*.82), w=112*k,h=46*k,x=n.x-w/2,y=n.y-h/2;
+  ctx.save();
+  ctx.shadowColor=theme==='light'?'rgba(15,23,42,.16)':'rgba(0,0,0,.45)'; ctx.shadowBlur=5*k;
+  roundRect(ctx,x,y,w,h,8*k); ctx.fillStyle=TH().card; ctx.fill(); ctx.shadowBlur=0;
+  ctx.strokeStyle=selectedId===n.id?'#0ea5e9':projectColor(n); ctx.lineWidth=(selectedId===n.id?3:2)*k; ctx.stroke();
+  const c=n.company, img=c&&imgCache[c.id], iconR=13*k;
+  let textLeft=x+8*k;
+  if(img){
+    const cx=x+iconR+6*k,cy=n.y; ctx.save();ctx.beginPath();ctx.arc(cx,cy,iconR,0,Math.PI*2);ctx.clip();ctx.drawImage(img,cx-iconR,cy-iconR,iconR*2,iconR*2);ctx.restore();
+    textLeft=cx+iconR+5*k;
+  }
+  ctx.textAlign='left';ctx.textBaseline='middle';ctx.fillStyle=TH().text;ctx.font=`bold ${8.2*k}px sans-serif`;
+  ctx.fillText(fitText(ctx,n.name,x+w-textLeft-6*k),textLeft,n.y-6*k);
+  ctx.fillStyle=TH().dim;ctx.font=`${6.6*k}px sans-serif`;
+  ctx.fillText(fitText(ctx,c?c.name:'企業未設定',x+w-textLeft-6*k),textLeft,n.y+8*k);
+  ctx.restore();
+}
+function buildProjectNode3D(n){
+  const grp=new THREE.Group(), c=n.company;
+  const cv=document.createElement('canvas'); cv.width=cv.height=128;
+  const ctx=cv.getContext('2d'), img=c&&imgCache[c.id];
+  ctx.beginPath();ctx.arc(64,64,54,0,Math.PI*2);ctx.fillStyle=projectColor(n);ctx.fill();
+  if(img){
+    ctx.save();ctx.beginPath();ctx.arc(64,64,46,0,Math.PI*2);ctx.clip();
+    ctx.drawImage(img,18,18,92,92);ctx.restore();
+  }
+  ctx.beginPath();ctx.arc(64,64,55,0,Math.PI*2);ctx.strokeStyle=selectedId===n.id?'#0ea5e9':'#ffffff';ctx.lineWidth=selectedId===n.id?8:4;ctx.stroke();
+  const tex=new THREE.CanvasTexture(cv);
+  if('colorSpace' in tex && THREE.SRGBColorSpace) tex.colorSpace=THREE.SRGBColorSpace;
+  const sp=new THREE.Sprite(new THREE.SpriteMaterial({map:tex,transparent:true,depthWrite:false}));
+  sp.scale.set(18,18,1);grp.add(sp);
+  const t=new SpriteText(`${n.name}\n${c?c.name:'企業未設定'}`);
+  t.color=TH().text;t.textHeight=4.2;t.position.set(0,-13,0);grp.add(t);
+  return grp;
+}
+function drawProjectAxes2D(ctx){
+  const th=TH(), left=-270,right=270,top=-240,bottom=240;
+  ctx.save();ctx.lineWidth=1;ctx.strokeStyle=theme==='light'?'#d5dbe4':'#344155';ctx.fillStyle=th.dim;
+  ctx.font='11px sans-serif';ctx.textAlign='center';ctx.textBaseline='top';
+  for(let i=0;i<=5;i++){
+    const x=left+(right-left)*i/5,y=top+(bottom-top)*i/5;
+    ctx.globalAlpha=i===0||i===5?1:.45;
+    ctx.beginPath();ctx.moveTo(x,top);ctx.lineTo(x,bottom);ctx.stroke();
+    ctx.beginPath();ctx.moveTo(left,y);ctx.lineTo(right,y);ctx.stroke();
+  }
+  ctx.globalAlpha=1;ctx.fillText(axisMeta(projectAxes.x).name,0,bottom+10);
+  ctx.save();ctx.translate(left-20,0);ctx.rotate(-Math.PI/2);ctx.fillText(axisMeta(projectAxes.y).name,0,0);ctx.restore();
+  ctx.restore();
+}
+function addProjectAxes3D(){
+  const scene=Graph.scene(), L=250;
+  const axes=[
+    {to:[L,-L,-L],from:[-L,-L,-L],color:'#f59e0b',label:'X  '+axisMeta(projectAxes.x).short,pos:[L+22,-L,-L]},
+    {to:[-L,L,-L],from:[-L,-L,-L],color:'#22c55e',label:'Y  '+axisMeta(projectAxes.y).short,pos:[-L,L+22,-L]},
+    {to:[-L,-L,L],from:[-L,-L,-L],color:'#38bdf8',label:'Z  '+axisMeta(projectAxes.z).short,pos:[-L,-L,L+22]}
+  ];
+  axes.forEach(a=>{
+    const g=new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(...a.from),new THREE.Vector3(...a.to)]);
+    scene.add(new THREE.Line(g,new THREE.LineBasicMaterial({color:a.color,transparent:true,opacity:.72})));
+    const t=new SpriteText(a.label);t.color=a.color;t.textHeight=11;t.position.set(...a.pos);scene.add(t);
+  });
+  scene.add(new THREE.AmbientLight(0xffffff,1.5));
+}
+
+function projectValueText(p,id){
+  if(!hasProjectValue(p,id)) return '未入力';
+  const a=axisMeta(id), v=Number(p[id]);
+  return `${v.toLocaleString('ja-JP')}${a.unit}`;
+}
+function syncProjectAxisOptions(){
+  const fields=[['axisX','x'],['axisY','y'],['axisZ','z']];
+  fields.forEach(([el,key])=>{
+    const select=$('#'+el), current=projectAxes[key];
+    select.innerHTML=PROJECT_AXES.map(a=>`<option value="${a.id}" ${a.id===current?'selected':''}>${esc(a.name)}</option>`).join('');
+  });
+  $('#axisZWrap').style.display=projectDim==='3D'?'':'none';
+  $('#p2d').classList.toggle('on',projectDim==='2D');
+  $('#p3d').classList.toggle('on',projectDim==='3D');
+}
+function renderProjectSide(){
+  syncProjectAxisOptions();
+  const axes=projectAxisIds(), projects=DB.projects||[];
+  const mapped=projects.filter(p=>axes.every(a=>hasProjectValue(p,a))).length;
+  $('#projectSummary').innerHTML=`登録 <b style="color:var(--fg)">${projects.length}件</b> ／ 現在のマップに表示 <b style="color:var(--fg)">${mapped}件</b><br>${esc(axes.map(a=>axisMeta(a).short).join(' × '))}`;
+  $('#pCount').textContent=projects.length;
+  $('#projectList').innerHTML=projects.slice().sort((a,b)=>String(b.updatedAt).localeCompare(String(a.updatedAt))).map(p=>{
+    const c=companyOf(p.companyId);
+    return `<div class="listitem" data-id="${p.id}">
+      ${c&&c.logo?`<img class="thumb" src="${c.logo}" alt="">`:`<i class="dot" style="width:22px;height:22px;flex:0 0 22px;background:${c?catColor(primaryCat(c)):'#64748b'}"></i>`}
+      <span class="nm"><b>${esc(p.name)}</b><br><span class="muted">${esc(c?c.name:'企業未設定')}</span></span>
+      <span class="acts"><button class="btn sm" data-act="edit">編集</button><button class="btn sm danger" data-act="del">削</button></span>
+    </div>`;
+  }).join('')||'<p class="muted">まだ案件がありません。編集モードで追加できます。</p>';
+  $('#projectList').querySelectorAll('.listitem').forEach(el=>{
+    el.onclick=e=>{
+      const act=e.target.dataset.act,id=el.dataset.id;
+      if(act==='edit'){openProjectModal(id);return;}
+      if(act==='del'){deleteProject(id);return;}
+      selectedId=id;showProjectDetail(id);refreshGraph();
+    };
+  });
+  const parts=axes.map((id,i)=>{
+    const a=axisMeta(id),d=projectDomain(id);
+    return `${['X','Y','Z'][i]}：${esc(a.short)}（${d[0].toLocaleString('ja-JP')}–${Math.round(d[1]).toLocaleString('ja-JP')}${esc(a.unit)}）`;
+  });
+  $('#axisLegend').textContent=parts.join('　');
+}
+function showProjectDetail(id){
+  const p=(DB.projects||[]).find(x=>x.id===id);if(!p)return;
+  const c=companyOf(p.companyId);
+  $('#detail').innerHTML=`
+    <h2>${c&&c.logo?`<img class="thumb" style="width:30px;height:30px;flex:0 0 30px" src="${c.logo}" alt="">`:''}${esc(p.name)}</h2>
+    <p class="muted" style="margin:4px 0 8px">${esc(c?c.name:'企業未設定')}</p>
+    <div class="metricGrid">${PROJECT_AXES.map(a=>`<div class="metric"><span class="muted">${esc(a.name)}</span><b>${esc(projectValueText(p,a.id))}</b></div>`).join('')}</div>
+    ${p.note?`<p class="muted" style="white-space:pre-wrap">${esc(p.note)}</p>`:''}
+    <div style="display:flex;gap:6px;margin-top:11px"><button class="btn sm" id="pEdit">編集</button><button class="btn sm danger" id="pDel">削除</button><button class="btn sm" id="pClose" style="margin-left:auto">閉じる</button></div>`;
+  $('#detail').classList.add('show');
+  $('#pEdit').onclick=()=>openProjectModal(id);
+  $('#pDel').onclick=()=>deleteProject(id);
+  $('#pClose').onclick=()=>{selectedId=null;hideDetail();refreshGraph();};
+}
+
+function makeGraph(){
+  const el = $('#graph');
+  if(Graph && Graph._destructor) Graph._destructor();
+  el.innerHTML = '';
+
+  if(mode==='PROJECT'){
+    if(projectDim==='3D'){
+      Graph=ForceGraph3D()(el).backgroundColor(TH().bg).showNavInfo(false)
+        .nodeThreeObject(n=>buildProjectNode3D(n)).nodeThreeObjectExtend(false)
+        .onNodeClick(n=>{selectedId=n.id;showProjectDetail(n.id);refreshGraph();})
+        .onBackgroundClick(()=>{selectedId=null;hideDetail();refreshGraph();});
+      addProjectAxes3D();
+    }else{
+      Graph=ForceGraph()(el).backgroundColor(TH().bg).nodeRelSize(7)
+        .nodeCanvasObject(drawProjectCard)
+        .nodePointerAreaPaint((n,color,ctx)=>{ctx.fillStyle=color;ctx.fillRect(n.x-60,n.y-26,120,52);})
+        .onRenderFramePre(drawProjectAxes2D)
+        .onNodeClick(n=>{selectedId=n.id;showProjectDetail(n.id);refreshGraph();})
+        .onBackgroundClick(()=>{selectedId=null;hideDetail();refreshGraph();});
+    }
+    refreshGraph();
+    setTimeout(()=>{try{Graph.zoomToFit(650,projectDim==='3D'?90:70);}catch(e){}},250);
+    return;
+  }
+
+  if(mode==='3D'){
+    Graph = ForceGraph3D()(el)
+      .backgroundColor(TH().bg)
+      .showNavInfo(false)
+      .nodeRelSize(6)
+      .nodeThreeObject(n=>buildNode3D(n))
+      .nodeThreeObjectExtend(false)
+      .linkColor(linkColor)
+      .linkWidth(l=>l.type==='affinity' ? 0.35 + (l.sim||0)*0.9 : (rtOf(l.type).dash?0.5:0.9))
+      .linkOpacity(.6)
+      .linkDirectionalArrowLength(l=>(l.directed||rtOf(l.type).directed)?3.5:0)
+      .linkDirectionalArrowRelPos(1)
+      .linkThreeObjectExtend(true)
+      .linkThreeObject(l=>{
+        if(!l.label) return new THREE.Object3D();
+        const t = new SpriteText(l.label);
+        t.color = '#93a4bb'; t.textHeight = 2.4;
+        return t;
+      })
+      .linkPositionUpdate((sprite,{start,end})=>{
+        if(!sprite || !sprite.material) return;
+        sprite.position.set(...['x','y','z'].map(a=>start[a]+(end[a]-start[a])/2));
+      })
+      .onNodeClick(n=>{ selectedId=n.id; showDetail(n.id); refreshGraph(); })
+      .onNodeDragEnd(n=>{ n.fx=n.x; n.fy=n.y; n.fz=n.z; })
+      .linkLabel(l=>l.type==='affinity'
+        ? `相性 ${(l.sim*100).toFixed(0)}%：${(l.shared||[]).join('・')}`
+        : (l.label || rtOf(l.type).name))
+      .onLinkClick(l=>{ if(l.type!=='affinity') openRelModal(l.id); })
+      .onBackgroundClick(()=>{ selectedId=null; hideDetail(); refreshGraph(); });
+
+    Graph.d3Force('charge').strength(CFG.chargeStrength);
+    tuneLinkForce();
+    Graph.d3Force('cluster', clusterForce());
+
+  } else {
+    Graph = ForceGraph()(el)
+      .backgroundColor(TH().bg)
+      .nodeRelSize(6)
+      .nodeCanvasObject(drawCard)
+      .nodePointerAreaPaint((n,color,ctx)=>{
+        const w=CFG.cardW*view.scale*focusK(n), h=CFG.cardH*view.scale*focusK(n);
+        ctx.fillStyle=color; ctx.fillRect(n.x-w/2, n.y-h/2, w, h);
+      })
+      .linkColor(linkColor)
+      .linkWidth(l=>l.type==='affinity' ? 0.5 + (l.sim||0)*1.2 : (rtOf(l.type).dash?0.8:1.4))
+      .linkLineDash(linkDash)
+      .linkCurvature(l=>view.layout==='band'?0.22:0)
+      .linkDirectionalArrowLength(l=>(l.directed||rtOf(l.type).directed)?5:0)
+      .linkDirectionalArrowRelPos(1)
+      .linkCanvasObjectMode(()=> 'after')
+      .linkCanvasObject((l,ctx,scale)=>{
+        if(!l.label || scale<0.4) return;
+        const s0=l.source, t0=l.target; if(!s0||!t0||typeof s0!=='object') return;
+        let x=(s0.x+t0.x)/2, y=(s0.y+t0.y)/2;
+        const cp = l.__controlPoints;                 // 曲線の場合は制御点から中点を求める
+        if(cp && cp.length>=2){ x = .25*s0.x + .5*cp[0] + .25*t0.x; y = .25*s0.y + .5*cp[1] + .25*t0.y; }
+        const fs = 4.4*view.scale;
+        ctx.font=`${fs}px sans-serif`; ctx.textAlign='center'; ctx.textBaseline='middle';
+        const w=ctx.measureText(l.label).width;
+        ctx.fillStyle = theme==='light' ? 'rgba(255,255,255,.82)' : 'rgba(11,15,23,.8)';
+        ctx.fillRect(x-w/2-3, y-fs*0.75, w+6, fs*1.5);
+        ctx.fillStyle=linkColor(l);
+        ctx.fillText(l.label,x,y);
+      })
+      .onRenderFramePre(drawBands)
+      .onNodeClick(n=>{ selectedId=n.id; showDetail(n.id); refreshGraph(); })
+      .onNodeDragEnd(n=>{ n.fx=n.x; n.fy=n.y; })
+      .linkLabel(l=>l.type==='affinity'
+        ? `相性 ${(l.sim*100).toFixed(0)}%：${(l.shared||[]).join('・')}`
+        : (l.label || rtOf(l.type).name))
+      .onLinkClick(l=>{ if(l.type!=='affinity') openRelModal(l.id); })
+      .onBackgroundClick(()=>{ selectedId=null; hideDetail(); refreshGraph(); });
+
+    Graph.d3Force('charge').strength(CFG.chargeStrength);
+    tuneLinkForce();
+  }
+  refreshGraph(true);
+  let fitted = false;
+  Graph.onEngineStop(()=>{
+    if(fitted) return; fitted = true;
+    if(mode==='3D') Graph.zoomToFit(700, 90); else Graph.zoomToFit(700, 40);
+  });
+}
+
+/* =========================================================================
+   2D：カード描画 と カテゴリ整列レイアウト
+   ========================================================================= */
+let bands = [];   // [{cat, y0, y1}]
+
+function roundRect(ctx,x,y,w,h,r){
+  ctx.beginPath();
+  ctx.moveTo(x+r,y); ctx.lineTo(x+w-r,y); ctx.quadraticCurveTo(x+w,y,x+w,y+r);
+  ctx.lineTo(x+w,y+h-r); ctx.quadraticCurveTo(x+w,y+h,x+w-r,y+h);
+  ctx.lineTo(x+r,y+h); ctx.quadraticCurveTo(x,y+h,x,y+h-r);
+  ctx.lineTo(x,y+r); ctx.quadraticCurveTo(x,y,x+r,y); ctx.closePath();
+}
+function fitText(ctx, str, maxW){
+  if(ctx.measureText(str).width <= maxW) return str;
+  let t = str;
+  while(t.length > 1 && ctx.measureText(t + '…').width > maxW) t = t.slice(0,-1);
+  return t + '…';
+}
+
+function drawCard(n, ctx){
+  const on = inFocus(n);
+  const k = view.scale * focusK(n);
+  ctx.save();
+  if(!on) ctx.globalAlpha = 0.38;
+  const w = CFG.cardW * k, h = CFG.cardH * k * (n.hub ? 1.25 : 1);
+  const x = n.x - w/2, y = n.y - h/2;
+  const cat = catColor(primaryCat(n));
+  const th = TH();
+
+  // 影
+  ctx.save();
+  ctx.shadowColor = theme==='light' ? 'rgba(15,23,42,.10)' : 'rgba(0,0,0,.45)';
+  ctx.shadowBlur = 4*k; ctx.shadowOffsetY = 1.5*k;
+  roundRect(ctx,x,y,w,h,6*k);
+  ctx.fillStyle = th.card; ctx.fill();
+  ctx.restore();
+
+  // カテゴリの淡い塗り
+  roundRect(ctx,x,y,w,h,6*k);
+  ctx.fillStyle = cat + th.fillA; ctx.fill();
+
+  // ステータスの枠
+  ctx.strokeStyle = n.hub ? '#e0a800' : staColor(n.status);
+  ctx.lineWidth = (n.hub ? 3 : 2) * k;
+  ctx.stroke();
+  if(selectedId === n.id){
+    roundRect(ctx, x-3*k, y-3*k, w+6*k, h+6*k, 8*k);
+    ctx.strokeStyle = '#0ea5e9'; ctx.lineWidth = 2*k; ctx.stroke();
+  }
+
+  // ロゴ（あれば左端に円形で）
+  let textL = x, textW = w;
+  const img = imgCache[n.id];
+  if(img){
+    const r = h*0.34, cx = x + r + 5*k, cy = n.y;
+    ctx.save(); ctx.beginPath(); ctx.arc(cx,cy,r,0,Math.PI*2); ctx.clip();
+    ctx.drawImage(img, cx-r, cy-r, r*2, r*2); ctx.restore();
+    textL = cx + r; textW = x + w - textL;
+  }
+  const cx = textL + textW/2, pad = 5*k;
+
+  // 社名 ＋ タグ
+  ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  ctx.font = `bold ${8.2*k}px sans-serif`;
+  ctx.fillStyle = th.text;
+  ctx.fillText(fitText(ctx, n.name, textW - pad*2), cx, n.y - (n.note ? 5*k : 0));
+  if(n.note){
+    ctx.font = `${6.4*k}px sans-serif`;
+    ctx.fillStyle = th.dim;
+    ctx.fillText(fitText(ctx, n.note, textW - pad*2), cx, n.y + 7*k);
+  }
+  ctx.restore();
+}
+
+/* カテゴリごとに横帯を作って並べる（Miro版のレイアウトに相当） */
+function layoutBands(nodes){
+  bands = [];
+  let y = 0;
+  const groups = [{id:'__hub', label:'FastNeura', members:nodes.filter(n=>n.hub)}]
+    .concat(CATS.map(c=>({id:c.id, label:`${c.id}. ${c.name}`,
+                          members:nodes.filter(n=>!n.hub && primaryCat(n)===c.id)})));
+  for(const g of groups){
+    if(!g.members.length){ continue; }
+    const k = view.scale * catK(g.id);
+    const cw = CFG.cardW*k + 14*k, ch = CFG.cardH*k + 16*k;
+    const cols = Math.min(Math.max(3, Math.round(CFG.bandCols / catK(g.id))), g.members.length);
+    const rows = Math.ceil(g.members.length / cols);
+    const h = rows*ch + 18*k;
+    g.members.forEach((n,i)=>{
+      const r = Math.floor(i/cols), c = i%cols;
+      const inRow = Math.min(cols, g.members.length - r*cols);
+      n.fx = (c - (inRow-1)/2) * cw;
+      n.fy = y + 12*k + r*ch + ch/2 - 8*k;
+      n.x = n.fx; n.y = n.fy;
+    });
+    bands.push({label:g.label, cat:g.id, y0:y, y1:y+h, w:Math.max(cols,4)*cw, k});
+    y += h;
+  }
+}
+
+function drawBands(ctx){
+  if(mode !== '2D' || view.layout !== 'band' || !bands.length) return;
+  const th = TH();
+  const W = Math.max(...bands.map(b=>b.w)) * 1.15;
+  bands.forEach((b,i)=>{
+    const k = b.k;
+    ctx.fillStyle = (focusCat && b.cat===focusCat)
+      ? (theme==='light' ? '#eaf4fd' : '#16283a')
+      : (i%2 ? th.bandAlt : th.band);
+    ctx.fillRect(-W/2, b.y0, W, b.y1-b.y0);
+    ctx.font = `bold ${7*k}px sans-serif`;
+    ctx.fillStyle = b.cat==='__hub' ? '#c79300' : catColor(b.cat);
+    ctx.textAlign = 'left'; ctx.textBaseline = 'top';
+    ctx.globalAlpha = .85;
+    ctx.fillText(b.label, -W/2 + 8*k, b.y0 + 5*k);
+    ctx.globalAlpha = 1;
+  });
+}
+
+/* 相性リンクは「似ているほど短く・強く」引き寄せる */
+function tuneLinkForce(){
+  const lf = Graph.d3Force('link');
+  if(!lf) return;
+  lf.distance(l => l.type==='affinity'
+        ? (30 + (1 - (l.sim||0)) * 130) * view.scale
+        : CFG.linkDistance * view.scale)
+    .strength(l => l.type==='affinity' ? Math.min(1, (l.sim||0) * 1.2 * aff.force) : 0.4);
+}
+
+function buildNode3D(n){
+  const on = inFocus(n);
+  const grp = new THREE.Group();
+  const tex = new THREE.CanvasTexture(nodeCanvasCached(n));
+  if('colorSpace' in tex && THREE.SRGBColorSpace) tex.colorSpace = THREE.SRGBColorSpace;
+  const sp = new THREE.Sprite(new THREE.SpriteMaterial({
+    map:tex, transparent:true, depthWrite:false, opacity: on ? 1 : 0.34}));
+  const size = CFG.nodeSize * view.scale * focusK(n) * (n.hub?CFG.hubScale:1);
+  sp.scale.set(size,size,1);
+  grp.add(sp);
+  if(on){                                   // フォーカス外はラベルを消して視界を確保
+    const t = new SpriteText(n.name);
+    t.color = n.hub ? (theme==='light'?'#b8860b':'#f5c518') : TH().text;
+    t.textHeight = (n.hub ? 4.6 : 3.4) * view.scale * (focusCat ? 1.25 : 1);
+    t.position.set(0, -(size/2 + 3.6), 0);
+    grp.add(t);
+  }
+  return grp;
+}
+
+/* フォーカス中のカテゴリを中心に集約し、それ以外を外周へ逃がすカスタムフォース */
+function clusterForce(){
+  let nodes = [];
+  function f(alpha){
+    if(!focusCat) return;
+    const R = 260 * view.scale;
+    for(const n of nodes){
+      if(inFocus(n)){
+        n.vx -= n.x * 0.10 * alpha;
+        n.vy -= n.y * 0.10 * alpha;
+        if(n.z !== undefined) n.vz -= n.z * 0.10 * alpha;
+      } else {
+        const d = Math.hypot(n.x||0, n.y||0, n.z||0) || 1;
+        const k = (R - d) / d * 0.05 * alpha;
+        n.vx += (n.x||0) * k;
+        n.vy += (n.y||0) * k;
+        if(n.z !== undefined) n.vz += (n.z||0) * k;
+      }
+    }
+  }
+  f.initialize = ns => { nodes = ns; };
+  return f;
+}
+
+let hoverLink=null;
+function refreshGraph(){
+  if(!Graph) return;
+  if(mode==='PROJECT'){
+    Graph.graphData(projectGraphData());
+    renderProjectSide();
+    return;
+  }
+  stashPositions();
+  const gd = graphData();
+  if(mode==='2D' && view.layout==='band'){ layoutBands(gd.nodes); }
+  else { gd.nodes.forEach(n=>{ delete n.fx; delete n.fy; }); }
+  Graph.graphData(gd);
+  if(mode==='3D') Graph.nodeThreeObject(n=>buildNode3D(n)); // 新しい関数を渡して再生成させる
+  renderSide();
+  if(focusCat) renderCatPanel();
+}
+
+/* =========================================================================
+   SIDE PANEL
+   ========================================================================= */
+function renderSide(){
+  // カテゴリ
+  const counts = {};
+  DB.companies.forEach(c=>(c.categories||[]).forEach(k=>counts[k]=(counts[k]||0)+1));
+  $('#catlist').innerHTML = CATS.map(c=>`
+    <div class="catrow ${hidden.has(c.id)?'off':''} ${focusCat===c.id?'focus':''}" data-cat="${c.id}">
+      <i class="dot" style="background:${c.color}"></i>
+      <span>${c.id}. ${esc(c.name)}</span>
+      ${focusCat===c.id?'<span class="fbadge">フォーカス中</span>':''}
+      <span class="count">${counts[c.id]||0}</span>
+      <button class="eye" data-eye title="表示/非表示">${hidden.has(c.id)?'🚫':'👁'}</button>
+    </div>`).join('');
+  $('#catlist').querySelectorAll('.catrow').forEach(el=>el.onclick=e=>{
+    const k=el.dataset.cat;
+    if(e.target.closest && e.target.closest('[data-eye]')){
+      hidden.has(k)?hidden.delete(k):hidden.add(k);
+      if(hidden.has(k) && focusCat===k) focusCat=null;
+      refreshGraph(); return;
+    }
+    setFocus(focusCat===k ? null : k);
+  });
+
+  // ステータス
+  const sc = {};
+  DB.companies.forEach(c=>{ const k=c.status||''; sc[k]=(sc[k]||0)+1; });
+  $('#stalist').innerHTML = STATUSES.map(st=>`
+    <div class="catrow ${hiddenSta.has(st.id)?'off':''}" data-sta="${st.id}">
+      <i class="dot" style="background:${st.color}"></i>
+      <span>${esc(st.name)}</span><span class="count">${sc[st.id]||0}</span>
+    </div>`).join('');
+  $('#stalist').querySelectorAll('.catrow').forEach(el=>el.onclick=()=>{
+    const k=el.dataset.sta; hiddenSta.has(k)?hiddenSta.delete(k):hiddenSta.add(k); refreshGraph();
+  });
+
+  // 関係線の種類
+  const tc = {};
+  DB.relations.forEach(r=>{ const k=r.type||'actual'; tc[k]=(tc[k]||0)+1; });
+  tc['affinity'] = aff.on ? AFF.length : 0;
+  $('#typelist').innerHTML = RTYPES.map(t=>`
+    <div class="catrow ${hiddenType.has(t.id)?'off':''}" data-t="${t.id}">
+      <i class="dot" style="background:${t.color}"></i>
+      <span>${esc(t.name)}</span><span class="count">${tc[t.id]||0}</span>
+    </div>`).join('');
+  $('#typelist').querySelectorAll('.catrow').forEach(el=>el.onclick=()=>{
+    const k=el.dataset.t; hiddenType.has(k)?hiddenType.delete(k):hiddenType.add(k); refreshGraph();
+  });
+
+  // 企業
+  const q = ($('#search').value||'').trim().toLowerCase();
+  const list = DB.companies.filter(c=>!q||c.name.toLowerCase().includes(q))
+                           .sort((a,b)=> (b.hub?1:0)-(a.hub?1:0) || a.name.localeCompare(b.name,'ja'));
+  $('#cCount').textContent = DB.companies.length;
+  $('#complist').innerHTML = list.map(c=>`
+    <div class="listitem" data-id="${c.id}">
+      ${c.logo?`<img class="thumb" src="${c.logo}">`:`<i class="dot" style="width:22px;height:22px;flex:0 0 22px;background:${catColor((c.categories||[])[0])}"></i>`}
+      <span class="nm">${c.hub?'★ ':''}${esc(c.name)}</span>
+      <span class="acts">
+        <button class="btn sm" data-act="edit">編集</button>
+        <button class="btn sm danger" data-act="del">削</button>
+      </span>
+    </div>`).join('') || '<p class="muted">まだ企業がありません。</p>';
+  $('#complist').querySelectorAll('.listitem').forEach(el=>{
+    const id = el.dataset.id;
+    el.onclick = e=>{
+      const act = e.target.dataset.act;
+      if(act==='edit'){ openCompanyModal(id); return; }
+      if(act==='del'){ deleteCompany(id); return; }
+      selectedId=id; showDetail(id); focusNode(id); refreshGraph();
+    };
+  });
+
+  // 関係
+  const nameOf = id => (DB.companies.find(c=>c.id===id)||{}).name || '(不明)';
+  $('#rCount').textContent = DB.relations.length;
+  $('#rellist').innerHTML = DB.relations.map(r=>`
+    <div class="rel listitem" data-id="${r.id}">
+      <span class="nm">${esc(nameOf(r.source))} ${r.directed?'→':'—'} ${esc(nameOf(r.target))}</span>
+      <span class="lbl" style="color:${rtOf(r.type).color}">${esc(r.label||rtOf(r.type).name)}</span>
+      <span class="acts">
+        <button class="btn sm" data-act="edit">編集</button>
+        <button class="btn sm danger" data-act="del">削</button>
+      </span>
+    </div>`).join('') || '<p class="muted">まだ関係がありません。</p>';
+  $('#rellist').querySelectorAll('.rel').forEach(el=>{
+    const id=el.dataset.id;
+    el.onclick = e=>{
+      const act=e.target.dataset.act;
+      if(act==='del'){ deleteRelation(id); return; }
+      openRelModal(id);
+    };
+  });
+}
+
+function focusNode(id){
+  const n = (Graph.graphData().nodes||[]).find(n=>n.id===id);
+  if(!n) return;
+  if(mode==='3D'){
+    const d = 90, r = 1 + d/Math.hypot(n.x||1,n.y||1,n.z||1);
+    Graph.cameraPosition({x:(n.x||0)*r,y:(n.y||0)*r,z:(n.z||0)*r + 40}, n, 900);
+  } else {
+    Graph.centerAt(n.x,n.y,700); Graph.zoom(3,700);
+  }
+}
+
+/* =========================================================================
+   DETAIL PANEL
+   ========================================================================= */
+function showDetail(id){
+  const c = DB.companies.find(x=>x.id===id); if(!c) return;
+  const rels = DB.relations.filter(r=>r.source===id||r.target===id);
+  const nameOf = i=>(DB.companies.find(x=>x.id===i)||{}).name||'?';
+  $('#detail').innerHTML = `
+    <h2>${c.logo?`<img class="thumb" style="width:30px;height:30px;flex:0 0 30px" src="${c.logo}">`:''}${esc(c.name)}</h2>
+    ${c.url?`<a href="${esc(c.url)}" target="_blank" rel="noopener" style="color:var(--accent2);font-size:12px">${esc(c.url)}</a>`:''}
+    <div class="tags"><span class="tag" style="background:${staColor(c.status)}33;border:1px solid ${staColor(c.status)}">${esc((STA[c.status]||STA['']).name)}</span>${(c.categories||[]).map(k=>`<span class="tag" data-fc="${k}" style="cursor:pointer;background:${catColor(k)}33;border:1px solid ${catColor(k)}66">${k}. ${esc((CAT[k]||{}).name||'')}</span>`).join('')}</div>
+    ${c.note?`<p class="muted" style="white-space:pre-wrap">${esc(c.note)}</p>`:''}
+    <p class="muted" style="margin:10px 0 3px">キーワード</p>
+    <div class="tags">${[...(KWMAP.get(id)||keywordsOf(c))].map(k=>`<span class="tag">${esc(k)}</span>`).join('') || '<span class="muted">なし</span>'}</div>
+    <p class="muted" style="margin:10px 0 3px">相性が近い企業</p>
+    ${similarTo(id,5).map(x=>`<div class="cprow" data-sim="${x.c.id}" style="padding:4px 6px">
+        <i class="sdot" style="background:${catColor(primaryCat(x.c))}"></i>
+        <div style="min-width:0"><div class="nm">${esc(x.c.name)} <span style="color:var(--accent2)">${Math.round(x.sim*100)}%</span></div>
+        <div class="tg">${esc(x.shared.slice(0,4).join('・'))}</div></div></div>`).join('') || '<p class="muted">該当なし</p>'}
+    <p class="muted" style="margin:10px 0 4px">関係 ${rels.length} 件</p>
+    ${rels.map(r=>`<div class="muted">・${esc(r.source===id?'→ '+nameOf(r.target):'← '+nameOf(r.source))}${r.label?`<span style="color:var(--accent)"> 〔${esc(r.label)}〕</span>`:''}</div>`).join('')}
+    <div style="display:flex;gap:6px;margin-top:11px;flex-wrap:wrap">
+      <button class="btn sm" id="dEdit">編集</button>
+      <button class="btn sm" id="dRel">関係を追加</button>
+      <button class="btn sm danger" id="dDel">削除</button>
+      <button class="btn sm" id="dClose" style="margin-left:auto">閉じる</button>
+    </div>`;
+  $('#detail').classList.add('show');
+  $('#detail').querySelectorAll('[data-fc]').forEach(t=>t.onclick=()=>setFocus(t.dataset.fc));
+  $('#detail').querySelectorAll('[data-sim]').forEach(t=>t.onclick=()=>{
+    selectedId=t.dataset.sim; showDetail(selectedId); focusNode(selectedId); refreshGraph(); });
+  $('#dEdit').onclick=()=>openCompanyModal(id);
+  $('#dRel').onclick =()=>openRelModal(null,id);
+  $('#dDel').onclick =()=>deleteCompany(id);
+  $('#dClose').onclick=()=>{ hideDetail(); selectedId=null; refreshGraph(); };
+}
+const hideDetail = ()=>$('#detail').classList.remove('show');
+
+/* =========================================================================
+   カテゴリフォーカス
+   ========================================================================= */
+function setFocus(cid){
+  focusCat = cid;
+  if(cid) hidden.delete(cid);
+  dataVersion++;                       // ノード描画キャッシュを作り直す
+  renderCatPanel();
+  refreshGraph();
+  if(Graph){
+    if(mode==='3D'){
+      Graph.d3ReheatSimulation();
+      setTimeout(()=>{ try{ Graph.zoomToFit(900, 70, n=>inFocus(n)); }catch(e){} }, cid?1100:600);
+    } else {
+      setTimeout(()=>{ try{ Graph.zoomToFit(700, 40, n=>inFocus(n)); }catch(e){} }, 250);
+    }
+  }
+}
+
+function renderCatPanel(){
+  const chip = $('#focusChip');
+  if(focusCat){
+    chip.style.display = '';
+    chip.textContent = 'フォーカス: ' + focusCat + ' ✕';
+    chip.style.borderColor = catColor(focusCat);
+  } else chip.style.display = 'none';
+  const el = $('#catpanel');
+  if(!focusCat){ el.classList.remove('show'); return; }
+  hidden.delete(focusCat);
+  const c = CAT[focusCat];
+  const members = DB.companies
+    .filter(x=>!x.hub && (x.categories||[]).includes(focusCat))
+    .sort((a,b)=>a.name.localeCompare(b.name,'ja'));
+  el.querySelector('.ph').innerHTML = `
+    <i class="dot" style="background:${c.color}"></i>
+    <b>${c.id}. ${esc(c.name)}</b>
+    <span class="count" style="margin-left:auto">${members.length}社</span>
+    <button class="btn sm" id="cpClose">✕</button>`;
+  el.querySelector('.pb').innerHTML = members.map(m=>`
+    <div class="cprow ${selectedId===m.id?'sel':''}" data-id="${m.id}">
+      <i class="sdot" style="background:${staColor(m.status)}"></i>
+      ${m.logo?`<img class="thumb" style="width:20px;height:20px;flex:0 0 20px" src="${m.logo}">`:''}
+      <div style="min-width:0">
+        <div class="nm">${esc(m.name)}</div>
+        ${m.note?`<div class="tg">${esc(m.note)}</div>`:''}
+        ${(m.categories||[]).length>1?`<div class="tg" style="opacity:.7">他: ${(m.categories||[]).filter(k=>k!==focusCat).join(', ')}</div>`:''}
+      </div>
+    </div>`).join('') || '<p class="muted" style="padding:8px">該当なし</p>';
+  el.querySelector('#cpClose').onclick = ()=>setFocus(null);
+  el.querySelectorAll('.cprow').forEach(r=>r.onclick=()=>{
+    selectedId = r.dataset.id;
+    showDetail(selectedId); focusNode(selectedId); renderCatPanel(); refreshGraph();
+  });
+  el.classList.add('show');
+}
+
+/* =========================================================================
+   MODALS
+   ========================================================================= */
+function modal(html, onMount){
+  const ov = document.createElement('div');
+  ov.className='overlay';
+  ov.innerHTML = `<div class="modal">${html}</div>`;
+  ov.addEventListener('click', e=>{ if(e.target===ov) ov.remove(); });
+  document.body.appendChild(ov);
+  onMount && onMount(ov);
+  return ov;
+}
+
+/* ---- 企業の追加/編集 ---- */
+function openCompanyModal(id){
+  if(!canEdit()){ alert('閲覧モードです。上部の「編集」に切り替えてください。'); return; }
+  const c = id ? DB.companies.find(x=>x.id===id) : {id:uid(),name:'',categories:[],logo:null,url:'',note:'',hub:false,status:'',keywords:[]};
+  if(!c) return;
+  let draft = JSON.parse(JSON.stringify(c));
+  const ov = modal(`
+    <header>${id?'企業を編集':'企業を追加'}</header>
+    <div class="body">
+      <div class="logobox" style="margin-bottom:14px">
+        <img class="logoprev" id="mLogo" src="${draft.logo||''}" alt="">
+        <div>
+          <input type="file" id="mFile" accept="image/*" style="display:none">
+          <button class="btn sm" id="mPick">ロゴ画像を選択</button>
+          <button class="btn sm danger" id="mClear">削除</button>
+          <p class="muted" style="margin:6px 0 0">任意。正方形に切り抜き→円形化されます。</p>
+        </div>
+      </div>
+      <label class="f"><span>企業名 *</span><input class="inp" id="mName" value="${esc(draft.name)}" placeholder="株式会社〇〇"></label>
+      <label class="f"><span>カテゴリ（複数選択可）</span><div class="chips" id="mCats"></div></label>
+      <label class="f"><span>ステータス</span><select class="inp" id="mSta">
+        ${STATUSES.map(st=>`<option value="${st.id}" ${(draft.status||'')===st.id?'selected':''}>${esc(st.name)}</option>`).join('')}
+      </select></label>
+      <label class="f"><span>URL</span><input class="inp" id="mUrl" value="${esc(draft.url)}" placeholder="https://"></label>
+      <label class="f"><span>キーワード（任意・カンマ区切り／相性判定に使われます）</span>
+        <input class="inp" id="mKw" value="${esc((draft.keywords||[]).join(', '))}" placeholder="睡眠, 脳波, 素材"></label>
+      <label class="f"><span>メモ</span><textarea class="inp" id="mNote" placeholder="関係の背景、担当者、案件など">${esc(draft.note)}</textarea></label>
+      <label class="f" style="display:flex;align-items:center;gap:8px">
+        <input type="checkbox" id="mHub" ${draft.hub?'checked':''}><span style="margin:0">ハブ企業として強調表示（FastNeura等）</span>
+      </label>
+    </div>
+    <footer>
+      <button class="btn" data-x>キャンセル</button>
+      <button class="btn primary" id="mSave">保存</button>
+    </footer>`, ov=>{
+      const chips = ov.querySelector('#mCats');
+      chips.innerHTML = CATS.map(c2=>`<span class="chip ${draft.categories.includes(c2.id)?'on':''}" data-k="${c2.id}">
+        <i class="dot" style="background:${c2.color}"></i>${c2.id}. ${esc(c2.name)}</span>`).join('');
+      chips.querySelectorAll('.chip').forEach(el=>el.onclick=()=>{
+        const k=el.dataset.k;
+        if(draft.categories.includes(k)) draft.categories=draft.categories.filter(x=>x!==k);
+        else draft.categories.push(k);
+        el.classList.toggle('on');
+      });
+      ov.querySelector('#mPick').onclick=()=>ov.querySelector('#mFile').click();
+      ov.querySelector('#mClear').onclick=()=>{ draft.logo=null; ov.querySelector('#mLogo').src=''; };
+      ov.querySelector('#mFile').onchange=async e=>{
+        const f=e.target.files[0]; if(!f) return;
+        const d=await processLogo(f);
+        if(d){ draft.logo=d; ov.querySelector('#mLogo').src=d; }
+      };
+      ov.querySelector('[data-x]').onclick=()=>ov.remove();
+      ov.querySelector('#mSave').onclick=async ()=>{
+        const name = ov.querySelector('#mName').value.trim();
+        if(!name){ ov.querySelector('#mName').focus(); return; }
+        const obj = {id:draft.id, name, categories:draft.categories, logo:draft.logo,
+                     url:ov.querySelector('#mUrl').value.trim(), note:ov.querySelector('#mNote').value,
+                     hub:ov.querySelector('#mHub').checked, status:ov.querySelector('#mSta').value,
+                     keywords:ov.querySelector('#mKw').value.split(/[,、]/).map(x=>x.trim()).filter(Boolean)};
+        const i = DB.companies.findIndex(x=>x.id===obj.id);
+        if(i>=0) DB.companies[i]=obj; else DB.companies.push(obj);
+        if(obj.logo){ const im=await loadImg(obj.logo); if(im) imgCache[obj.id]=im; } else delete imgCache[obj.id];
+        await persist('company', obj);
+        ov.remove(); refreshGraph(); if(selectedId===obj.id) showDetail(obj.id);
+      };
+      setTimeout(()=>ov.querySelector('#mName').focus(),40);
+    });
+}
+
+/* ---- 関係の追加/編集 ---- */
+function openRelModal(id, presetSource){
+  if(!canEdit()){ alert('閲覧モードです。上部の「編集」に切り替えてください。'); return; }
+  if(DB.companies.length<2){ alert('関係を作るには企業が2社以上必要です。'); return; }
+  const r = id ? DB.relations.find(x=>x.id===id)
+              : {id:uid(), source:presetSource||DB.companies[0].id, target:'', label:'', type:'actual', color:'', directed:false};
+  if(!r) return;
+  const opts = sel => DB.companies.map(c=>`<option value="${c.id}" ${sel===c.id?'selected':''}>${esc(c.name)}</option>`).join('');
+  const ov = modal(`
+    <header>${id?'関係を編集':'関係を追加'}</header>
+    <div class="body">
+      <label class="f"><span>起点</span><select class="inp" id="rS">${opts(r.source)}</select></label>
+      <label class="f"><span>終点</span><select class="inp" id="rT"><option value="">選択…</option>${opts(r.target)}</select></label>
+      <label class="f"><span>関係の種類</span><select class="inp" id="rTy">
+        ${RTYPES.filter(t=>!t.auto).map(t=>`<option value="${t.id}" ${(r.type||'actual')===t.id?'selected':''}>${esc(t.name)}</option>`).join('')}
+      </select></label>
+      <label class="f"><span>関係の名前（任意）</span>
+        <input class="inp" id="rL" value="${esc(r.label)}" placeholder="例：共同研究 / 販売代理 / 出資 / 材料供給">
+      </label>
+      <div style="display:flex;gap:14px;align-items:center;margin-bottom:12px">
+        <label class="f" style="margin:0"><span>線の色（上書き）</span><input type="color" class="inp" id="rC" value="${r.color||rtOf(r.type).color}" style="width:64px;padding:3px;height:36px"></label>
+        <label class="f" style="margin:0;display:flex;align-items:center;gap:8px;padding-top:16px">
+          <input type="checkbox" id="rCU" ${r.color?'checked':''}><span style="margin:0">色を上書き</span>
+        </label>
+        <label class="f" style="margin:0;display:flex;align-items:center;gap:8px;padding-top:16px">
+          <input type="checkbox" id="rD" ${r.directed?'checked':''}><span style="margin:0">方向あり（矢印）</span>
+        </label>
+      </div>
+      <p class="muted">よく使う名前：出資 / 共同研究 / 業務提携 / 受託開発 / 顧客 / 供給元 / 紹介 / 同一コンソーシアム</p>
+    </div>
+    <footer>
+      ${id?'<button class="btn danger" id="rDel" style="margin-right:auto">削除</button>':''}
+      <button class="btn" data-x>キャンセル</button>
+      <button class="btn primary" id="rSave">保存</button>
+    </footer>`, ov=>{
+      ov.querySelector('#rTy').onchange=e=>{
+        if(!ov.querySelector('#rCU').checked) ov.querySelector('#rC').value = rtOf(e.target.value).color;
+        ov.querySelector('#rD').checked = rtOf(e.target.value).directed;
+      };
+      ov.querySelector('[data-x]').onclick=()=>ov.remove();
+      if(id) ov.querySelector('#rDel').onclick=()=>{ ov.remove(); deleteRelation(id); };
+      ov.querySelector('#rSave').onclick=async ()=>{
+        const s=ov.querySelector('#rS').value, t=ov.querySelector('#rT').value;
+        if(!t || s===t){ alert('起点と終点に別の企業を選んでください。'); return; }
+        const obj={id:r.id, source:s, target:t, label:ov.querySelector('#rL').value.trim(),
+                   type:ov.querySelector('#rTy').value,
+                   color:ov.querySelector('#rCU').checked?ov.querySelector('#rC').value:'',
+                   directed:ov.querySelector('#rD').checked};
+        const i=DB.relations.findIndex(x=>x.id===obj.id);
+        if(i>=0) DB.relations[i]=obj; else DB.relations.push(obj);
+        await persist('relation', obj);
+        ov.remove(); refreshGraph();
+      };
+    });
+}
+
+/* ---- 案件の追加/編集 ---- */
+function openProjectModal(id){
+  if(!canEdit()){alert('閲覧モードです。上部の「編集」に切り替えてください。');return;}
+  if(!DB.companies.length){alert('先に企業を登録してください。');return;}
+  const p=id?(DB.projects||[]).find(x=>x.id===id):normProject({id:uid(),companyId:'',name:'',note:''});
+  if(!p)return;
+  const opts=DB.companies.slice().sort((a,b)=>a.name.localeCompare(b.name,'ja')).map(c=>`<option value="${c.id}" ${p.companyId===c.id?'selected':''}>${esc(c.name)}</option>`).join('');
+  const metricInputs=PROJECT_AXES.map(a=>{
+    const step=a.id==='expectedAmount'||a.id==='winProbability'?'1':'0.5';
+    return `<label class="f"><span>${esc(a.name)}（任意・${esc(a.unit)}）</span><input class="inp" type="number" id="pr_${a.id}" value="${hasProjectValue(p,a.id)?Number(p[a.id]):''}" min="${a.min}" ${a.max!==null?`max="${a.max}"`:''} step="${step}" placeholder="未入力"></label>`;
+  }).join('');
+  const ov=modal(`
+    <header>${id?'案件を編集':'案件を追加'}</header>
+    <div class="body">
+      <label class="f"><span>案件名 *</span><input class="inp" id="prName" value="${esc(p.name)}" placeholder="案件・提案・PoCの名称"></label>
+      <label class="f"><span>企業 *</span><select class="inp" id="prCompany"><option value="">選択…</option>${opts}</select></label>
+      <div class="metricGrid" style="display:grid">${metricInputs}</div>
+      <label class="f"><span>メモ</span><textarea class="inp" id="prNote" placeholder="背景、次のアクション、判断材料など">${esc(p.note)}</textarea></label>
+      <p class="muted">評価項目はすべて任意です。選択中の軸が入力済みの案件だけがマップに表示されます。</p>
+    </div>
+    <footer><button class="btn" data-x>キャンセル</button><button class="btn primary" id="prSave">保存</button></footer>`,ov=>{
+      ov.querySelector('[data-x]').onclick=()=>ov.remove();
+      ov.querySelector('#prSave').onclick=async()=>{
+        const name=ov.querySelector('#prName').value.trim(),companyId=ov.querySelector('#prCompany').value;
+        if(!name){ov.querySelector('#prName').focus();return;}
+        if(!companyId){ov.querySelector('#prCompany').focus();return;}
+        const invalid=PROJECT_AXES.map(a=>ov.querySelector('#pr_'+a.id)).find(el=>!el.checkValidity());
+        if(invalid){invalid.reportValidity();return;}
+        const obj=normProject({id:p.id,name,companyId,note:ov.querySelector('#prNote').value,
+          ...Object.fromEntries(PROJECT_AXES.map(a=>[a.id,optionalNumber(ov.querySelector('#pr_'+a.id).value)])),
+          createdAt:p.createdAt,updatedAt:new Date().toISOString()});
+        const i=DB.projects.findIndex(x=>x.id===obj.id);
+        if(i>=0)DB.projects[i]=obj;else DB.projects.push(obj);
+        await persist('project',obj);ov.remove();selectedId=obj.id;showProjectDetail(obj.id);refreshGraph();
+      };
+      setTimeout(()=>ov.querySelector('#prName').focus(),40);
+    });
+}
+
+async function deleteProject(id){
+  const p=(DB.projects||[]).find(x=>x.id===id);if(!p)return;
+  if(!confirm(`「${p.name}」を削除します。よろしいですか？`))return;
+  DB.projects=DB.projects.filter(x=>x.id!==id);
+  await persist('project',p,true);
+  if(selectedId===id){selectedId=null;hideDetail();}
+  refreshGraph();
+}
+
+async function deleteCompany(id){
+  const c = DB.companies.find(x=>x.id===id); if(!c) return;
+  const linkedProjects=(DB.projects||[]).filter(p=>p.companyId===id);
+  if(!confirm(`「${c.name}」と、その関係・紐づく案件をすべて削除します。よろしいですか？`)) return;
+  const rels = DB.relations.filter(r=>r.source===id||r.target===id);
+  DB.relations = DB.relations.filter(r=>r.source!==id&&r.target!==id);
+  DB.projects = (DB.projects||[]).filter(p=>p.companyId!==id);
+  DB.companies = DB.companies.filter(x=>x.id!==id);
+  delete imgCache[id];
+  saveLocal();
+  for(const r of rels) await persist('relation', r, true);
+  for(const p of linkedProjects) await persist('project', p, true);
+  await persist('company', c, true);
+  if(selectedId===id){ selectedId=null; hideDetail(); }
+  refreshGraph();
+}
+async function deleteRelation(id){
+  const r = DB.relations.find(x=>x.id===id); if(!r) return;
+  if(!confirm('この関係を削除します。よろしいですか？')) return;
+  DB.relations = DB.relations.filter(x=>x.id!==id);
+  await persist('relation', r, true);
+  refreshGraph();
+}
+
+/* ---- メニュー（保存先・入出力） ---- */
+function openMenu(){
+  const where = !ghOn() ? 'このブラウザのみ（リポジトリ未設定）'
+                         : `${GH.owner}/${GH.repo}@${GH.branch} の ${GH.path}`;
+  modal(`
+    <header>保存先とデータ管理</header>
+    <div class="body">
+      <p class="muted" style="margin-top:0">現在の保存先：<b style="color:var(--fg)">${esc(where)}</b></p>
+
+      <h4 style="margin:16px 0 8px;font-size:12px;color:var(--fg-dim);letter-spacing:.08em">GITHUB 公開データ</h4>
+      <div style="display:flex;gap:8px">
+        <label class="f" style="flex:1"><span>オーナー</span><input class="inp" id="gO" value="${esc(GH.owner)}" placeholder="hanadamushin"></label>
+        <label class="f" style="flex:1"><span>リポジトリ</span><input class="inp" id="gR" value="${esc(GH.repo)}" placeholder="ecosystem-map"></label>
+      </div>
+      <div style="display:flex;gap:8px">
+        <label class="f" style="flex:1"><span>ブランチ</span><input class="inp" id="gB" value="${esc(GH.branch)}" placeholder="main"></label>
+        <label class="f" style="flex:1"><span>ファイルパス</span><input class="inp" id="gP" value="${esc(GH.path)}" placeholder="data.json"></label>
+      </div>
+      <p class="muted">
+        編集内容はこのブラウザに保存されます。共有するときは「JSONをエクスポート」で書き出し、GitHub上の <b>data.json</b> を置き換えてください。アクセストークンは使いません。
+      </p>
+
+      <h4 style="margin:18px 0 8px;font-size:12px;color:var(--fg-dim);letter-spacing:.08em">その他</h4>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn" id="xPull">最新を取得</button>
+        <button class="btn" id="xExport">JSONをエクスポート</button>
+        <button class="btn" id="xImport">JSONをインポート</button>
+        <input type="file" id="xFile" accept="application/json" style="display:none">
+        <button class="btn" id="xSeed">初期データに戻す</button>
+        <button class="btn danger" id="xReset">ローカルキャッシュ消去</button>
+      </div>
+    </div>
+    <footer>
+      <button class="btn" data-x>閉じる</button>
+      <button class="btn primary" id="gSave">保存先を設定</button>
+    </footer>`, ov=>{
+      ov.querySelector('[data-x]').onclick=()=>ov.remove();
+      ov.querySelector('#xPull').onclick=async ()=>{
+        if(!ghOn()){ alert('リポジトリが未設定です。'); return; }
+        try{ DB = await ghPull(); await ensureImages(); dataVersion++; saveLocal(); refreshGraph();
+             setStatus('最新を取得しました ' + new Date().toLocaleTimeString('ja-JP')); ov.remove(); }
+        catch(e){ alert('取得失敗: ' + e.message); }
+      };
+      ov.querySelector('#xExport').onclick=()=>{
+        const blob=new Blob([JSON.stringify(DB,null,1)],{type:'application/json'});
+        const a=document.createElement('a');
+        a.href=URL.createObjectURL(blob); a.download='data.json'; a.click();
+      };
+      ov.querySelector('#xImport').onclick=()=>ov.querySelector('#xFile').click();
+      ov.querySelector('#xFile').onchange=async e=>{
+        const f=e.target.files[0]; if(!f) return;
+        try{
+          const j=JSON.parse(await f.text());
+          if(!Array.isArray(j.companies)) throw new Error('形式が不正です');
+          DB = normDB(j);
+          Object.keys(imgCache).forEach(k=>delete imgCache[k]);
+          await ensureImages(); dataVersion++; saveLocal();
+          ov.remove(); refreshGraph();
+        }catch(err){ alert('読み込み失敗: '+err.message); }
+      };
+      ov.querySelector('#xSeed').onclick=async ()=>{
+        if(!confirm('現在の表示を、同梱の初期データ（Miro CSV由来）に戻します。よろしいですか？')) return;
+        if(!(await trySeedFile())) DB = normDB(JSON.parse(JSON.stringify(SEED)));
+        Object.keys(imgCache).forEach(k=>delete imgCache[k]);
+        await ensureImages(); dataVersion++; saveLocal(); ov.remove(); refreshGraph();
+      };
+      ov.querySelector('#xReset').onclick=()=>{
+        if(!confirm('このブラウザのキャッシュを消去します（リポジトリのデータは消えません）。')) return;
+        localStorage.removeItem(LS_DATA); location.reload();
+      };
+      ov.querySelector('#gSave').onclick=()=>{
+        GH = {owner:ov.querySelector('#gO').value.trim(), repo:ov.querySelector('#gR').value.trim(),
+              branch:ov.querySelector('#gB').value.trim()||'main',
+              path:ov.querySelector('#gP').value.trim()||'data.json'};
+        localStorage.setItem(LS_SYNC, JSON.stringify(GH));
+        location.reload();
+      };
+    });
+}
+
+/* =========================================================================
+   BOOT
+   ========================================================================= */
+const setStatus = t => $('#status').textContent = t;
+
+$('#btnAdd').onclick = ()=>openCompanyModal(null);
+$('#btnRel').onclick = ()=>openRelModal(null);
+$('#btnAddProject').onclick = ()=>openProjectModal(null);
+$('#btnMenu').onclick= openMenu;
+$('#btnSide').onclick= ()=>$('#side').classList.toggle('hidden');
+$('#search').oninput = renderSide;
+$('#catAll').onclick = ()=>{ hidden.clear(); refreshGraph(); };
+$('#catUnfocus').onclick = ()=> setFocus(null);
+$('#focusChip').onclick  = ()=> setFocus(null);
+$('#catNone').onclick= ()=>{ CATS.forEach(c=>hidden.add(c.id)); refreshGraph(); };
+/* ---- 表示設定 ---- */
+function syncViewUI(){
+  $('#vScale').value = view.scale;
+  $('#vScaleV').textContent = '×' + Number(view.scale).toFixed(1);
+  $('#vLayout').textContent = '2Dレイアウト：' + (view.layout==='band' ? 'カテゴリ整列' : 'フォース');
+  $('#vTheme').textContent  = '配色：' + (theme==='light' ? 'ライト' : 'ダーク');
+}
+$('#vScale').oninput = e=>{ view.scale = parseFloat(e.target.value); saveView(); syncViewUI(); refreshGraph(); };
+$('#vLayout').onclick = ()=>{
+  view.layout = view.layout==='band' ? 'force' : 'band';
+  saveView(); syncViewUI(); posCache.clear(); refreshGraph();
+  if(mode==='2D') setTimeout(()=>Graph.zoomToFit(600,40), 350);
+};
+$('#vTheme').onclick = ()=>{
+  theme = view.theme = (theme==='light' ? 'dark' : 'light');
+  saveView(); syncViewUI();
+  Graph.backgroundColor(TH().bg); refreshGraph();
+};
+$('#vFit').onclick = ()=> Graph.zoomToFit(600, mode==='3D'?90:40);
+
+/* ---- 相性 ---- */
+function syncAffUI(){
+  $('#afOn').textContent    = '引力：' + (aff.on?'ON':'OFF');
+  $('#afOn').classList.toggle('primary', aff.on);
+  $('#afCross').textContent = '異業種のみ：' + (aff.crossOnly?'ON':'OFF');
+  $('#afThr').value = aff.thr;     $('#afThrV').textContent = aff.thr.toFixed(2);
+  $('#afForce').value = aff.force; $('#afForceV').textContent = '×'+aff.force.toFixed(1);
+  $('#afInfo').textContent = aff.on
+    ? `${AFF.length} 本の相性リンクを生成中。線にカーソルを合わせると共通キーワードが出ます。`
+    : '社名・タグ・手入力キーワードから共通点を抽出し、近い企業同士を引き寄せます。';
+}
+function applyAff(){
+  saveAff(); affKey=''; computeAffinity();
+  if(Graph){ tuneLinkForce(); refreshGraph(); if(Graph.d3ReheatSimulation) Graph.d3ReheatSimulation(); }
+  syncAffUI();
+}
+$('#afOn').onclick = ()=>{
+  aff.on = !aff.on;
+  if(aff.on){
+    hiddenType.delete('affinity');
+    if(mode==='2D' && view.layout==='band'){ view.layout='force'; saveView(); syncViewUI(); posCache.clear(); }
+  }
+  applyAff();
+  if(aff.on) setTimeout(()=>{ try{ Graph.zoomToFit(800, mode==='3D'?90:40); }catch(e){} }, 1400);
+};
+$('#afCross').onclick = ()=>{ aff.crossOnly = !aff.crossOnly; applyAff(); };
+$('#afThr').oninput   = e=>{ aff.thr = parseFloat(e.target.value); applyAff(); };
+$('#afForce').oninput = e=>{ aff.force = parseFloat(e.target.value); applyAff(); };
+
+$('#b3d').onclick = ()=>setMode('3D');
+$('#b2d').onclick = ()=>setMode('2D');
+$('#bProjects').onclick = ()=>setMode('PROJECT');
+function syncAccessUI(){
+  document.body.classList.toggle('readonly',accessMode!=='edit');
+  $('#modeView').classList.toggle('on',accessMode==='view');
+  $('#modeEdit').classList.toggle('on',accessMode==='edit');
+}
+function setAccessMode(next){
+  accessMode=next;
+  localStorage.setItem('fn-ecomap-access-v1',accessMode);
+  syncAccessUI();
+}
+$('#modeView').onclick=()=>setAccessMode('view');
+$('#modeEdit').onclick=()=>setAccessMode('edit');
+function syncModeUI(){
+  document.body.classList.toggle('project-mode',mode==='PROJECT');
+  $('#b2d').classList.toggle('on',mode==='2D');
+  $('#b3d').classList.toggle('on',mode==='3D');
+  $('#bProjects').classList.toggle('on',mode==='PROJECT');
+  $('#hint').textContent=mode==='PROJECT'
+    ? (projectDim==='3D'?'案件をクリックで詳細／ドラッグで回転／ホイールでズーム':'案件をクリックで詳細／ホイールでズーム')
+    : (mode==='3D'?'ノードをクリックで詳細／ドラッグで回転／ホイールでズーム':'カードをクリックで詳細・ドラッグで移動／ホイールでズーム');
+}
+function setMode(m){
+  if(mode===m){syncModeUI();return;}
+  if(mode!=='PROJECT')stashPositions();
+  posCache.clear();selectedId=null;hideDetail();
+  mode=m;
+  syncModeUI();
+  saveView();
+  makeGraph();
+}
+function setProjectDim(dim){
+  if(projectDim===dim)return;
+  projectDim=dim;localStorage.setItem('fn-ecomap-project-dim-v1',dim);
+  selectedId=null;hideDetail();syncModeUI();makeGraph();
+}
+$('#p2d').onclick=()=>setProjectDim('2D');
+$('#p3d').onclick=()=>setProjectDim('3D');
+function setProjectAxis(key,value){
+  const other=Object.keys(projectAxes).find(k=>k!==key&&projectAxes[k]===value);
+  if(other)projectAxes[other]=projectAxes[key];
+  projectAxes[key]=value;
+  localStorage.setItem('fn-ecomap-project-axes-v1',JSON.stringify(projectAxes));
+  selectedId=null;hideDetail();makeGraph();
+}
+$('#axisX').onchange=e=>setProjectAxis('x',e.target.value);
+$('#axisY').onchange=e=>setProjectAxis('y',e.target.value);
+$('#axisZ').onchange=e=>setProjectAxis('z',e.target.value);
+window.addEventListener('keydown', e=>{
+  if(e.key==='Escape'){
+    if(document.querySelector('.overlay')){ document.querySelectorAll('.overlay').forEach(o=>o.remove()); return; }
+    if(selectedId){ selectedId=null; hideDetail(); refreshGraph(); return; }
+    if(focusCat) setFocus(null);
+  }
+});
+
+(async function init(){
+  if(window.innerWidth<760) $('#side').classList.add('hidden');
+  syncViewUI(); syncAffUI(); syncAccessUI(); syncModeUI();
+  await loadAll();
+  makeGraph(); syncAffUI();
+  if(mode==='2D' && view.layout==='band') setTimeout(()=>Graph.zoomToFit(600,40), 400);
+})();
+</script>
+</body>
+</html>
