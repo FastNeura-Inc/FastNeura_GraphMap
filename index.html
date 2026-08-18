@@ -121,7 +121,6 @@ body.project-mode #side .ecoSec{display:none}
 #projectSec{display:none}
 body.project-mode #projectSec{display:block}
 body.project-mode #focusChip, body.project-mode #btnAdd, body.project-mode #btnRel{display:none !important}
-body.project-mode #search{display:none}
 body:not(.project-mode) #btnAddProject{display:none}
 .axisGrid{display:grid;grid-template-columns:1fr;gap:8px}
 .projectSummary{margin:9px 0 0;padding:8px 10px;border-radius:8px;background:#101a28;color:var(--fg-dim);font-size:11.5px;line-height:1.55}
@@ -443,6 +442,19 @@ const LS_PENDING = 'fn-ecomap-pending-v1';
 const uid = () => Math.random().toString(36).slice(2,10) + Date.now().toString(36).slice(-4);
 const $ = s => document.querySelector(s);
 const esc = s => String(s??'').replace(/[&<>"']/g, m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+const normalizeSearch = s => String(s??'').normalize('NFKC').toLocaleLowerCase('ja').trim();
+const searchQuery = () => normalizeSearch($('#search')?.value);
+function companyMatchesSearch(c,q=searchQuery()){
+  if(!q) return true;
+  const categories=(c.categories||[]).map(id=>(CAT[id]||{}).name||'');
+  const status=(STA[c.status||'']||{}).name||'';
+  return normalizeSearch([c.name,c.note,c.url,(c.keywords||[]).join(' '),categories.join(' '),status].join(' ')).includes(q);
+}
+function projectMatchesSearch(p,q=searchQuery()){
+  if(!q) return true;
+  const c=DB.companies.find(x=>x.id===p.companyId);
+  return normalizeSearch([p.name,p.note,c?.name,c?.note,(c?.keywords||[]).join(' ')].join(' ')).includes(q);
+}
 
 /* =========================================================================
    PERSISTENCE
@@ -827,7 +839,8 @@ function stashPositions(){
   });
 }
 function graphData(){
-  const nodes = DB.companies.filter(visible).map(c=>{
+  const q=searchQuery();
+  const nodes = DB.companies.filter(c=>visible(c)&&companyMatchesSearch(c,q)).map(c=>{
     const p = posCache.get(c.id);
     return p ? Object.assign({}, c, p) : c;
   });
@@ -861,7 +874,8 @@ function projectCoord(p,id,span=440,invert=false){
 }
 function projectGraphData(){
   const axes=projectAxisIds();
-  const nodes=(DB.projects||[]).filter(p=>axes.every(a=>hasProjectValue(p,a))).map(p=>{
+  const q=searchQuery();
+  const nodes=(DB.projects||[]).filter(p=>projectMatchesSearch(p,q)&&axes.every(a=>hasProjectValue(p,a))).map(p=>{
     const c=companyOf(p.companyId);
     const n={...p, company:c, project:true};
     n.x=n.fx=projectCoord(p,projectAxes.x,500,false);
@@ -954,24 +968,25 @@ function syncProjectAxisOptions(){
 }
 function renderProjectSide(){
   syncProjectAxisOptions();
-  const axes=projectAxisIds(), projects=DB.projects||[];
-  const mapped=projects.filter(p=>axes.every(a=>hasProjectValue(p,a))).length;
-  $('#projectSummary').innerHTML=`登録 <b style="color:var(--fg)">${projects.length}件</b> ／ 現在のマップに表示 <b style="color:var(--fg)">${mapped}件</b><br>${esc(axes.map(a=>axisMeta(a).short).join(' × '))}`;
-  $('#pCount').textContent=projects.length;
-  $('#projectList').innerHTML=projects.slice().sort((a,b)=>String(b.updatedAt).localeCompare(String(a.updatedAt))).map(p=>{
+  const axes=projectAxisIds(), projects=DB.projects||[],q=searchQuery();
+  const results=projects.filter(p=>projectMatchesSearch(p,q));
+  const mapped=results.filter(p=>axes.every(a=>hasProjectValue(p,a))).length;
+  $('#projectSummary').innerHTML=`登録 <b style="color:var(--fg)">${projects.length}件</b>${q?` ／ 検索結果 <b style="color:var(--fg)">${results.length}件</b>`:''} ／ 現在のマップに表示 <b style="color:var(--fg)">${mapped}件</b><br>${esc(axes.map(a=>axisMeta(a).short).join(' × '))}`;
+  $('#pCount').textContent=q?`${results.length} / ${projects.length}`:projects.length;
+  $('#projectList').innerHTML=results.slice().sort((a,b)=>String(b.updatedAt).localeCompare(String(a.updatedAt))).map(p=>{
     const c=companyOf(p.companyId);
     return `<div class="listitem" data-id="${p.id}">
       ${c&&c.logo?`<img class="thumb" src="${c.logo}" alt="">`:`<i class="dot" style="width:22px;height:22px;flex:0 0 22px;background:${c?catColor(primaryCat(c)):'#64748b'}"></i>`}
       <span class="nm"><b>${esc(p.name)}</b><br><span class="muted">${esc(c?c.name:'企業未設定')}</span></span>
       <span class="acts"><button class="btn sm" data-act="edit">編集</button><button class="btn sm danger" data-act="del">削</button></span>
     </div>`;
-  }).join('')||'<p class="muted">まだ案件がありません。編集モードで追加できます。</p>';
+  }).join('')||(q?'<p class="muted">検索条件に一致する案件がありません。</p>':'<p class="muted">まだ案件がありません。編集モードで追加できます。</p>');
   $('#projectList').querySelectorAll('.listitem').forEach(el=>{
     el.onclick=e=>{
       const act=e.target.dataset.act,id=el.dataset.id;
       if(act==='edit'){openProjectModal(id);return;}
       if(act==='del'){deleteProject(id);return;}
-      selectedId=id;showProjectDetail(id);refreshGraph();
+      selectedId=id;showProjectDetail(id);refreshGraph();setTimeout(()=>focusNode(id),60);
     };
   });
   const parts=axes.map((id,i)=>{
@@ -1347,10 +1362,10 @@ function renderSide(){
   });
 
   // 企業
-  const q = ($('#search').value||'').trim().toLowerCase();
-  const list = DB.companies.filter(c=>!q||c.name.toLowerCase().includes(q))
+  const q = searchQuery();
+  const list = DB.companies.filter(c=>companyMatchesSearch(c,q))
                            .sort((a,b)=> (b.hub?1:0)-(a.hub?1:0) || a.name.localeCompare(b.name,'ja'));
-  $('#cCount').textContent = DB.companies.length;
+  $('#cCount').textContent = q ? `${list.length} / ${DB.companies.length}` : DB.companies.length;
   $('#complist').innerHTML = list.map(c=>`
     <div class="listitem" data-id="${c.id}">
       ${c.logo?`<img class="thumb" src="${c.logo}">`:`<i class="dot" style="width:22px;height:22px;flex:0 0 22px;background:${catColor((c.categories||[])[0])}"></i>`}
@@ -1359,7 +1374,7 @@ function renderSide(){
         <button class="btn sm" data-act="edit">編集</button>
         <button class="btn sm danger" data-act="del">削</button>
       </span>
-    </div>`).join('') || '<p class="muted">まだ企業がありません。</p>';
+    </div>`).join('') || (q?'<p class="muted">検索条件に一致する企業がありません。</p>':'<p class="muted">まだ企業がありません。</p>');
   $('#complist').querySelectorAll('.listitem').forEach(el=>{
     const id = el.dataset.id;
     el.onclick = e=>{
@@ -1372,8 +1387,10 @@ function renderSide(){
 
   // 関係
   const nameOf = id => (DB.companies.find(c=>c.id===id)||{}).name || '(不明)';
-  $('#rCount').textContent = DB.relations.length;
-  $('#rellist').innerHTML = DB.relations.map(r=>`
+  const matchedIds=new Set(list.map(c=>c.id));
+  const relations=q?DB.relations.filter(r=>matchedIds.has(r.source)||matchedIds.has(r.target)):DB.relations;
+  $('#rCount').textContent = q ? `${relations.length} / ${DB.relations.length}` : DB.relations.length;
+  $('#rellist').innerHTML = relations.map(r=>`
     <div class="rel listitem" data-id="${r.id}">
       <span class="nm">${esc(nameOf(r.source))} ${r.directed?'→':'—'} ${esc(nameOf(r.target))}</span>
       <span class="lbl" style="color:${rtOf(r.type).color}">${esc(r.label||rtOf(r.type).name)}</span>
@@ -1395,7 +1412,7 @@ function renderSide(){
 function focusNode(id){
   const n = (Graph.graphData().nodes||[]).find(n=>n.id===id);
   if(!n) return;
-  if(mode==='3D'){
+  if(mode==='3D'||(mode==='PROJECT'&&projectDim==='3D')){
     const d = 90, r = 1 + d/Math.hypot(n.x||1,n.y||1,n.z||1);
     Graph.cameraPosition({x:(n.x||0)*r,y:(n.y||0)*r,z:(n.z||0)*r + 40}, n, 900);
   } else {
@@ -1807,7 +1824,34 @@ $('#btnRel').onclick = ()=>openRelModal(null);
 $('#btnAddProject').onclick = ()=>openProjectModal(null);
 $('#btnMenu').onclick= openMenu;
 $('#btnSide').onclick= ()=>$('#side').classList.toggle('hidden');
-$('#search').oninput = renderSide;
+let searchTimer=null;
+function applySearch(){
+  selectedId=null;hideDetail();
+  refreshGraph();
+  const q=searchQuery();
+  const count=mode==='PROJECT'
+    ? (DB.projects||[]).filter(p=>projectMatchesSearch(p,q)).length
+    : DB.companies.filter(c=>visible(c)&&companyMatchesSearch(c,q)).length;
+  setStatus(q?`「${$('#search').value.trim()}」の検索結果：${count}件`:'検索を解除しました');
+  setTimeout(()=>{try{Graph.zoomToFit(450,mode==='3D'||(mode==='PROJECT'&&projectDim==='3D')?90:50);}catch(e){}},120);
+}
+$('#search').oninput=()=>{
+  clearTimeout(searchTimer);searchTimer=setTimeout(applySearch,80);
+};
+$('#search').onkeydown=e=>{
+  if(e.key==='Enter'){
+    clearTimeout(searchTimer);applySearch();
+    const q=searchQuery();
+    const first=mode==='PROJECT'
+      ? (DB.projects||[]).find(p=>projectMatchesSearch(p,q)&&projectAxisIds().every(a=>hasProjectValue(p,a)))
+      : DB.companies.find(c=>visible(c)&&companyMatchesSearch(c,q));
+    if(first){
+      selectedId=first.id;
+      mode==='PROJECT'?showProjectDetail(first.id):showDetail(first.id);
+      refreshGraph();setTimeout(()=>focusNode(first.id),80);
+    }
+  }
+};
 $('#catAll').onclick = ()=>{ hidden.clear(); refreshGraph(); };
 $('#catUnfocus').onclick = ()=> setFocus(null);
 $('#focusChip').onclick  = ()=> setFocus(null);
@@ -1886,6 +1930,7 @@ function syncModeUI(){
   $('#b2d').classList.toggle('on',mode==='2D');
   $('#b3d').classList.toggle('on',mode==='3D');
   $('#bProjects').classList.toggle('on',mode==='PROJECT');
+  $('#search').placeholder=mode==='PROJECT'?'案件・企業を検索…':'企業・キーワードを検索…';
   $('#hint').textContent=mode==='PROJECT'
     ? (projectDim==='3D'?'案件をクリックで詳細／ドラッグで回転／ホイールでズーム':'案件をクリックで詳細／ホイールでズーム')
     : (mode==='3D'?'ノードをクリックで詳細／ドラッグで回転／ホイールでズーム':'カードをクリックで詳細・ドラッグで移動／ホイールでズーム');
@@ -1919,6 +1964,7 @@ $('#axisZ').onchange=e=>setProjectAxis('z',e.target.value);
 window.addEventListener('keydown', e=>{
   if(e.key==='Escape'){
     if(document.querySelector('.overlay')){ document.querySelectorAll('.overlay').forEach(o=>o.remove()); return; }
+    if(searchQuery()){ $('#search').value=''; applySearch(); return; }
     if(selectedId){ selectedId=null; hideDetail(); refreshGraph(); return; }
     if(focusCat) setFocus(null);
   }
