@@ -1,0 +1,1285 @@
+{
+ "people": {
+  "india": {
+   "activity": "none",
+   "memberships": [
+    {
+     "est": false,
+     "role": "planned",
+     "team": "hw"
+    },
+    {
+     "est": false,
+     "role": "planned",
+     "team": "sw"
+    }
+   ],
+   "name": "インド人インターン候補",
+   "note": "Talendy／GS-JTI 経由で応募100件超。オンラインインターンが中心で、ハードウェア人材は厳選して来日。",
+   "status": "incoming",
+   "title": "エンジニア（IIT等）"
+  },
+  "takagi": {
+   "activity": "low",
+   "lastSeen": "2026-09-19",
+   "memberships": [
+    {
+     "est": true,
+     "role": "pm",
+     "team": "p-contact"
+    }
+   ],
+   "name": "高木友貴",
+   "note": "どのプロジェクトのPMに据えるか検討中（9/16）。",
+   "slack": "U0BKHTSMYAH",
+   "status": "active",
+   "title": "BD（スマートコンタクトレンズ）"
+  },
+  "shimono": {
+   "activity": "none",
+   "memberships": [],
+   "name": "下野匠人",
+   "note": "応募あり、面談前（10/15）。",
+   "status": "incoming",
+   "title": "BD志望（阪大医学部6年）"
+  },
+  "nakata": {
+   "activity": "high",
+   "core": true,
+   "lastSeen": "2026-10-15",
+   "memberships": [
+    {
+     "est": false,
+     "role": "member",
+     "team": "exec"
+    },
+    {
+     "est": false,
+     "role": "lead",
+     "team": "sw"
+    },
+    {
+     "est": false,
+     "role": "member",
+     "team": "hw"
+    },
+    {
+     "est": false,
+     "role": "member",
+     "team": "rnd"
+    },
+    {
+     "est": true,
+     "role": "pm",
+     "team": "p-xhro"
+    },
+    {
+     "est": true,
+     "role": "pm",
+     "team": "p-nedo"
+    },
+    {
+     "est": true,
+     "role": "pm",
+     "team": "p-moveandfeel"
+    },
+    {
+     "est": false,
+     "role": "member",
+     "team": "p-toyota"
+    },
+    {
+     "est": false,
+     "role": "member",
+     "team": "p-jre"
+    },
+    {
+     "est": false,
+     "role": "member",
+     "team": "p-nikko"
+    },
+    {
+     "est": false,
+     "role": "member",
+     "team": "p-melco"
+    },
+    {
+     "est": false,
+     "role": "member",
+     "team": "p-toshima"
+    },
+    {
+     "est": false,
+     "role": "member",
+     "team": "p-physical"
+    },
+    {
+     "est": false,
+     "role": "member",
+     "team": "p-panasonic"
+    }
+   ],
+   "name": "中田昂成",
+   "note": "技術チームの稼働割り振りを担当。サントリー報告書などでキャパが逼迫気味（9/25 本人発言）。",
+   "slack": "U09AZ3RCHV3",
+   "status": "active",
+   "title": "CTO・Sync OS 開発リード"
+  },
+  "soeda": {
+   "activity": "none",
+   "lastSeen": "2026-09-15",
+   "memberships": [],
+   "name": "添田悠介",
+   "note": "稼働していない。",
+   "slack": "U0BF3THACF7",
+   "status": "inactive",
+   "title": "計測協力"
+  },
+  "mizuno": {
+   "activity": "high",
+   "lastSeen": "2026-10-15",
+   "memberships": [
+    {
+     "est": false,
+     "role": "member",
+     "team": "rnd"
+    },
+    {
+     "est": false,
+     "role": "member",
+     "team": "hw"
+    },
+    {
+     "est": false,
+     "role": "pm",
+     "team": "p-canon"
+    },
+    {
+     "est": false,
+     "role": "member",
+     "team": "p-xhro"
+    },
+    {
+     "est": false,
+     "role": "member",
+     "team": "p-nedo"
+    },
+    {
+     "est": false,
+     "role": "member",
+     "team": "p-toyota"
+    },
+    {
+     "est": false,
+     "role": "member",
+     "team": "p-toshima"
+    },
+    {
+     "est": false,
+     "role": "member",
+     "team": "p-physical"
+    },
+    {
+     "est": false,
+     "role": "member",
+     "team": "p-mitou"
+    }
+   ],
+   "name": "水野晋之介",
+   "note": "未踏AD（IRIS）の申請取りまとめ、計測用PC・回線の管理、人間拡張コンソーシアム。",
+   "slack": "U09MTMWT886",
+   "status": "active",
+   "title": "研究・渉外"
+  },
+  "mori-mariko": {
+   "activity": "low",
+   "lastSeen": "2026-10-15",
+   "memberships": [
+    {
+     "est": true,
+     "role": "member",
+     "team": "p-hakuhodo"
+    }
+   ],
+   "name": "森真梨子",
+   "note": "",
+   "slack": "U0B0RCXJTFA",
+   "status": "advisor",
+   "title": "博報堂案件の協力者（推定）"
+  },
+  "omori": {
+   "activity": "none",
+   "joined": "10/17 面談",
+   "memberships": [
+    {
+     "est": false,
+     "role": "planned",
+     "team": "hw"
+    },
+    {
+     "est": false,
+     "role": "planned",
+     "team": "rnd"
+    }
+   ],
+   "name": "大森さん（中田さんの研究室）",
+   "note": "10/17 15-16時に協業の議論（水口・中田・平塚・稲田）。個人への業務委託を想定。",
+   "status": "incoming",
+   "title": "実験・アルゴ・ハード人材"
+  },
+  "tamura": {
+   "activity": "low",
+   "joined": "2026-10-14",
+   "lastSeen": "2026-10-14",
+   "memberships": [
+    {
+     "est": false,
+     "role": "member",
+     "team": "sw"
+    }
+   ],
+   "name": "田村雷輝",
+   "note": "京大M2（コンパイラ・高速化）、INSPIRE 経由。10/19 に自己紹介・Sync OS 議論会。未踏ADに応募予定。",
+   "slack": "U0C0QE3HEF2",
+   "status": "new",
+   "title": "バックエンド（Sync OS）"
+  },
+  "tsutsui": {
+   "activity": "mid",
+   "lastSeen": "2026-10-06",
+   "memberships": [
+    {
+     "est": false,
+     "role": "member",
+     "team": "sw"
+    },
+    {
+     "est": false,
+     "role": "member",
+     "team": "rnd"
+    },
+    {
+     "est": false,
+     "role": "member",
+     "team": "p-nedo"
+    }
+   ],
+   "name": "筒井達哉",
+   "note": "自動モデル探索エージェント（Sync_Pipeline の AutoDevAgents ブランチ）、NeurIPS Track3 のスコア出し。",
+   "slack": "U0ALS1XV3G9",
+   "status": "active",
+   "title": "生体信号エージェント"
+  },
+  "ebihara": {
+   "activity": "mid",
+   "lastSeen": "2026-10-15",
+   "memberships": [
+    {
+     "est": false,
+     "role": "member",
+     "team": "hw"
+    },
+    {
+     "est": false,
+     "role": "lead",
+     "team": "p-jre"
+    },
+    {
+     "est": false,
+     "role": "member",
+     "team": "p-nedo"
+    },
+    {
+     "est": false,
+     "role": "member",
+     "team": "p-xhro"
+    },
+    {
+     "est": false,
+     "role": "member",
+     "team": "p-toshima"
+    },
+    {
+     "est": false,
+     "role": "member",
+     "team": "p-defense"
+    },
+    {
+     "est": false,
+     "role": "member",
+     "team": "p-macnica"
+    }
+   ],
+   "name": "蛯原",
+   "note": "JRE・島津の実験統括（準PM）。執行役員化（本人の希望はCDO＝Chief Defense Officer）を検討中。",
+   "slack": "U0AL3L4TCLF",
+   "status": "active",
+   "title": "実験オペレーター・ドローン／防衛"
+  },
+  "nagai": {
+   "activity": "none",
+   "memberships": [],
+   "name": "ながいみき",
+   "note": "リクルートを打診する段階（10/13）。",
+   "status": "incoming",
+   "title": "打診段階"
+  },
+  "akama": {
+   "activity": "none",
+   "lastSeen": "2026-09-07",
+   "memberships": [],
+   "name": "赤間遥",
+   "note": "8月末に離脱、9/7 に #management を退出。",
+   "slack": "U08FRKB05UZ",
+   "status": "inactive",
+   "title": "旧COO"
+  },
+  "phd-xhro": {
+   "activity": "none",
+   "memberships": [
+    {
+     "est": false,
+     "role": "planned",
+     "team": "p-xhro"
+    },
+    {
+     "est": false,
+     "role": "planned",
+     "team": "rnd"
+    }
+   ],
+   "name": "片岡さんラボの博士学生",
+   "note": "サントリー水谷さんの共同研究者。3月からドイツでポスドク予定。片岡さんが紹介を打診（10/14）。",
+   "status": "incoming",
+   "title": "XHROデータ解析"
+  },
+  "aoyama-nakata": {
+   "activity": "none",
+   "memberships": [],
+   "name": "青山研の中田さん",
+   "note": "平塚さん経由で業務委託を希望（10/13）。",
+   "status": "incoming",
+   "title": "業務委託希望"
+  },
+  "ishii": {
+   "activity": "mid",
+   "lastSeen": "2026-10-15",
+   "memberships": [
+    {
+     "est": false,
+     "role": "advisor",
+     "team": "exec"
+    },
+    {
+     "est": false,
+     "role": "advisor",
+     "team": "p-xhro"
+    },
+    {
+     "est": false,
+     "role": "advisor",
+     "team": "p-nedo"
+    },
+    {
+     "est": false,
+     "role": "advisor",
+     "team": "p-toyota"
+    },
+    {
+     "est": false,
+     "role": "advisor",
+     "team": "p-nikko"
+    },
+    {
+     "est": false,
+     "role": "advisor",
+     "team": "p-canon"
+    },
+    {
+     "est": false,
+     "role": "advisor",
+     "team": "p-honda"
+    },
+    {
+     "est": false,
+     "role": "advisor",
+     "team": "p-contact"
+    }
+   ],
+   "name": "石井大智",
+   "note": "9/17 にCOO就任を打診され、アドバイザーとして関わる形に（9/18）。営業への同席、補助金やイベントの紹介。",
+   "slack": "U0A1M1PR4UC",
+   "status": "advisor",
+   "title": "アドバイザー"
+  },
+  "hiratsuka": {
+   "activity": "high",
+   "core": true,
+   "lastSeen": "2026-10-14",
+   "memberships": [
+    {
+     "est": false,
+     "role": "member",
+     "team": "exec"
+    },
+    {
+     "est": false,
+     "role": "pm",
+     "team": "p-jre"
+    },
+    {
+     "est": false,
+     "role": "pm",
+     "team": "p-melco"
+    },
+    {
+     "est": true,
+     "role": "pm",
+     "team": "p-nikko"
+    },
+    {
+     "est": true,
+     "role": "pm",
+     "team": "p-sumiriko"
+    },
+    {
+     "est": true,
+     "role": "pm",
+     "team": "p-panasonic"
+    },
+    {
+     "est": false,
+     "role": "member",
+     "team": "p-xhro"
+    },
+    {
+     "est": false,
+     "role": "member",
+     "team": "p-toyota"
+    },
+    {
+     "est": false,
+     "role": "member",
+     "team": "p-defense"
+    },
+    {
+     "est": false,
+     "role": "member",
+     "team": "p-macnica"
+    },
+    {
+     "est": false,
+     "role": "member",
+     "team": "p-leo"
+    },
+    {
+     "est": false,
+     "role": "member",
+     "team": "p-physical"
+    },
+    {
+     "est": false,
+     "role": "member",
+     "team": "p-toshima"
+    },
+    {
+     "est": false,
+     "role": "member",
+     "team": "p-moveandfeel"
+    }
+   ],
+   "name": "平塚蒼大",
+   "note": "事業開発のフロント。PMを最も多く抱えている（JRE・三菱電機は明示）。",
+   "slack": "U0A3WLMQ4HF",
+   "status": "active",
+   "title": "執行役員 事業開発・ブランド戦略"
+  },
+  "ishikawa": {
+   "activity": "low",
+   "lastSeen": "2026-10-14",
+   "memberships": [
+    {
+     "est": false,
+     "role": "planned",
+     "team": "p-toyota"
+    }
+   ],
+   "name": "石川悠",
+   "note": "味の素の事業収支を担当。11月のトヨタ紡織計測に振る案。",
+   "slack": "U0ARXTKMKKN",
+   "status": "active",
+   "title": "事業開発補助"
+  },
+  "kataoka": {
+   "activity": "low",
+   "joined": "2026-10-14",
+   "lastSeen": "2026-10-14",
+   "memberships": [
+    {
+     "est": false,
+     "role": "member",
+     "team": "sw"
+    },
+    {
+     "est": true,
+     "role": "member",
+     "team": "rnd"
+    }
+   ],
+   "name": "片岡朝貴",
+   "note": "OIST（計算論的神経科学）。最初の数週間は様子を見ながら稼働。同じラボの博士学生（XHROデータ解析）を紹介予定。",
+   "slack": "U0C8LGT9ZR9",
+   "status": "new",
+   "title": "AIエンジニア"
+  },
+  "kariyama": {
+   "activity": "low",
+   "lastSeen": "2026-09-30",
+   "memberships": [
+    {
+     "est": false,
+     "role": "advisor",
+     "team": "sw"
+    }
+   ],
+   "name": "刈山",
+   "note": "技術顧問。Sync OS 開発に技術的な助言（ハーネス選定など）。",
+   "slack": "U07PFVCNMEH",
+   "status": "advisor",
+   "title": "技術顧問"
+  },
+  "yoshikawa": {
+   "activity": "mid",
+   "lastSeen": "2026-10-14",
+   "memberships": [
+    {
+     "est": false,
+     "role": "member",
+     "team": "sw"
+    },
+    {
+     "est": false,
+     "role": "member",
+     "team": "p-nedo"
+    }
+   ],
+   "name": "吉川和之",
+   "note": "NEDO島津の Hume データ解析。稼働の余裕は少なめ。",
+   "slack": "U090UR2SRSM",
+   "status": "active",
+   "title": "ソフトウェア・ML"
+  },
+  "sado": {
+   "activity": "low",
+   "lastSeen": "2026-09-17",
+   "memberships": [
+    {
+     "est": false,
+     "role": "member",
+     "team": "p-xhro"
+    },
+    {
+     "est": false,
+     "role": "member",
+     "team": "p-jre"
+    },
+    {
+     "est": false,
+     "role": "planned",
+     "team": "p-toyota"
+    }
+   ],
+   "name": "佐渡海斗",
+   "note": "サントリー・JREの計測。11月のトヨタ紡織計測にも振る案。",
+   "slack": "U0AQM6DTLVC",
+   "status": "active",
+   "title": "計測・実験"
+  },
+  "inada": {
+   "activity": "high",
+   "lastSeen": "2026-10-15",
+   "memberships": [
+    {
+     "est": false,
+     "role": "lead",
+     "team": "hw"
+    },
+    {
+     "est": false,
+     "role": "member",
+     "team": "rnd"
+    },
+    {
+     "est": true,
+     "role": "pm",
+     "team": "p-toa"
+    },
+    {
+     "est": false,
+     "role": "member",
+     "team": "p-xhro"
+    },
+    {
+     "est": false,
+     "role": "member",
+     "team": "p-toyota"
+    },
+    {
+     "est": false,
+     "role": "member",
+     "team": "p-melco"
+    },
+    {
+     "est": false,
+     "role": "member",
+     "team": "p-defense"
+    },
+    {
+     "est": false,
+     "role": "member",
+     "team": "p-mitou"
+    }
+   ],
+   "name": "稲田雅治",
+   "note": "自作脳波計の仕様、Hush 電極改良、社内サーバー・回線の保守。",
+   "slack": "U09VBPWP3HV",
+   "status": "active",
+   "title": "ハードウェア開発担当"
+  },
+  "jp-applicants": {
+   "activity": "none",
+   "memberships": [],
+   "name": "日本人応募者（数名）",
+   "note": "10/15 に新たに数名から応募。採用MTGを予定。",
+   "status": "incoming",
+   "title": "職種未定"
+  },
+  "nakajima": {
+   "activity": "mid",
+   "lastSeen": "2026-10-16",
+   "memberships": [
+    {
+     "est": true,
+     "role": "pm",
+     "team": "p-honda"
+    },
+    {
+     "est": false,
+     "role": "member",
+     "team": "p-xhro"
+    },
+    {
+     "est": false,
+     "role": "member",
+     "team": "p-jre"
+    },
+    {
+     "est": false,
+     "role": "member",
+     "team": "p-toyota"
+    }
+   ],
+   "name": "中島徳彦",
+   "note": "バックオフィス全般。請求・インボイス、購買、キャッシュ管理。",
+   "slack": "U09FU3ST40H",
+   "status": "active",
+   "title": "バックオフィス（組織戦略）"
+  },
+  "sato": {
+   "activity": "mid",
+   "lastSeen": "2026-10-15",
+   "memberships": [
+    {
+     "est": false,
+     "role": "member",
+     "team": "p-physical"
+    }
+   ],
+   "name": "佐藤文太朗",
+   "note": "元CoO。CrewRobotics 系の営業。",
+   "slack": "U06RHSLPKH8",
+   "status": "active",
+   "title": "フィジカル植民地（営業）"
+  },
+  "jung": {
+   "activity": "none",
+   "memberships": [],
+   "name": "Daechul Jung",
+   "note": "稼働していない（8/31 に応募あり）。",
+   "status": "inactive",
+   "title": "ML・BCI"
+  },
+  "harada": {
+   "activity": "mid",
+   "lastSeen": "2026-10-14",
+   "memberships": [
+    {
+     "est": false,
+     "role": "member",
+     "team": "sw"
+    },
+    {
+     "est": false,
+     "role": "member",
+     "team": "rnd"
+    },
+    {
+     "est": false,
+     "role": "member",
+     "team": "p-xhro"
+    },
+    {
+     "est": false,
+     "role": "member",
+     "team": "p-panasonic"
+    }
+   ],
+   "name": "原田雄大",
+   "note": "NeurIPS系BCIコンペ（本番 10/28〜11/22）、サントリーのモデル。サーバー停止で約1週間作業が止まった。",
+   "slack": "U0A0GNBLT9T",
+   "status": "active",
+   "title": "ソフトウェア・ML"
+  },
+  "karamatsu": {
+   "activity": "mid",
+   "lastSeen": "2026-10-15",
+   "memberships": [
+    {
+     "est": false,
+     "role": "member",
+     "team": "p-xhro"
+    },
+    {
+     "est": false,
+     "role": "member",
+     "team": "p-leo"
+    }
+   ],
+   "name": "唐松晴香（Seika）",
+   "note": "睡眠・夢プロダクト、海外のアポ取り。",
+   "slack": "U0BH2HPHDPZ",
+   "status": "active",
+   "title": "事業開発（ボストン）"
+  },
+  "hu": {
+   "activity": "none",
+   "memberships": [],
+   "name": "胡佳儀（HU JIAYI）",
+   "note": "10/15 に #sync_採用 で自己紹介。",
+   "status": "incoming",
+   "title": "Business志望（東大 D1）"
+  },
+  "kobayashi": {
+   "activity": "low",
+   "lastSeen": "2026-10-08",
+   "memberships": [],
+   "name": "小林千晃",
+   "note": "#a_operation_team メンバー。雑誌発刊・合宿の企画。",
+   "slack": "U0A4ML2KWSY",
+   "status": "active",
+   "title": "ナラティブ・思想コミュニティ"
+  },
+  "mizuguchi": {
+   "activity": "high",
+   "core": true,
+   "lastSeen": "2026-10-16",
+   "memberships": [
+    {
+     "est": false,
+     "role": "lead",
+     "team": "exec"
+    },
+    {
+     "est": true,
+     "role": "lead",
+     "team": "rnd"
+    },
+    {
+     "est": true,
+     "role": "advisor",
+     "team": "sw"
+    },
+    {
+     "est": true,
+     "role": "pm",
+     "team": "p-toyota"
+    },
+    {
+     "est": true,
+     "role": "pm",
+     "team": "p-macnica"
+    },
+    {
+     "est": true,
+     "role": "pm",
+     "team": "p-leo"
+    },
+    {
+     "est": true,
+     "role": "pm",
+     "team": "p-hakuhodo"
+    },
+    {
+     "est": true,
+     "role": "pm",
+     "team": "p-physical"
+    },
+    {
+     "est": false,
+     "role": "member",
+     "team": "p-xhro"
+    },
+    {
+     "est": false,
+     "role": "member",
+     "team": "p-nedo"
+    },
+    {
+     "est": false,
+     "role": "member",
+     "team": "p-jre"
+    },
+    {
+     "est": false,
+     "role": "member",
+     "team": "p-nikko"
+    },
+    {
+     "est": false,
+     "role": "member",
+     "team": "p-melco"
+    },
+    {
+     "est": false,
+     "role": "member",
+     "team": "p-sumiriko"
+    },
+    {
+     "est": false,
+     "role": "member",
+     "team": "p-toshima"
+    },
+    {
+     "est": false,
+     "role": "member",
+     "team": "p-defense"
+    },
+    {
+     "est": false,
+     "role": "member",
+     "team": "p-canon"
+    },
+    {
+     "est": false,
+     "role": "member",
+     "team": "p-moveandfeel"
+    },
+    {
+     "est": false,
+     "role": "member",
+     "team": "p-contact"
+    },
+    {
+     "est": false,
+     "role": "member",
+     "team": "p-toa"
+    }
+   ],
+   "name": "水口成寛",
+   "note": "研究方針・顧客窓口・契約。新規・リード案件は水口・平塚（＋石井）で回し、既存PJに集中する方針（9/21）。",
+   "slack": "U060Q78DZE0",
+   "status": "active",
+   "title": "CEO"
+  },
+  "kokubo": {
+   "activity": "high",
+   "core": true,
+   "lastSeen": "2026-10-15",
+   "memberships": [
+    {
+     "est": false,
+     "role": "member",
+     "team": "exec"
+    },
+    {
+     "est": false,
+     "role": "member",
+     "team": "rnd"
+    },
+    {
+     "est": false,
+     "role": "pm",
+     "team": "p-defense"
+    },
+    {
+     "est": false,
+     "role": "pm",
+     "team": "p-mitou"
+    },
+    {
+     "est": true,
+     "role": "pm",
+     "team": "p-toshima"
+    },
+    {
+     "est": false,
+     "role": "member",
+     "team": "p-xhro"
+    },
+    {
+     "est": false,
+     "role": "member",
+     "team": "p-nedo"
+    },
+    {
+     "est": false,
+     "role": "member",
+     "team": "p-toyota"
+    },
+    {
+     "est": false,
+     "role": "member",
+     "team": "p-jre"
+    },
+    {
+     "est": false,
+     "role": "member",
+     "team": "p-sumiriko"
+    },
+    {
+     "est": false,
+     "role": "member",
+     "team": "p-macnica"
+    },
+    {
+     "est": false,
+     "role": "member",
+     "team": "p-leo"
+    },
+    {
+     "est": false,
+     "role": "member",
+     "team": "p-hakuhodo"
+    },
+    {
+     "est": false,
+     "role": "member",
+     "team": "p-physical"
+    },
+    {
+     "est": false,
+     "role": "member",
+     "team": "p-moveandfeel"
+    }
+   ],
+   "name": "小久保蓮太",
+   "note": "採用（インド人エンジニア・インターン）、大企業営業、JVの論点。睡眠段階推定・位相検出など技術寄りの担当も持つ。",
+   "slack": "U09H5PN8LAD",
+   "status": "active",
+   "title": "CSO"
+  },
+  "motegi": {
+   "activity": "none",
+   "lastSeen": "2026-10-12",
+   "memberships": [],
+   "name": "茂木",
+   "note": "学業優先のため稼働停止（10/12）。",
+   "slack": "U0ATZDTJBU6",
+   "status": "inactive",
+   "title": "旧アルゴリズム担当"
+  }
+ },
+ "teams": {
+  "sw": {
+   "channel": "#a_sync_os開発",
+   "kind": "sw",
+   "last": "2026-10-15",
+   "name": "ソフトウェア開発",
+   "next": "10/19 18-19時 田村さんの自己紹介・Sync OS 議論会",
+   "note": "Sync OS（モデル非依存のハーネス＋エージェント評価レイヤー）、自動モデル探索、生体信号エージェント、BCIコンペ。技術開発は隔週でチェックポイントを置く方針（9/19）。",
+   "order": 2,
+   "status": "active"
+  },
+  "p-jre": {
+   "channel": "#案件_jre",
+   "client": "JR東日本スタートアップ",
+   "kind": "project",
+   "last": "2026-10-13",
+   "name": "JR東日本 眠気検知",
+   "note": "眠気検知・FRMS。IRB・共同実験契約の段階で、検証用デバイスを調達中。要件定義後は蛯原さんに任せる方針（9/15）。",
+   "order": 4,
+   "status": "active"
+  },
+  "p-toyota": {
+   "channel": "#案件_トヨタ紡織 / #fn_トヨタ紡織",
+   "client": "トヨタ紡織（井波氏・前納氏）",
+   "kind": "project",
+   "last": "2026-10-14",
+   "name": "トヨタ紡織",
+   "next": "契約・予算の確定。11月の計測実験は佐渡・添田・石川に振る案",
+   "note": "車室内の状態誘導。デモ後に Azure 対応と GUI（シナリオAI・監視GUI）の開発依頼。予算・契約は未確定。",
+   "order": 3,
+   "status": "active"
+  },
+  "rnd": {
+   "channel": "#a_research",
+   "kind": "rnd",
+   "last": "2026-10-06",
+   "name": "研究開発",
+   "note": "これから整備するチーム。今動いているテーマ：自動研究（サーベイ系エージェント、NeurIPS Track3 評価）、BCIコンペ、睡眠（PSG・位相検出）、回転波・アナログ認知仮説、EgoBrain（東大 佐藤先生）、光遺伝学・超音波BCIの比較。",
+   "order": 4,
+   "status": "building"
+  },
+  "p-moveandfeel": {
+   "channel": "#案件_move_and_feel",
+   "client": "Move&Feel",
+   "kind": "project",
+   "last": "2026-10-10",
+   "name": "Move&Feel",
+   "note": "市場調査から共同研究開発へ。見積もり提出・NDA済みで先方は前向き。計画書は小久保・平塚が作成し、PMを中田さんから移管中。",
+   "order": 14,
+   "status": "nego"
+  },
+  "exec": {
+   "channel": "#a_fastneura_意思決定",
+   "kind": "exec",
+   "last": "2026-10-15",
+   "name": "経営陣",
+   "note": "9/16 に、フルコミメンバーだけで重要な意思決定を完結させる場（水口・中田・小久保・平塚）を新設。蛯原さんの執行役員化を検討中（10/12）。",
+   "order": 1,
+   "status": "active"
+  },
+  "p-panasonic": {
+   "channel": "#案件_panasonic",
+   "client": "パナソニック（アクセラ）",
+   "kind": "project",
+   "last": "2026-09-15",
+   "name": "パナソニック",
+   "note": "資料提出後、動きなし。",
+   "order": 30,
+   "status": "stalled"
+  },
+  "p-defense": {
+   "channel": "#defensetech事業部",
+   "client": "スペースデータ・防衛技術協会・マクニカ（防衛）",
+   "kind": "project",
+   "last": "2026-09-04",
+   "name": "防衛Tech",
+   "next": "10/22 先端技術研究会",
+   "note": "認知負荷プロトタイプ、ミリ波による人体・呼吸検出。",
+   "order": 20,
+   "status": "proposal"
+  },
+  "hw": {
+   "channel": "#a-sync-ハードウェア / #サーバー管理",
+   "kind": "hw",
+   "last": "2026-10-15",
+   "name": "ハードウェア",
+   "note": "自作脳波計の仕様、Hush 電極の改良、未踏のメガネ型マウント、計測機材。社内GPUサーバーと回線の保守も実質ここが担っており、稲田さん1人に依存している。",
+   "order": 3,
+   "status": "active"
+  },
+  "p-toa": {
+   "channel": "#案件_toa",
+   "client": "TOA",
+   "kind": "project",
+   "last": "2026-10-08",
+   "name": "TOA",
+   "note": "工場向けで再始動。CEOが稲田さんにMTG打診を依頼（10/8）。",
+   "order": 16,
+   "status": "nego"
+  },
+  "p-toshima": {
+   "channel": "#案件_豊島",
+   "client": "豊島",
+   "kind": "project",
+   "last": "2026-10-15",
+   "name": "豊島",
+   "note": "倫理審査・実験費を含む見積もりを依頼された。今のPoCが終わり次第、本実験へ。",
+   "order": 11,
+   "status": "nego"
+  },
+  "p-melco": {
+   "channel": "#b_sync_三菱電機",
+   "client": "三菱電機（池田氏）",
+   "kind": "project",
+   "last": "2026-10-14",
+   "name": "三菱電機 省電力AI",
+   "note": "10/13 に NDA 締結、10/14 に訪問。脳波計へのエッジ推論の組み込みを検討。",
+   "order": 5,
+   "status": "active"
+  },
+  "p-contact": {
+   "channel": "#smart_contactlens",
+   "client": "メニコン・筑波大眼科ほか",
+   "kind": "project",
+   "last": "2026-09-21",
+   "name": "スマートコンタクトレンズ",
+   "note": "探索段階。メニコンの鈴木氏と面談。",
+   "order": 22,
+   "status": "proposal"
+  },
+  "p-physical": {
+   "channel": "#案件_フィジカル植民地",
+   "client": "CrewRobotics",
+   "kind": "project",
+   "last": "2026-10-08",
+   "name": "フィジカル植民地",
+   "note": "CrewVision／ロボデータバンクへのリファラル。3月までに約1000人の紹介が目標。商社・地銀など顧客・パートナーをリスト化中。",
+   "order": 7,
+   "status": "active"
+  },
+  "p-hakuhodo": {
+   "channel": "#案件_博報堂",
+   "client": "Hakuhodo DY ONE（青木氏）",
+   "kind": "project",
+   "last": "2026-10-15",
+   "name": "博報堂DY ONE",
+   "next": "11/15 15:00 次回MTG",
+   "note": "アテンション計測／ブランドリフトの文脈で Sync を提案。アイスタイル・三越伊勢丹を想定ターゲットにした提案材料を持ち寄る。",
+   "order": 12,
+   "status": "nego"
+  },
+  "p-leo": {
+   "channel": "#案件_川崎leo",
+   "client": "川崎重工",
+   "kind": "project",
+   "last": "2026-10-07",
+   "name": "川崎重工 LEO",
+   "note": "ソーシャルロボットの上位機能。先方の歩行開発が一段落した後に議論。競合調査中。",
+   "order": 21,
+   "status": "proposal"
+  },
+  "p-mitou": {
+   "channel": "#未踏アドいけるじゃん案件",
+   "client": "稲見先生",
+   "kind": "project",
+   "last": "2026-10-14",
+   "name": "未踏AD（IRIS）",
+   "note": "スマートグラス＋脳波の視界フィードバックHW。メガネ型アタッチメントのBOMを作り部品発注を判断。特許面の懸念あり。",
+   "order": 8,
+   "status": "active"
+  },
+  "p-canon": {
+   "channel": "#案件_canon",
+   "client": "キヤノン・高知大・室戸市",
+   "kind": "project",
+   "last": "2026-09-16",
+   "name": "キヤノン × 室戸市",
+   "next": "見積もりの作成",
+   "note": "地域保健データ。Phase 0 でトラックA/Bの2本を検討。CEOが契約を持ち、進行は水野さんに一任。",
+   "order": 15,
+   "status": "nego"
+  },
+  "p-nikko": {
+   "channel": "#案件_日鉄興和不動産",
+   "client": "日鉄興和不動産・STYZ",
+   "kind": "project",
+   "last": "2026-10-12",
+   "name": "日鉄興和不動産",
+   "note": "現場・ホワイトワーカー向け。pre-PoC と網羅的な PoC を設計中。",
+   "order": 10,
+   "status": "nego"
+  },
+  "p-sumiriko": {
+   "channel": "#案件_住友理工",
+   "client": "住友理工",
+   "kind": "project",
+   "last": "2026-10-10",
+   "name": "住友理工 睡眠",
+   "note": "取引先登録と購入手続き中。9hours の施設を睡眠計測の場にする案。",
+   "order": 6,
+   "status": "active"
+  },
+  "p-nedo": {
+   "channel": "#案件_島津 / #案件_nedo_懸賞金",
+   "client": "島津製作所・SandBox",
+   "kind": "project",
+   "last": "2026-10-13",
+   "name": "NEDO 島津（懸賞金）",
+   "next": "11月から本実験。Hume データ解析（吉川、10/17 期限）",
+   "note": "予選通過。認知負荷に適応するLLMのプロトコルを開発中。島津側の権利放棄を交渉中で、ビッグテック／AIモデル企業への売り込みも構想。",
+   "order": 2,
+   "status": "active"
+  },
+  "p-honda": {
+   "channel": "#案件_honda",
+   "client": "本田技研・Honda研究所",
+   "kind": "project",
+   "last": "2026-09-12",
+   "name": "Honda",
+   "note": "3回MTGの後、先方の返信待ち。",
+   "order": 31,
+   "status": "stalled"
+  },
+  "p-macnica": {
+   "channel": "#案件_マクニカ",
+   "client": "マクニカ（大黒研・バクネ経由を含む）",
+   "kind": "project",
+   "last": "2026-10-02",
+   "name": "マクニカ",
+   "note": "4件で次のアクションが確定。心拍制御スライドと大黒研デバイスの説明資料を提出。スマートウォッチのデータセットを受領。",
+   "order": 13,
+   "status": "nego"
+  },
+  "p-xhro": {
+   "channel": "#案件_サントリー / #pj_xhro",
+   "client": "サントリー（水谷氏）",
+   "kind": "project",
+   "last": "2026-10-15",
+   "name": "サントリー XHRO 睡眠",
+   "next": "10/17 位相検出の経過報告（小久保）",
+   "note": "被験者 N=30 を目標に残り約10人を集める段階。1月以降は closed-loop 実験・クリニック実証・XHRO Agent を含む拡大契約を協議中。",
+   "order": 1,
+   "status": "active"
+  }
+ },
+ "log": {
+  "seed-01": {
+   "at": "2026-10-14T18:00:00+09:00",
+   "text": "田村雷輝・片岡朝貴 がエンジニアとして加入"
+  },
+  "seed-08": {
+   "at": "2026-09-07T18:00:00+09:00",
+   "text": "赤間遥（COO）が離脱"
+  },
+  "seed-04": {
+   "at": "2026-10-12T18:00:00+09:00",
+   "text": "茂木 が稼働停止"
+  },
+  "seed-07": {
+   "at": "2026-09-16T18:00:00+09:00",
+   "text": "意思決定チャンネルを開設（水口・中田・小久保・平塚）"
+  },
+  "fix-1017": {
+   "at": "2026-10-17T01:10:00+09:00",
+   "text": "中島・水野・稲田 を経営陣から外す、刈山 を技術顧問に、添田・Daechul Jung を稼働なしに修正"
+  },
+  "seed-02": {
+   "at": "2026-10-13T18:00:00+09:00",
+   "text": "三菱電機と NDA 締結（PM 平塚）"
+  },
+  "seed-05": {
+   "at": "2026-10-08T18:00:00+09:00",
+   "text": "トヨタ紡織の11月計測を 佐渡・添田・石川 に振る案"
+  },
+  "seed-06": {
+   "at": "2026-09-18T18:00:00+09:00",
+   "text": "石井大智 はアドバイザーとして関わる形に"
+  },
+  "seed-00": {
+   "at": "2026-10-16T08:00:00+09:00",
+   "text": "Slack の分析をもとに組織図を作成"
+  },
+  "seed-03": {
+   "at": "2026-10-12T18:01:00+09:00",
+   "text": "蛯原 の執行役員化を検討開始"
+  }
+ },
+ "meta": {
+  "info": {
+   "source": "Slack（2026-09-01〜10-16 の経営・技術・案件チャンネル）を Claude が分析。PM・所属の一部は推定",
+   "updatedAt": "2026-10-16"
+  }
+ }
+}
